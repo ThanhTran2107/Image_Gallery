@@ -5,7 +5,8 @@ import { FIRE_BASE_IMAGE_FIELD_ID, FIRE_BASE_IMAGE_TABLE } from 'constant';
 
 export const useGetImagesHook = () => {
   return useCallback(async () => {
-    return new Promise(async (resolve, reject) => {
+    // eslint-disable-next-line no-async-promise-executor
+    return new Promise(async resolve => {
       const docRef = doc(db, FIRE_BASE_IMAGE_TABLE, FIRE_BASE_IMAGE_FIELD_ID); // Chỉ định document bằng docId
       const docSnap = await getDoc(docRef);
 
