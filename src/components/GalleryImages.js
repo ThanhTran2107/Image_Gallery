@@ -19,7 +19,7 @@ const StyledImage = styled.img`
 export const GalleryImages = ({ images, onDelete }) => {
   return (
     <StyledGallery>
-      {images.map((img) => (
+      {images.map(img => (
         <div key={img.id}>
           <StyledImage src={img.url} alt="Uploaded" />
           <button onClick={() => onDelete(img.id)}>Delete</button>

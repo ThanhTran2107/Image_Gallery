@@ -18,37 +18,37 @@ export const UploadImage = ({ onFileUploadComplete, onUploading }) => {
   const [files, setFiles] = useState([]);
 
   const getValidationImagesError = files => {
-    if(files.length > 5){
+    if (files.length > 5) {
       return 'You can upload only 5 images at a time !';
     }
 
     const largeFilesName = files.filter(file => !isValidImageSize(file)).map(file => file.name);
 
-    if(largeFilesName.length > 0){
+    if (largeFilesName.length > 0) {
       return `${largeFilesName.join(' , ')} too large. Max allowed size is 1.5MB !`;
     }
-  }
+  };
 
-  const handleImageValidation = (event) => {
+  const handleImageValidation = event => {
     const { files } = event.target;
     const selectedFiles = Array.from(files);
 
     const errorMessage = getValidationImagesError(selectedFiles);
 
-    if(errorMessage){
+    if (errorMessage) {
       toast.error(errorMessage);
       document.getElementById('file').value = '';
-      
+
       return;
     }
-    
+
     setFiles(selectedFiles);
-  }
+  };
 
   const handleUploadImage = async () => {
     let countOfUploadedFiles = 0;
 
-    if(files.length === 0){
+    if (files.length === 0) {
       toast.error('There are no any files to upload!');
 
       return;
@@ -57,17 +57,17 @@ export const UploadImage = ({ onFileUploadComplete, onUploading }) => {
     onUploading(true);
 
     files.forEach(file => {
-      uploadImageService(file).then((data) => {
+      uploadImageService(file).then(data => {
         const { url } = data.data.image;
 
-        if(url){
+        if (url) {
           const imageId = uuidv4();
-          onFileUploadComplete(prevState => ([...prevState, { id: imageId, url }]));
+          onFileUploadComplete(prevState => [...prevState, { id: imageId, url }]);
         }
-        
+
         countOfUploadedFiles += 1;
 
-        if(countOfUploadedFiles === files.length){
+        if (countOfUploadedFiles === files.length) {
           onUploading(false);
 
           toast.success('All images uploaded successfully !');
@@ -81,7 +81,8 @@ export const UploadImage = ({ onFileUploadComplete, onUploading }) => {
   return (
     <div>
       <StyledTitle>Upload Image</StyledTitle>
-      <input onChange={handleImageValidation} type="file" id="file" multiple /><br />
+      <input onChange={handleImageValidation} type="file" id="file" multiple />
+      <br />
       <button onClick={handleUploadImage}>Upload</button>
       <br />
     </div>

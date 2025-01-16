@@ -26,11 +26,11 @@ export const ImageUploadPage = () => {
     }
   }, [isLoading, images]);
 
-  const handleDeleteUrl = (deleteId) => {
-    const newImages = images.filter((img) => img.id !== deleteId);
+  const handleDeleteUrl = deleteId => {
+    const newImages = images.filter(img => img.id !== deleteId);
 
     setImages(newImages);
-    window.localStorage.setItem('images', JSON.stringify(newImages));    
+    window.localStorage.setItem('images', JSON.stringify(newImages));
   };
 
   return (
