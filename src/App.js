@@ -1,11 +1,11 @@
-import { ImageUploadPage } from './pages/ImageUploadPage';
+import { ImageListingPage } from './pages/image-listing-page';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <div>
-      <ImageUploadPage />
+      <ImageListingPage />
       <ToastContainer />
     </div>
   );

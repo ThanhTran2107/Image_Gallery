@@ -1,56 +1,57 @@
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const StyledGallery = styled.div`
+const StyledPreview = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 20px;
-  gap: 50px;
+  margin-top: -20px;
+  margin-left: 60px;
+  gap: 30px;
+`;
+
+const StyledImageContainer = styled.div`
+  position: relative;
+  width: 100px;
+  text-align: center;
 `;
 
 const StyledImage = styled.img`
-  width: 200px;
-  height: 200px;
-  border: 3px solid #bf4f74;
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border: 2px solid #bf4f74;
+  border-radius: 5px;
 `;
 
 const StyledButton = styled.button`
   position: absolute;
   top: -10px;
-  right: -10px;
+  right: -13px;
   width: 20px;
   height: 20px;
   background-color: red;
   color: white;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
   border: none;
   border-radius: 50%;
   cursor: pointer;
 `;
 
-const StyledImageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-`;
-
-export const GalleryImages = ({ images, onDelete }) => {
+export const PreviewImages = ({ images, onDelete }) => {
   return (
-    <StyledGallery>
+    <StyledPreview>
       {images.map(img => (
         <StyledImageContainer key={img.id}>
-          <StyledImage src={img.url} alt="Uploaded" />
+          <StyledImage src={img.url} alt="Previewed" title={img.file.name} />
           <StyledButton onClick={() => onDelete(img.id)}>X</StyledButton>
         </StyledImageContainer>
       ))}
-    </StyledGallery>
+    </StyledPreview>
   );
 };
 
-GalleryImages.propTypes = {
+PreviewImages.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,

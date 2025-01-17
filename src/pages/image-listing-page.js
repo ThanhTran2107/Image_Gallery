@@ -10,13 +10,19 @@ const StyledBackGround = styled.section`
   background: papayawhip;
 `;
 
+const StyledHr = styled.hr`
+  margin-top: 50px;
+  margin-bottom: 50px;
+  border: 1px solid black;
+`;
+
 const getInitialUrls = () => {
   const images = JSON.parse(window.localStorage.getItem('images'));
 
   return images || [];
 };
 
-export const ImageUploadPage = () => {
+export const ImageListingPage = () => {
   const [images, setImages] = useState(() => getInitialUrls());
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,6 +42,7 @@ export const ImageUploadPage = () => {
   return (
     <StyledBackGround>
       <UploadImage onFileUploadComplete={setImages} onUploading={setIsLoading} />
+      <StyledHr id="custom-line" />
       <GalleryImages images={images} onDelete={handleDeleteUrl} />
       {isLoading && <Spinner />}
     </StyledBackGround>
