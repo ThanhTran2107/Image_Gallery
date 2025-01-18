@@ -1,4 +1,4 @@
-import { UPLOAD_IMAGE_END_POINT, HTTP_POST } from '../constant';
+import { HTTP_POST, UPLOAD_IMAGE_END_POINT } from '../constant';
 
 export const uploadImageService = async file => {
   return new Promise(resolve => {

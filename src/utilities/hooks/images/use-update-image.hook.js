@@ -1,6 +1,6 @@
-import { useCallback } from 'react';
-import { doc, updateDoc } from 'firebase/firestore';
 import { db } from 'firebase-config';
+import { doc, updateDoc } from 'firebase/firestore';
+import { useCallback } from 'react';
 
 export const useUpdateImage = () => {
   return useCallback((albumId, imageId, data) => {

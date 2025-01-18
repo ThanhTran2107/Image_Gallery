@@ -1,6 +1,5 @@
-import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
-
 import { db } from 'firebase-config';
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 import { useCallback } from 'react';
 
 export const useAddAlbum = () => {

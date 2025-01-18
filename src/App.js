@@ -1,6 +1,7 @@
-import { ImageUploadPage } from './pages/ImageUploadPage';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+
+import { ImageUploadPage } from './pages/ImageUploadPage';
 
 function App() {
   return (
