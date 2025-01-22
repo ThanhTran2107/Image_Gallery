@@ -7,6 +7,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@tanstack/react-query": "^5.64.1",
+    "classnames": "^2.5.1",
     "cra-template": "1.2.0",
     "firebase": "^11.1.0",
     "lodash-es": "^4.17.21",
@@ -61,12 +62,12 @@
     ]
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "4.2.1",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.1.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.0",
-    "prettier": "^3.4.2",
-    "@trivago/prettier-plugin-sort-imports": "4.2.1"
+    "prettier": "^3.4.2"
   }
 }

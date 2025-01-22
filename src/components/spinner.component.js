@@ -2,15 +2,14 @@ import styled from 'styled-components';
 
 const StyledSpinner = styled.div`
   border: 4px solid transparent;
-  border-top: 4px solid #bf4f74;
+  border-top: 4px solid #ffffff;
   border-radius: 100%;
   width: 50px;
   height: 50px;
   animation: spin 1s linear infinite;
-
   position: absolute;
-  top: 90px;
-  right: 730px;
+  top: 100px;
+  left: 115px;
 
   @keyframes spin {
     0% {
