@@ -71,7 +71,7 @@ export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete,
       uploadImageService(image.file).then(data => {
         const { url } = data.data.image;
 
-        addImages(albumId, { url }).then(serverId => {
+        addImages(albumId, { url }).then(async serverId => {
           onFileUploadComplete({ url: url, serverId, clientId: image.clientId });
 
           setIsUploading(false);

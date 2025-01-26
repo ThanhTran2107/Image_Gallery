@@ -10,7 +10,7 @@ export const useDeleteAlbum = () => {
 
         await deleteDoc(albumRef);
 
-        reject(albumRef.id);
+        resolve(albumRef.id);
       } catch (e) {
         reject(e);
       }

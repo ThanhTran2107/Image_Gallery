@@ -14,6 +14,8 @@ export const useGetAlbums = () => {
           id: doc.id,
         }));
 
+        console.log('get');
+
         resolve(data);
       } catch (error) {
         reject(error);

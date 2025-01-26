@@ -15,25 +15,21 @@ export const useCachedAlbums = () => {
   // if not exist => skip
 
   useEffect(() => {
-    (async () => {
-      try {
-        const albums = await getAlbums();
-
-        if (!isEmpty(albums)) {
-          setAlbumList(albums);
+    getAlbums()
+      .then(data => {
+        if (!isEmpty(data)) {
+          setAlbumList(data);
 
           const currentAlbumId = window.localStorage.getItem('currentAlbumId');
 
-          const found = find(albums, alb => alb.id === currentAlbumId);
+          const found = find(data, alb => alb.id === currentAlbumId);
 
           if (!isEmpty(found)) {
             setCurrentAlbum(found);
           }
         }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+      })
+      .catch(e => console.log(e));
   }, []);
 
   return {
