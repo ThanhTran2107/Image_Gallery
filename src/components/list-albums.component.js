@@ -166,8 +166,8 @@ export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
 
   return (
     <>
-      <OpenButton onClick={handleOpenAlbum}>All Albums</OpenButton>W
-      {showAlbums && <BackDrop onClick={handleCloseAlbums} />}W
+      <OpenButton onClick={handleOpenAlbum}>All Albums</OpenButton>
+      {showAlbums && <BackDrop onClick={handleCloseAlbums} />}
       <Container className={classNames({ 'is-show': showAlbums })}>
         <ListContainer onClick={event => event.stopPropagation()}>
           <Header>

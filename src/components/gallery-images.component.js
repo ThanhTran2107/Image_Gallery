@@ -1,7 +1,7 @@
-import { find, findIndex } from 'lodash-es';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+
+import { usePreviewImages } from 'utilities/hooks/custom-hooks/use-preview-images.hook';
 
 import { ImageUploaderTool } from './image-uploader-tool.component';
 import { ImageCard } from './image.component';
@@ -37,17 +37,7 @@ const PreviewImage = styled.img`
 `;
 
 export const GalleryImages = ({ images, albumId, onDelete, onFilesAttached, onFileUploadComplete }) => {
-  const [showImage, setShowImage] = useState(false);
-
-  const handleImageClick = showId => {
-    const imageToShow = find(images, img => img.id === showId);
-
-    setShowImage(imageToShow);
-  };
-
-  const handleCloseModal = () => {
-    setShowImage(false);
-  };
+  const { isOpen, previewImage, onSelectImage, onClosePreviewModal } = usePreviewImages(images);
 
   const sendImageToImageComponent = images.map(img => (
     <ImageCard
@@ -56,39 +46,9 @@ export const GalleryImages = ({ images, albumId, onDelete, onFilesAttached, onFi
       albumId={albumId}
       onDelete={onDelete}
       onFileUploadComplete={onFileUploadComplete}
-      onSelectImage={handleImageClick}
+      onSelectImage={onSelectImage}
     />
   ));
-
-  useEffect(() => {
-    const handleKeyDown = event => {
-      const currentIndex = findIndex(images, img => img.id === showImage.id);
-
-      if (event.key === 'ArrowRight' && currentIndex < images.length - 1) {
-        setShowImage(images[currentIndex + 1]);
-      } else if (event.key === 'ArrowLeft' && currentIndex > 0) {
-        setShowImage(images[currentIndex - 1]);
-      } else if (event.key === 'Escape') {
-        handleCloseModal();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [images, showImage]);
-
-  useEffect(() => {
-    if (showImage) {
-      document.body.style.overflow = 'hidden';
-    }
-
-    return () => {
-      document.body.style.overflow = 'auto';
-    };
-  }, [showImage]);
 
   return (
     <>
@@ -97,11 +57,11 @@ export const GalleryImages = ({ images, albumId, onDelete, onFilesAttached, onFi
         {sendImageToImageComponent}
       </GalleryWrapper>
 
-      {showImage && (
+      {isOpen && (
         <>
-          <PreviewImageModal onClick={handleCloseModal}>
+          <PreviewImageModal onClick={onClosePreviewModal}>
             <PreviewImage
-              src={showImage.url}
+              src={previewImage.url}
               alt="Uploaded"
               className="show-image"
               onClick={event => event.stopPropagation()}

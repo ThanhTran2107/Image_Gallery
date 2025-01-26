@@ -1,4 +1,4 @@
-import { find, findIndex, isEmpty, map } from 'lodash-es';
+import { find, findIndex, map } from 'lodash-es';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -7,7 +7,7 @@ import { HeaderPage } from 'components/header.component';
 import { ListAlbums } from 'components/list-albums.component';
 import { ScrollButtons } from 'components/scroll-buttons.component';
 
-import { useGetAlbums } from 'utilities/hooks/albums/use-get-albums.hook';
+import { useCachedAlbums } from 'utilities/hooks/custom-hooks/use-cached-albums.hook';
 import { useDeleteImage } from 'utilities/hooks/images/use-delete-image.hook';
 import { useGetImages } from 'utilities/hooks/images/use-get-images.hook';
 
@@ -18,13 +18,11 @@ const Wrapper = styled.section`
 
 export const ImageListingPage = () => {
   const [images, setImages] = useState([]);
-  const [albumsList, setAlbumsList] = useState([]);
-  const [album, setAlbum] = useState({});
+  const { currentAlbum, setCurrentAlbum, albumList } = useCachedAlbums();
 
-  const getAlbums = useGetAlbums();
   const getImages = useGetImages();
   const deleteImage = useDeleteImage();
-  const albumId = album.id;
+  const albumId = currentAlbum.id;
 
   const handleDeleteImages = deleteId => {
     const newImages = [...images];
@@ -51,29 +49,10 @@ export const ImageListingPage = () => {
   const handleImagesAttached = data => setImages([...data, ...images]);
 
   const handleSetAlbumId = selectedId => {
-    const selectedAlbum = find(ListAlbums, alb => alb.id === selectedId);
+    const selectedAlbum = find(albumList, alb => alb.id === selectedId);
 
-    setAlbum(selectedAlbum);
+    setCurrentAlbum(selectedAlbum);
   };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const albums = await getAlbums();
-
-        if (!isEmpty(albums)) {
-          const currentAlbumId = window.localStorage.getItem('currentAlbumId');
-
-          const currentAlbum = find(albums, alb => alb.id === currentAlbumId);
-
-          setAlbumsList(albums);
-          !isEmpty(currentAlbum) && setAlbum(currentAlbum);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
 
   useEffect(() => {
     (async () => {
@@ -92,7 +71,7 @@ export const ImageListingPage = () => {
 
   return (
     <Wrapper>
-      <HeaderPage album={album} />
+      <HeaderPage album={currentAlbum} />
       <GalleryImages
         images={images}
         onDelete={handleDeleteImages}
@@ -101,7 +80,7 @@ export const ImageListingPage = () => {
         albumId={albumId}
       />
       <ScrollButtons />
-      <ListAlbums albums={albumsList} onSelectedAlbumId={handleSetAlbumId} />
+      <ListAlbums albums={albumList} onSelectedAlbumId={handleSetAlbumId} />
     </Wrapper>
   );
 };
