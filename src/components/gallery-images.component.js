@@ -8,10 +8,18 @@ import { ImageCard } from './image.component';
 
 const GalleryWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 15px;
   padding: 16px;
   justify-content: center;
+
+  @media only screen and (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media only screen and (min-width: 1024px) {
+    grid-template-columns: repeat(5, 1fr);
+  }
 `;
 
 const PreviewImageModal = styled.div`

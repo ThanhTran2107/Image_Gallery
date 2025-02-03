@@ -14,11 +14,13 @@ import { useGetImages } from 'utilities/hooks/images/use-get-images.hook';
 const Wrapper = styled.section`
   display: flex;
   flex-direction: column;
+  max-width: 1536px;
+  margin: 0 auto;
 `;
 
 export const ImageListingPage = () => {
   const [images, setImages] = useState([]);
-  const { currentAlbum, setCurrentAlbum, albumList } = useCachedAlbums();
+  const { currentAlbum, setCurrentAlbum, albumList, setAlbumList } = useCachedAlbums();
 
   const getImages = useGetImages();
   const deleteImage = useDeleteImage();
@@ -36,10 +38,10 @@ export const ImageListingPage = () => {
     }
   };
 
-  const handleFileUploadComplete = ({ clientId, serverId, url }) => {
+  const handleFileUploadComplete = ({ clientId, id, url }) => {
     setImages(prevImages => {
       return map(prevImages, img => {
-        if (img.clientId === clientId) return { clientId, serverId, url };
+        if (img.clientId === clientId) return { clientId, id, url };
 
         return img;
       });
@@ -52,6 +54,18 @@ export const ImageListingPage = () => {
     const selectedAlbum = find(albumList, alb => alb.id === selectedId);
 
     setCurrentAlbum(selectedAlbum);
+  };
+
+  const handleUpdateAlbum = updatedAlbum => {
+    setCurrentAlbum(updatedAlbum);
+
+    setAlbumList(albumList =>
+      albumList.map(album => {
+        if (album.id === updatedAlbum.id) return { ...updatedAlbum };
+
+        return album;
+      }),
+    );
   };
 
   useEffect(() => {
@@ -71,7 +85,7 @@ export const ImageListingPage = () => {
 
   return (
     <Wrapper>
-      <HeaderPage album={currentAlbum} />
+      <HeaderPage album={currentAlbum} imagesCount={images.length} onUpdateAlbum={handleUpdateAlbum} />
       <GalleryImages
         images={images}
         onDelete={handleDeleteImages}

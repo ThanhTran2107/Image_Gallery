@@ -5,16 +5,13 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   position: fixed;
-  width: 650px;
+  width: 550px;
   height: 750px;
   border: none;
   background-color: #ffffff00;
-  color: white;
   right: 0px;
-  bottom: -20px;
-  transform: translateX(100%);
+  transform: translateX(110%);
   transition: transform 0.5s;
-  display: flex;
 
   &.is-show {
     transform: translateX(0);
@@ -27,9 +24,7 @@ const ListContainer = styled.div`
   height: 750px;
   border: none;
   background-color: white;
-  color: white;
   right: 600px;
-  bottom: 0px;
   transform: translateX(100%);
   transition: transform 0.5s;
   overflow: auto;
@@ -38,12 +33,8 @@ const ListContainer = styled.div`
 const Header = styled.div`
   display: flex;
   align-items: center;
-  position: fixed;
-  top: 0px;
-  width: 700px;
   height: 60px;
   background: #8f878736;
-  border: 1px solid #ffff;
 
   .header-text {
     display: flex;
@@ -69,7 +60,7 @@ const BackDrop = styled.div`
 const CloseButton = styled.button`
   display: flex;
   margin-top: 350px;
-  margin-left: -11px;
+  margin-left: -111px;
   border: none;
   border-radius: 10px 10px 0 0;
   cursor: pointer;
@@ -97,7 +88,6 @@ const CloseButton = styled.button`
 const AlbumList = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  justify-content: space-around;
   position: fixed;
   top: 100px;
   width: 600px;
@@ -107,7 +97,6 @@ const Items = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
 
   img {
     width: 150px;
@@ -130,7 +119,7 @@ const Items = styled.div`
 const OpenButton = styled.button`
   display: flex;
   position: fixed;
-  right: -29px;
+  right: -35px;
   top: 350px;
   border: none;
   border-radius: 10px 10px 0 0;
@@ -142,7 +131,6 @@ const OpenButton = styled.button`
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  text-align: center;
   color: white;
 
   &:hover {
@@ -158,7 +146,7 @@ export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
   const handleCloseAlbums = () => setShowAlbums(false);
 
   const albumsList = albums.map(({ avatar, id, name }) => (
-    <Items key={id} onClick={() => onSelectedAlbumId(id)}>
+    <Items className="item" key={id} onClick={() => onSelectedAlbumId(id)}>
       <img src={avatar} alt={name} />
       <p>{name}</p>
     </Items>
@@ -169,7 +157,7 @@ export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
       <OpenButton onClick={handleOpenAlbum}>All Albums</OpenButton>
       {showAlbums && <BackDrop onClick={handleCloseAlbums} />}
       <Container className={classNames({ 'is-show': showAlbums })}>
-        <ListContainer onClick={event => event.stopPropagation()}>
+        <ListContainer className="list-container" onClick={event => event.stopPropagation()}>
           <Header>
             <span className="header-text">All Albums</span>
           </Header>

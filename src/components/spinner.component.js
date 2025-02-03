@@ -8,8 +8,6 @@ const StyledSpinner = styled.div`
   height: 50px;
   animation: spin 1s linear infinite;
   position: absolute;
-  top: 100px;
-  left: 115px;
 
   @keyframes spin {
     0% {

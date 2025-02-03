@@ -9,9 +9,9 @@ import { isValidImageSize } from '../services/isValidImageSize';
 
 const UploadButton = styled.button`
   width: 100%;
-  height: 300px;
+  height: 150px;
   border-radius: 10px;
-  background: gray;
+  background: #3b3b3b;
   border: none;
   cursor: pointer;
   transition: transform 180ms cubic-bezier(0.25, 1, 0.5, 1);
@@ -23,12 +23,18 @@ const UploadButton = styled.button`
       transform: scale(1.05);
     }
   }
+
+  @media only screen and (min-width: 768px) {
+    height: 200px;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    height: 300px;
+  }
 `;
 
 export const ImageUploaderTool = ({ onFilesAttached }) => {
-  const handleOpenDialogFile = () => {
-    document.getElementById('file').click();
-  };
+  const handleOpenDialogFile = () => document.getElementById('file').click();
 
   const getValidationImagesError = files => {
     if (files.length > 200) {
@@ -50,8 +56,6 @@ export const ImageUploaderTool = ({ onFilesAttached }) => {
     const selectedFiles = Array.from(files);
 
     if (selectedFiles.length === 0) {
-      toast.error('There are no files to upload !');
-
       return;
     }
 

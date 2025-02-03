@@ -36,5 +36,6 @@ export const useCachedAlbums = () => {
     currentAlbum,
     albumList,
     setCurrentAlbum,
+    setAlbumList,
   };
 };

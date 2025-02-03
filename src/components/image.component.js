@@ -2,7 +2,6 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
-// import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
 import { useAddImage } from 'utilities/hooks/images/use-add-image.hook';
@@ -12,7 +11,7 @@ import { Spinner } from './spinner.component';
 
 const StyledImage = styled.img`
   width: 100%;
-  height: 300px;
+  height: 150px;
   object-fit: cover;
   border-radius: 10px;
   border: 1px solid #ccc;
@@ -20,6 +19,8 @@ const StyledImage = styled.img`
 
 const StyledImageContainer = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
   position: relative;
   transition: transform 180ms cubic-bezier(0.25, 1, 0.5, 1);
@@ -31,12 +32,33 @@ const StyledImageContainer = styled.div`
       display: flex;
     }
   }
+
+  @media only screen and (min-width: 768px) {
+    .image {
+      height: 200px;
+    }
+
+    .banner {
+      height: 25px;
+    }
+  }
+
+  @media only screen and (min-width: 1024px) {
+    .image {
+      height: 300px;
+    }
+
+    .banner {
+      height: 35px;
+    }
+  }
 `;
 
 const Banner = styled.div`
   position: absolute;
+  bottom: 88.5%;
   width: 100%;
-  height: 35px;
+  height: 17.5px;
   background: #726f6f75;
   font-size: 15px;
   font-weight: bold;
@@ -71,8 +93,8 @@ export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete,
       uploadImageService(image.file).then(data => {
         const { url } = data.data.image;
 
-        addImages(albumId, { url }).then(async serverId => {
-          onFileUploadComplete({ url: url, serverId, clientId: image.clientId });
+        addImages(albumId, { url }).then(id => {
+          onFileUploadComplete({ url: url, id, clientId: image.clientId });
 
           setIsUploading(false);
         });
