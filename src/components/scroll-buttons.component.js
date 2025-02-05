@@ -1,6 +1,7 @@
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -44,27 +45,23 @@ const ArrowDownButton = styled.button`
   }
 `;
 
-export const ScrollButtons = () => {
+export const ScrollButtons = ({ scrollHeightChanged }) => {
   const [invisibleUp, setInvisibleUp] = useState(true);
   const [invisibleDown, setInvisibleDown] = useState(false);
 
-  const handleScrollUp = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const handleScrollUp = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  const handleScrollDown = () => {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  };
+  const handleScrollDown = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 
   useEffect(() => {
     const handleScroll = event => {
-      if (event.target.documentElement.scrollTop > 300) {
+      if (event.target.documentElement.scrollTop >= 1000) {
         setInvisibleUp(false);
       } else {
         setInvisibleUp(true);
       }
 
-      if (document.body.scrollHeight - window.innerHeight - Math.ceil(event.target.documentElement.scrollTop) > 300) {
+      if (event.target.documentElement.scrollHeight - window.scrollY - window.innerHeight >= 1000) {
         setInvisibleDown(false);
       } else {
         setInvisibleDown(true);
@@ -73,10 +70,16 @@ export const ScrollButtons = () => {
 
     document.addEventListener('scroll', handleScroll);
 
-    return () => {
-      document.removeEventListener('scroll', handleScroll);
-    };
+    return () => document.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (scrollHeightChanged != document.documentElement.scrollHeight) {
+      setInvisibleDown(false);
+    } else {
+      setInvisibleDown(true);
+    }
+  }, [scrollHeightChanged]);
 
   return (
     <div>
@@ -96,4 +99,8 @@ export const ScrollButtons = () => {
       )}
     </div>
   );
+};
+
+ScrollButtons.propTypes = {
+  scrollHeightChanged: PropTypes.number.isRequired,
 };

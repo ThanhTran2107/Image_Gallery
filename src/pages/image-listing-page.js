@@ -9,6 +9,7 @@ import { ScrollButtons } from 'components/scroll-buttons.component';
 
 import { useCachedAlbums } from 'utilities/hooks/custom-hooks/use-cached-albums.hook';
 import { useDeleteImage } from 'utilities/hooks/images/use-delete-image.hook';
+import { useGetImagesSize } from 'utilities/hooks/images/use-get-image-size.hook';
 import { useGetImages } from 'utilities/hooks/images/use-get-images.hook';
 
 const Wrapper = styled.section`
@@ -20,10 +21,16 @@ const Wrapper = styled.section`
 
 export const ImageListingPage = () => {
   const [images, setImages] = useState([]);
+  const [lastDocId, setLastDocId] = useState(null);
+  const [isLoadingImages, setIsLoadingImages] = useState(false);
+  const [totalImages, setTotalImages] = useState(0);
+  const [scrollHeightChanged, setSCrollHeightChanged] = useState(0);
   const { currentAlbum, setCurrentAlbum, albumList, setAlbumList } = useCachedAlbums();
 
   const getImages = useGetImages();
   const deleteImage = useDeleteImage();
+  const getImagesSize = useGetImagesSize();
+
   const albumId = currentAlbum.id;
 
   const handleDeleteImages = deleteId => {
@@ -68,24 +75,62 @@ export const ImageListingPage = () => {
     );
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        if (albumId) {
-          const images = await getImages(albumId);
+  const fetchImages = async () => {
+    if (!albumId || isLoadingImages) return;
 
-          window.localStorage.setItem('currentAlbumId', albumId);
-          setImages(images);
-        }
-      } catch (error) {
-        console.log(error);
+    window.localStorage.setItem('currentAlbumId', albumId);
+
+    setIsLoadingImages(true);
+
+    try {
+      getImagesSize(albumId)
+        .then(size => {
+          setTotalImages(size);
+
+          getImages(albumId, lastDocId).then(response => {
+            const totalFetchedImages = images.length + response.data.length;
+
+            if (totalFetchedImages > size) {
+              const remainingImages = size - images.length;
+
+              setImages(prev => [...prev, ...response.data.slice(0, remainingImages)]);
+              setLastDocId(response.lastDocId);
+              setIsLoadingImages(false);
+            } else {
+              setImages(prev => [...prev, ...response.data]);
+              setLastDocId(response.lastDocId);
+              setIsLoadingImages(false);
+              setSCrollHeightChanged(document.documentElement.scrollHeight);
+            }
+          });
+        })
+        .catch(e => console.log(e));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight && !isLoadingImages) {
+        fetchImages();
       }
-    })();
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastDocId]);
+
+  useEffect(() => {
+    setImages([]);
+    setIsLoadingImages(false);
+    fetchImages();
   }, [albumId]);
 
   return (
     <Wrapper>
-      <HeaderPage album={currentAlbum} imagesCount={images.length} onUpdateAlbum={handleUpdateAlbum} />
+      <HeaderPage album={currentAlbum} totalImages={totalImages} onUpdateAlbum={handleUpdateAlbum} />
       <GalleryImages
         images={images}
         onDelete={handleDeleteImages}
@@ -93,7 +138,7 @@ export const ImageListingPage = () => {
         onFileUploadComplete={handleFileUploadComplete}
         albumId={albumId}
       />
-      <ScrollButtons />
+      <ScrollButtons scrollHeightChanged={scrollHeightChanged} />
       <ListAlbums albums={albumList} onSelectedAlbumId={handleSetAlbumId} />
     </Wrapper>
   );

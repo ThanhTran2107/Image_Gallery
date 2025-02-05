@@ -176,12 +176,12 @@ const BackDrop = styled.div`
   cursor: pointer;
 `;
 
-const ImagesCount = styled.h1`
+const TotalImages = styled.h1`
   font-size: 18px;
   font-weight: normal;
 `;
 
-export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
+export const HeaderPage = ({ album, totalImages, onUpdateAlbum }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const inputRef = useRef(null);
@@ -280,7 +280,7 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
           )}
         </AlbumName>
       </InfoAlbum>
-      <ImagesCount>{imagesCount} IMAGES</ImagesCount>
+      <TotalImages>{totalImages} IMAGES</TotalImages>
     </Header>
   );
 };
@@ -291,6 +291,6 @@ HeaderPage.propTypes = {
     name: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
   }).isRequired,
-  imagesCount: PropTypes.number.isRequired,
+  totalImages: PropTypes.number.isRequired,
   onUpdateAlbum: PropTypes.number.isRequired,
 };

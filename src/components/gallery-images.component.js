@@ -1,3 +1,4 @@
+import { map } from 'lodash-es';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -47,7 +48,7 @@ const PreviewImage = styled.img`
 export const GalleryImages = ({ images, albumId, onDelete, onFilesAttached, onFileUploadComplete }) => {
   const { isOpen, previewImage, onSelectImage, onClosePreviewModal } = usePreviewImages(images);
 
-  const sendImageToImageComponent = images.map(img => (
+  const sendImageToImageComponent = map(images, img => (
     <ImageCard
       key={img.clientId || img.id}
       image={img}
