@@ -1,5 +1,5 @@
 import { db } from 'firebase-config';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { useCallback } from 'react';
 
 export const useGetAlbums = () => {
@@ -7,7 +7,9 @@ export const useGetAlbums = () => {
     return new Promise(async (resolve, reject) => {
       try {
         const idolsCollectionRef = collection(db, 'albums');
-        const querySnapshot = await getDocs(idolsCollectionRef);
+        const criteria = [idolsCollectionRef, orderBy('order', 'asc')];
+
+        const querySnapshot = await getDocs(query(...criteria));
 
         const data = querySnapshot.docs.map(doc => ({
           ...doc.data(),
