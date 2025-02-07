@@ -73,7 +73,7 @@ const CloseButton = styled.button`
   justify-content: center;
   font-weight: bold;
   text-align: center;
-  font-size: 17px;
+  font-size: 15px;
   color: white;
 
   &:hover {
@@ -132,6 +132,7 @@ const OpenButton = styled.button`
   justify-content: center;
   font-weight: bold;
   color: white;
+  font-size: 12px;
 
   &:hover {
     background: #87155a;
