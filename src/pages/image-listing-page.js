@@ -20,6 +20,7 @@ const Wrapper = styled.section`
 
 export const ImageListingPage = () => {
   const [images, setImages] = useState([]);
+  const [lastDocId, setLastDocId] = useState('');
   const { currentAlbum, setCurrentAlbum, albumList, setAlbumList } = useCachedAlbums();
 
   const getImages = useGetImages();
@@ -69,18 +70,16 @@ export const ImageListingPage = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (albumId) {
-          const images = await getImages(albumId);
-
+    if (albumId) {
+      getImages(albumId, lastDocId)
+        .then(response => {
           window.localStorage.setItem('currentAlbumId', albumId);
-          setImages(images);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    })();
+
+          setLastDocId(response.lastDocId);
+          setImages(response.data);
+        })
+        .catch(e => console.log(e));
+    }
   }, [albumId]);
 
   return (
