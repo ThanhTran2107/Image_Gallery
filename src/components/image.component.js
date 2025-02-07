@@ -1,4 +1,5 @@
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
@@ -66,8 +67,9 @@ const Banner = styled.div`
   border-radius: 9px 9px 0px 0px;
 
   display: none;
-  justify-content: flex-end;
   align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
 `;
 
 const DeleteButton = styled.div`
@@ -76,7 +78,18 @@ const DeleteButton = styled.div`
   color: #ffffff;
 
   &:hover {
-    color: #ffc2c2;
+    transform: scale(1.2);
+  }
+`;
+
+const DownloadButton = styled.button`
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.2);
   }
 `;
 
@@ -85,6 +98,33 @@ export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete,
   const addImages = useAddImage();
 
   const url = useMemo(() => image.url || URL.createObjectURL(image.file), [image]);
+
+  const handleDownloadImage = async () => {
+    try {
+      if (image) {
+        const response = await fetch(image.url);
+
+        if (response) {
+          const blob = await response.blob();
+
+          const url = URL.createObjectURL(blob);
+          const fileName = image.url.split('/');
+
+          const link = document.createElement('a');
+          link.download = `image-${fileName[3]}.jpg`;
+          link.href = url;
+
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          URL.revokeObjectURL(url);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
     if (image.file) {
@@ -106,6 +146,10 @@ export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete,
     <StyledImageContainer>
       <StyledImage src={url} alt="Uploaded" className="image" onClick={() => onSelectImage(image.id)} />
       <Banner className="banner">
+        <DownloadButton onClick={handleDownloadImage}>
+          <FontAwesomeIcon icon={faDownload} />
+        </DownloadButton>
+
         <DeleteButton onClick={() => onDelete(image.id)}>
           <FontAwesomeIcon icon={faTrashCan} />
         </DeleteButton>
