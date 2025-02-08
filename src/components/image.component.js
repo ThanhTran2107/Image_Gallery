@@ -1,5 +1,4 @@
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
@@ -15,7 +14,6 @@ const StyledImage = styled.img`
   height: 150px;
   object-fit: cover;
   border-radius: 10px;
-  border: 1px solid #ccc;
 `;
 
 const StyledImageContainer = styled.div`

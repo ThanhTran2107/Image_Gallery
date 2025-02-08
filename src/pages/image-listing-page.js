@@ -11,11 +11,14 @@ import { useCachedAlbums } from 'utilities/hooks/custom-hooks/use-cached-albums.
 import { useDeleteImage } from 'utilities/hooks/images/use-delete-image.hook';
 import { useGetImages } from 'utilities/hooks/images/use-get-images.hook';
 
-const Wrapper = styled.section`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 1536px;
+  min-height: 100vh;
   margin: 0 auto;
+  background-color: var(--background-color);
+  color: var(--text-color);
 `;
 
 export const ImageListingPage = () => {
