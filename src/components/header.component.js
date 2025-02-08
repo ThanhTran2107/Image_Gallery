@@ -1,6 +1,4 @@
-import { faCloudDownload } from '@fortawesome/free-solid-svg-icons';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faCloudDownload, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { trim } from 'lodash-es';
 import PropTypes from 'prop-types';
@@ -12,12 +10,12 @@ import { useUpdateAlbum } from 'utilities/hooks/albums/use-update-albums.hook';
 
 import { uploadImageService } from '../services/image';
 import { Spinner } from './spinner.component';
+import { ThemeSelector } from './theme-selector.component';
 
 const Header = styled.div`
   display: flex;
   padding: 16px;
   justify-content: space-between;
-  align-items: flex-end;
 
   @media only screen and (min-width: 768px) {
     .album-name {
@@ -87,6 +85,7 @@ const AlbumName = styled.div`
     border-radius: 5px;
     padding: 10px 10px;
     font-size: 20px;
+    color: black;
   }
 `;
 
@@ -117,14 +116,14 @@ const AvatarContainer = styled.div`
 `;
 
 const EditButton = styled.button`
-  display: flex;
+  display: inline-flex;
   color: #6767ff;
   font-size: 15px;
   gap: 10px;
   border: none;
   background: transparent;
   cursor: pointer;
-  width: 0;
+  width: fit-content;
 
   &.is-saving {
     display: none;
@@ -143,14 +142,14 @@ const EditButton = styled.button`
 `;
 
 const SaveButton = styled.button`
-  display: flex;
+  display: inline-flex;
   color: #6767ff;
   font-size: 15px;
   gap: 10px;
   border: none;
   background: transparent;
   cursor: pointer;
-  width: 0;
+  width: fit-content;
 
   &:hover {
     color: blue;
@@ -181,10 +180,22 @@ const ImagesCount = styled.h1`
   font-weight: normal;
 `;
 
+const DisplaySettings = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ThemeButton = styled(ThemeSelector)`
+  cursor: pointer;
+`;
+
 export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const inputRef = useRef(null);
+
   const updateAlbum = useUpdateAlbum();
 
   const handleOpenDialogFile = () => document.getElementById('avatar').click();
@@ -280,7 +291,11 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
           )}
         </AlbumName>
       </InfoAlbum>
-      <ImagesCount>{imagesCount} IMAGES</ImagesCount>
+
+      <DisplaySettings>
+        <ThemeButton />
+        <ImagesCount>{imagesCount} IMAGES</ImagesCount>
+      </DisplaySettings>
     </Header>
   );
 };

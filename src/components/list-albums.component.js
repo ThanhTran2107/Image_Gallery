@@ -1,3 +1,5 @@
+import { faClose } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -5,43 +7,34 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   position: fixed;
-  width: 550px;
-  height: 750px;
+  width: 620px;
+  min-height: 100vh;
   border: none;
-  background-color: #ffffff00;
+  background-color: var(--background-color);
   right: 0px;
-  transform: translateX(110%);
+  transform: translateX(100%);
   transition: transform 0.5s;
+  border: 1px solid white;
+  overflow: auto;
 
   &.is-show {
     transform: translateX(0);
   }
 `;
 
-const ListContainer = styled.div`
-  position: fixed;
-  width: 600px;
-  height: 750px;
-  border: none;
-  background-color: white;
-  right: 600px;
-  transform: translateX(100%);
-  transition: transform 0.5s;
-  overflow: auto;
-`;
-
 const Header = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   height: 60px;
-  background: #8f878736;
+  border-bottom: 1px solid white;
+  padding: 0 10px;
 
   .header-text {
     display: flex;
-    margin-left: 20px;
-    color: black;
     font-weight: bold;
     font-size: 20px;
+    margin-left: 10px;
   }
 `;
 
@@ -59,30 +52,10 @@ const BackDrop = styled.div`
 
 const CloseButton = styled.button`
   display: flex;
-  margin-top: 350px;
-  margin-left: -111px;
   border: none;
-  border-radius: 10px 10px 0 0;
   cursor: pointer;
-  background: #ca077e;
-  transform: rotate(270deg);
-  transform-origin: center;
-  width: 90px;
-  height: 30px;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  text-align: center;
+  background: transparent;
   font-size: 15px;
-  color: white;
-
-  &:hover {
-    background: #87155a;
-  }
-
-  &.is-show {
-    display: none;
-  }
 `;
 
 const AlbumList = styled.div`
@@ -109,10 +82,6 @@ const Items = styled.div`
       box-sizing: border-box;
       border: 4px solid #ca077e;
     }
-  }
-
-  p {
-    color: black;
   }
 `;
 
@@ -157,17 +126,16 @@ export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
     <>
       <OpenButton onClick={handleOpenAlbum}>All Albums</OpenButton>
       {showAlbums && <BackDrop onClick={handleCloseAlbums} />}
-      <Container className={classNames({ 'is-show': showAlbums })}>
-        <ListContainer className="list-container" onClick={event => event.stopPropagation()}>
-          <Header>
-            <span className="header-text">All Albums</span>
-          </Header>
-          <AlbumList>{albumsList}</AlbumList>
-        </ListContainer>
 
-        <CloseButton onClick={handleCloseAlbums} className={classNames({ 'is-show': !showAlbums })}>
-          Close
-        </CloseButton>
+      <Container className={classNames({ 'is-show': showAlbums })} onClick={event => event.stopPropagation()}>
+        <Header>
+          <span className="header-text">All Albums</span>
+          <CloseButton onClick={handleCloseAlbums}>
+            <FontAwesomeIcon icon={faClose} />
+          </CloseButton>
+        </Header>
+
+        <AlbumList>{albumsList}</AlbumList>
       </Container>
     </>
   );
