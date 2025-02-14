@@ -2,6 +2,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { MODE, THEME_OPTIONS } from 'constant';
 import { map, some } from 'lodash-es';
 import { useState } from 'react';
+import styled from 'styled-components';
+
+const ThemeButton = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  font-size: 0.5rem;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 1rem;
+  }
+  @media only screen and (min-width: 1024px) {
+    font-size: 1.5rem;
+  }
+`;
 
 export const ThemeSelector = () => {
   const [currentTheme, setCurrentTheme] = useState(() => {
@@ -28,7 +41,7 @@ export const ThemeSelector = () => {
         THEME_OPTIONS,
         ({ icon, mode }) =>
           mode === (currentTheme === MODE.dark ? MODE.light : MODE.dark) && (
-            <FontAwesomeIcon key={mode} icon={icon} onClick={handleToggleTheme} />
+            <ThemeButton key={mode} icon={icon} onClick={handleToggleTheme} />
           ),
       )}
     </>

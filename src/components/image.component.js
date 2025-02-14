@@ -1,5 +1,6 @@
 import { faDownload, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { COLORS } from 'constant';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
@@ -11,75 +12,88 @@ import { Spinner } from './spinner.component';
 
 const StyledImage = styled.img`
   width: 100%;
-  height: 150px;
+  height: 20rem;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 1rem;
 `;
 
 const StyledImageContainer = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
   position: relative;
   transition: transform 180ms cubic-bezier(0.25, 1, 0.5, 1);
+  justify-content: center;
+  align-items: center;
+  border-radius: 1rem;
+  border: 0.1rem solid var(--border-image-color);
+
   &:hover {
     transform: scale(1.05);
+
     .banner {
       display: flex;
     }
   }
+
   @media only screen and (min-width: 768px) {
     .image {
-      height: 200px;
+      height: 25rem;
     }
     .banner {
-      height: 25px;
+      height: 3rem;
     }
   }
+
   @media only screen and (min-width: 1024px) {
     .image {
-      height: 300px;
+      height: 30rem;
     }
     .banner {
-      height: 35px;
+      height: 4rem;
     }
   }
 `;
 
 const Banner = styled.div`
   position: absolute;
-  bottom: 88.5%;
   width: 100%;
-  height: 17.5px;
-  background: #726f6f75;
-  font-size: 15px;
+  height: 2rem;
+  background-color: ${COLORS.FOG_GRAY};
+  font-size: 1.5rem;
   font-weight: bold;
   border: none;
-  border-radius: 9px 9px 0px 0px;
+  border-radius: 1rem 1rem 0 0;
   display: none;
   align-items: center;
   justify-content: flex-end;
-  gap: 10px;
+  top: 0;
+  gap: 1rem;
 `;
 
-const DeleteButton = styled.div`
-  margin-right: 10px;
+const DeleteButton = styled(FontAwesomeIcon)`
+  padding: 1rem;
   cursor: pointer;
-  color: #ffffff;
+  color: ${COLORS.WHITE};
+
   &:hover {
     transform: scale(1.2);
   }
 `;
 
-const DownloadButton = styled.button`
+const DownloadButton = styled(FontAwesomeIcon)`
   border: none;
-  background: transparent;
-  color: #ffffff;
+  background-color: transparent;
+  color: ${COLORS.WHITE};
   cursor: pointer;
+
   &:hover {
     transform: scale(1.2);
   }
+`;
+
+const StyledSpinner = styled(Spinner)`
+  width: 8rem;
+  height: 8rem;
 `;
 
 export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete, onDelete }) => {
@@ -132,19 +146,18 @@ export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete,
   }, [image.file]);
 
   return (
-    <StyledImageContainer>
-      <StyledImage src={url} alt="Uploaded" className="image" onClick={() => onSelectImage(image.id)} />
-      <Banner className="banner">
-        <DownloadButton onClick={handleDownloadImage}>
-          <FontAwesomeIcon icon={faDownload} />
-        </DownloadButton>
+    <>
+      <StyledImageContainer>
+        <StyledImage src={url} alt="Uploaded" className="image" onClick={() => onSelectImage(image.id)} />
 
-        <DeleteButton onClick={() => onDelete(image.id)}>
-          <FontAwesomeIcon icon={faTrashCan} />
-        </DeleteButton>
-      </Banner>
-      {isUploading && <Spinner />}
-    </StyledImageContainer>
+        <Banner className="banner">
+          <DownloadButton icon={faDownload} onClick={handleDownloadImage} />
+          <DeleteButton icon={faTrashCan} onClick={() => onDelete(image.id)} />
+        </Banner>
+
+        {isUploading && <StyledSpinner />}
+      </StyledImageContainer>
+    </>
   );
 };
 
