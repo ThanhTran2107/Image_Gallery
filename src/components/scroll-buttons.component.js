@@ -1,59 +1,46 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { COLORS } from 'constant';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-const ArrowUpButton = styled.button`
+import { Button } from './button.component';
+
+const StyledButton = styled(Button)`
   position: fixed;
-  bottom: 110px;
-  right: 20px;
+  right: 2rem;
   border-radius: 100%;
-  width: 50px;
-  height: 50px;
+  width: 5rem;
+  height: 5rem;
   border: none;
-  background-color: rgb(0 123 255);
-  font-size: 20px;
-  color: white;
+  background-color: ${COLORS.BRIGHT_BLUE};
+  font-size: 1.5rem;
+  color: ${COLORS.WHITE};
   cursor: pointer;
-  transition: 0.3s;
+  transition: transform 0.3s;
 
   &:hover {
     transform: scale(1.1);
-    background-color: rgb(15 75 139);
+    background-color: ${COLORS.BLUE} !important;
+    color: ${COLORS.WHITE} !important;
   }
 `;
 
-const ArrowDownButton = styled.button`
-  position: fixed;
-  bottom: 30px;
-  right: 20px;
-  border-radius: 100%;
-  width: 50px;
-  height: 50px;
-  border: none;
-  background-color: rgb(0 123 255);
-  font-size: 20px;
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
+const ArrowUpButton = styled(StyledButton)`
+  bottom: 10rem;
+`;
 
-  &:hover {
-    transform: scale(1.1);
-    background-color: rgb(15 75 139);
-  }
+const ArrowDownButton = styled(StyledButton)`
+  bottom: 2rem;
 `;
 
 export const ScrollButtons = () => {
   const [invisibleUp, setInvisibleUp] = useState(true);
   const [invisibleDown, setInvisibleDown] = useState(false);
 
-  const handleScrollUp = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const handleScrollUp = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  const handleScrollDown = () => {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  };
+  const handleScrollDown = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 
   useEffect(() => {
     const handleScroll = event => {

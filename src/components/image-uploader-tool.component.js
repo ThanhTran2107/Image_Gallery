@@ -1,22 +1,25 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { COLORS } from 'constant';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
 import { isValidImageSize } from '../services/isValidImageSize';
+import { Button } from './button.component';
 
-const UploadButton = styled.button`
+const UploadButton = styled(Button)`
   width: 100%;
-  height: 150px;
-  border-radius: 10px;
-  background: #3b3b3b;
-  border: none;
+  height: 20rem;
+  border-radius: 1rem;
+  border: 0.1rem solid var(--border-upload-button-color);
+  background-color: ${COLORS.DARK_GRAY};
   cursor: pointer;
   transition: transform 180ms cubic-bezier(0.25, 1, 0.5, 1);
 
   &:hover {
+    background-color: ${COLORS.DARK_GRAY} !important;
     transform: scale(1.05);
 
     .icon {
@@ -25,11 +28,11 @@ const UploadButton = styled.button`
   }
 
   @media only screen and (min-width: 768px) {
-    height: 200px;
+    height: 25rem;
   }
 
   @media only screen and (min-width: 1024px) {
-    height: 300px;
+    height: 30rem;
   }
 `;
 
@@ -78,7 +81,7 @@ export const ImageUploaderTool = ({ onFilesAttached }) => {
   return (
     <UploadButton onClick={handleOpenDialogFile}>
       <input onChange={handleImageValidation} type="file" id="file" multiple style={{ display: 'none' }} />
-      <FontAwesomeIcon className="icon" icon={faPlus} style={{ width: '40px', height: '40px', color: 'white' }} />
+      <FontAwesomeIcon className="icon" icon={faPlus} style={{ width: '40px', height: '40px', color: COLORS.WHITE }} />
     </UploadButton>
   );
 };

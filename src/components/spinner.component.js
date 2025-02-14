@@ -1,11 +1,10 @@
+import { COLORS } from 'constant';
 import styled from 'styled-components';
 
 const StyledSpinner = styled.div`
   border: 4px solid transparent;
-  border-top: 4px solid #ffffff;
+  border-top: 4px solid ${COLORS.BRIGHT_BLUE};
   border-radius: 100%;
-  width: 50px;
-  height: 50px;
   animation: spin 1s linear infinite;
   position: absolute;
 
@@ -19,4 +18,4 @@ const StyledSpinner = styled.div`
   }
 `;
 
-export const Spinner = () => <StyledSpinner />;
+export const Spinner = ({ className }) => <StyledSpinner className={className} />;

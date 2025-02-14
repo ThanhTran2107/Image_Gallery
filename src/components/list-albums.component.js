@@ -1,20 +1,22 @@
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
+import { COLORS } from 'constant';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import styled from 'styled-components';
 
+import { Button } from './button.component';
+
 const Container = styled.div`
   position: fixed;
-  width: 620px;
+  width: 64rem;
   min-height: 100vh;
-  border: none;
   background-color: var(--background-color);
-  right: 0px;
+  right: 0;
   transform: translateX(100%);
   transition: transform 0.5s;
-  border: 1px solid white;
+  border: 0.1rem solid white;
   overflow: auto;
 
   &.is-show {
@@ -26,15 +28,13 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
-  border-bottom: 1px solid white;
-  padding: 0 10px;
+  height: 4rem;
+  padding: 2rem;
 
   .header-text {
     display: flex;
     font-weight: bold;
-    font-size: 20px;
-    margin-left: 10px;
+    font-size: 1.6rem;
   }
 `;
 
@@ -46,65 +46,67 @@ const BackDrop = styled.div`
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0 0 0 / 55%);
+  background-color: ${COLORS.BLACK_55};
   justify-content: center;
 `;
 
-const CloseButton = styled.button`
+const CloseButton = styled(FontAwesomeIcon)`
   display: flex;
   border: none;
   cursor: pointer;
-  background: transparent;
-  font-size: 15px;
+  font-size: 2rem;
 `;
 
 const AlbumList = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  position: fixed;
-  top: 100px;
-  width: 600px;
+  position: absolute;
+  width: 62rem;
+  padding: 2rem 0.5rem;
 `;
 
 const Items = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
+  font-size: 1.6rem;
 
   img {
-    width: 150px;
-    height: 150px;
+    width: 16rem;
+    height: 16rem;
     border-radius: 100%;
     object-fit: cover;
     cursor: pointer;
 
     &:hover {
       box-sizing: border-box;
-      border: 4px solid #ca077e;
+      border: 0.4rem solid #ca077e;
     }
   }
 `;
 
-const OpenButton = styled.button`
+const OpenButton = styled(Button)`
   display: flex;
   position: fixed;
-  right: -35px;
-  top: 350px;
+  right: -4rem;
+  top: 32rem;
   border: none;
-  border-radius: 10px 10px 0 0;
+  border-radius: 1rem 1rem 0 0;
   cursor: pointer;
-  background: #ca077e;
+  background-color: ${COLORS.DEEP_PINK};
   transform: rotate(270deg);
-  width: 100px;
-  height: 30px;
+  width: 10rem;
+  height: 2.5rem;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  color: white;
-  font-size: 12px;
+  color: ${COLORS.WHITE};
+  font-size: 1.2rem;
 
   &:hover {
-    background: #87155a;
+    background-color: ${COLORS.DARK_PINK} !important;
+    color: ${COLORS.WHITE} !important;
   }
 `;
 
@@ -130,9 +132,7 @@ export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
       <Container className={classNames({ 'is-show': showAlbums })} onClick={event => event.stopPropagation()}>
         <Header>
           <span className="header-text">All Albums</span>
-          <CloseButton onClick={handleCloseAlbums}>
-            <FontAwesomeIcon icon={faClose} />
-          </CloseButton>
+          <CloseButton icon={faClose} onClick={handleCloseAlbums} />
         </Header>
 
         <AlbumList>{albumsList}</AlbumList>

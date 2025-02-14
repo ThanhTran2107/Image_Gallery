@@ -1,5 +1,6 @@
 import { faCheck, faCloudDownload, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { COLORS } from 'constant';
 import { trim } from 'lodash-es';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
@@ -14,78 +15,83 @@ import { ThemeSelector } from './theme-selector.component';
 
 const Header = styled.div`
   display: flex;
-  padding: 16px;
+  padding: 1rem;
   justify-content: space-between;
 
   @media only screen and (min-width: 768px) {
     .album-name {
-      font-size: 25px;
-    }
-
-    .icon-upload-avatar {
-      font-size: 20px;
-      color: white;
+      font-size: 2rem;
     }
 
     .back-drop {
-      width: 120px;
-      height: 120px;
+      width: 12rem;
+      height: 12rem;
     }
 
     .album-avatar {
-      width: 120px;
-      height: 120px;
+      width: 12rem;
+      height: 12rem;
     }
 
     .icon-edit {
-      font-size: 20px;
+      font-size: 1rem;
+    }
+
+    .icon-save {
+      font-size: 1rem;
     }
   }
 
   @media only screen and (min-width: 1024px) {
     .album-name {
-      font-size: 30px;
-    }
-
-    .icon-upload-avatar {
-      font-size: 25px;
-      color: white;
+      font-size: 2.5rem;
     }
 
     .back-drop {
-      width: 160px;
-      height: 160px;
+      width: 16rem;
+      height: 16rem;
     }
 
     .album-avatar {
-      width: 160px;
-      height: 160px;
+      width: 16rem;
+      height: 16rem;
     }
 
     .icon-edit {
-      font-size: 25px;
+      font-size: 2rem;
+    }
+
+    .icon-save {
+      font-size: 2rem;
     }
   }
 `;
 
 const InfoAlbum = styled.div`
   display: flex;
-  gap: 30px;
+  gap: 1rem;
+
+  @media only screen and (min-width: 768px) {
+    gap: 1.5rem;
+  }
+  @media only screen and (min-width: 1024px) {
+    gap: 2rem;
+  }
 `;
 
 const AlbumName = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  font-size: 20px;
-  gap: 15px;
+  font-size: 1.5rem;
+  gap: 1rem;
 
   .input-album-name {
-    border: 1px solid blue;
-    border-radius: 5px;
-    padding: 10px 10px;
-    font-size: 20px;
-    color: black;
+    border: 0.1rem solid blue;
+    border-radius: 0.5rem;
+    padding: 1rem 1rem;
+    font-size: 2rem;
+    color: ${COLORS.BLACK};
   }
 `;
 
@@ -93,8 +99,8 @@ const Avatar = styled.img`
   border-radius: 100%;
   cursor: pointer;
   object-fit: cover;
-  width: 90px;
-  height: 90px;
+  width: 8rem;
+  height: 8rem;
 `;
 
 const AvatarContainer = styled.div`
@@ -109,19 +115,17 @@ const AvatarContainer = styled.div`
     }
     .icon-upload-avatar {
       display: flex;
-      font-size: 25px;
-      color: white;
+      font-size: 2.5rem;
+      color: ${COLORS.WHITE};
     }
   }
 `;
 
-const EditButton = styled.button`
-  display: inline-flex;
-  color: #6767ff;
-  font-size: 15px;
-  gap: 10px;
+const EditButton = styled(FontAwesomeIcon)`
+  color: ${COLORS.BRIGHT_BLUE};
+  font-size: 0.8rem;
   border: none;
-  background: transparent;
+  background-color: transparent;
   cursor: pointer;
   width: fit-content;
 
@@ -130,54 +134,45 @@ const EditButton = styled.button`
   }
 
   &:hover {
-    color: blue;
-  }
-
-  @media only screen and (min-width: 768px) {
-    font-size: 20px;
-  }
-  @media only screen and (min-width: 1024px) {
-    font-size: 25px;
+    color: ${COLORS.BLUE};
   }
 `;
 
-const SaveButton = styled.button`
-  display: inline-flex;
-  color: #6767ff;
-  font-size: 15px;
-  gap: 10px;
+const SaveButton = styled(FontAwesomeIcon)`
+  color: ${COLORS.BRIGHT_BLUE};
+  font-size: 0.8rem;
   border: none;
-  background: transparent;
+  background-color: transparent;
   cursor: pointer;
   width: fit-content;
 
   &:hover {
-    color: blue;
-  }
-
-  @media only screen and (min-width: 768px) {
-    font-size: 20px;
-  }
-  @media only screen and (min-width: 1024px) {
-    font-size: 25px;
+    color: ${COLORS.BLUE};
   }
 `;
 
 const BackDrop = styled.div`
   display: none;
-  background-color: rgb(0 0 0 / 55%);
+  background-color: ${COLORS.BLACK_55};
   border-radius: 100%;
-  margin-left: -160px;
+  margin-left: -16rem;
   justify-content: center;
   align-items: center;
-  width: 90px;
-  height: 90px;
+  width: 4rem;
+  height: 4rem;
   cursor: pointer;
 `;
 
 const ImagesCount = styled.h1`
-  font-size: 18px;
+  font-size: 0.5rem;
   font-weight: normal;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 1rem;
+  }
+  @media only screen and (min-width: 1024px) {
+    font-size: 1.5rem;
+  }
 `;
 
 const DisplaySettings = styled.div`
@@ -187,8 +182,9 @@ const DisplaySettings = styled.div`
   align-items: center;
 `;
 
-const ThemeButton = styled(ThemeSelector)`
-  cursor: pointer;
+const StyledSpinner = styled(Spinner)`
+  width: 4rem;
+  height: 4rem;
 `;
 
 export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
@@ -266,34 +262,28 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
             <FontAwesomeIcon className="icon-upload-avatar" icon={faCloudDownload} />
             <input onChange={handleUpdateAvatar} type="file" id="avatar" style={{ display: 'none' }} />
           </BackDrop>
-          {isUploading && <Spinner />}
+          {isUploading && <StyledSpinner />}
         </AvatarContainer>
 
         <AlbumName>
           {!isEditMode && (
             <>
               <span className="album-name">{album.name}</span>
-              <EditButton onClick={handleClickEditButton}>
-                <FontAwesomeIcon className="icon-edit" icon={faEdit} />
-                Edit
-              </EditButton>
+              <EditButton className="icon-edit" icon={faEdit} onClick={handleClickEditButton} />
             </>
           )}
 
           {isEditMode && (
             <>
               <input className="input-album-name" type="text" defaultValue={album.name} ref={inputRef} />
-              <SaveButton onClick={handleSaveName}>
-                <FontAwesomeIcon className="icon-save" icon={faCheck} />
-                Save
-              </SaveButton>
+              <SaveButton className="icon-save" icon={faCheck} onClick={handleSaveName} />
             </>
           )}
         </AlbumName>
       </InfoAlbum>
 
       <DisplaySettings>
-        <ThemeButton />
+        <ThemeSelector />
         <ImagesCount>{imagesCount} IMAGES</ImagesCount>
       </DisplaySettings>
     </Header>

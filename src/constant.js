@@ -7,10 +7,14 @@ export const FIRE_BASE_IMAGE_TABLE = 'FIRE_BASE_IMAGE_TABLE';
 export const FIRE_BASE_IMAGE_FIELD_ID = 'FIRE_BASE_IMAGE_FIELD_ID';
 
 export const COLORS = Object.freeze({
-  darkBackground: 'black',
-  lightPrimaryText: 'black',
-  lightBackground: 'white',
-  darkPrimaryText: 'white',
+  BLACK: '#000000',
+  WHITE: '#FFFFFF',
+  BRIGHT_BLUE: 'rgb(0 123 255)',
+  FOG_GRAY: '#726f6f75',
+  DARK_GRAY: '#3b3b3b',
+  DEEP_PINK: '#ca077e',
+  BLUE: 'blue',
+  BLACK_55: 'rgb(0 0 0 / 55%)',
 });
 
 export const MODE = Object.freeze({

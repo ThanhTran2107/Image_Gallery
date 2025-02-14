@@ -1,3 +1,4 @@
+import { COLORS } from 'constant';
 import { map } from 'lodash-es';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -10,8 +11,8 @@ import { ImageCard } from './image.component';
 const GalleryWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  padding: 16px;
+  gap: 1.6rem;
+  padding: 1rem;
   justify-content: center;
 
   @media only screen and (min-width: 768px) {
@@ -33,7 +34,7 @@ const PreviewImageModal = styled.div`
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0 0 0 / 55%);
+  background-color: ${COLORS.BLACK_55};
   justify-content: center;
 `;
 
@@ -41,7 +42,6 @@ const PreviewImage = styled.img`
   position: absolute;
   margin: auto;
   display: block;
-  width: 100;
   height: 100vh;
 `;
 

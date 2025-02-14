@@ -1,11 +1,5 @@
-[data-theme="dark"] {
-  --background-color: black;
-  --text-color: white;
-}
-
-[data-theme="light"] {
-  --background-color: white;
-  --text-color: black;
+html {
+  font-size: 62.5%; /* 16px * 62.5% = 10px */
 }
 
 body {
@@ -16,6 +10,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+[data-theme="dark"] {
+  --background-color: black;
+  --text-color: white;
+  --border-image-color: white;
+  --border-upload-button-color: white;
+  --divider-border-color: white;
+}
+
+[data-theme="light"] {
+  --background-color: white;
+  --text-color: black;
+  --border-image-color: #726f6f75;
+  --border-upload-button-color: transparent;
+  --divider-border-color: #726f6f75;
 }
