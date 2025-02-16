@@ -5,12 +5,11 @@ import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
+import { Spinner } from 'components/spinner.component';
+
 import { useAddImage } from 'utilities/hooks/data-hooks/images/use-add-image.hook';
 
-import { Image } from '../../components/image.component';
-import { Spinner } from '../../components/spinner.component';
-
-const StyledImage = styled(Image)`
+const StyledImage = styled.img`
   width: 100%;
   height: 20rem;
   object-fit: cover;

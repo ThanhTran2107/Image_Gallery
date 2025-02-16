@@ -8,6 +8,7 @@ import styled from 'styled-components';
 
 import { Avatar } from '../../components/avatar.component';
 import { Button } from '../../components/button.component';
+import { Space } from '../../components/space.component';
 
 const Container = styled.div`
   position: fixed;
@@ -63,14 +64,13 @@ const AlbumList = styled.div`
   grid-template-columns: repeat(3, 1fr);
   position: absolute;
   width: 62rem;
-  padding: 2rem 0.5rem;
+  padding: 2.5rem 0.5rem;
 `;
 
 const Items = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
   font-size: 1.6rem;
 `;
 
@@ -120,8 +120,10 @@ export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
 
   const albumsList = albums.map(({ avatar, id, name }) => (
     <Items className="item" key={id} onClick={() => onSelectedAlbumId(id)}>
-      <StyledImage src={avatar} alt={name} />
-      <p>{name}</p>
+      <Space direction="vertical" size="small" align="center">
+        <StyledImage src={avatar} alt={name} />
+        <p>{name}</p>
+      </Space>
     </Items>
   ));
 
