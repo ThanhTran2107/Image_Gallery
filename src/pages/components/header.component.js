@@ -15,6 +15,7 @@ import { uploadImageService } from 'services/uploadImageService';
 import { useUpdateAlbum } from 'utilities/hooks/data-hooks/albums/use-update-albums.hook';
 
 import { Avatar } from '../../components/avatar.component';
+import { Space } from '../../components/space.component';
 
 const Header = styled.div`
   display: flex;
@@ -72,7 +73,6 @@ const Header = styled.div`
 
 const InfoAlbum = styled.div`
   display: flex;
-  gap: 1rem;
 
   @media only screen and (min-width: 768px) {
     gap: 1.5rem;
@@ -87,7 +87,6 @@ const AlbumName = styled.div`
   flex-direction: column;
   justify-content: center;
   font-size: 1.5rem;
-  gap: 1rem;
 
   .input-album-name {
     border: 0.1rem solid blue;
@@ -180,13 +179,6 @@ const ImagesCount = styled.h1`
   }
 `;
 
-const DisplaySettings = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 const StyledSpinner = styled(Spinner)`
   width: 4rem;
   height: 4rem;
@@ -261,36 +253,40 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
   return (
     <Header>
       <InfoAlbum>
-        <AvatarContainer>
-          <AlbumAvatar className="album-avatar" src={album.avatar} alt={album.name} />
-          <BackDrop className="back-drop" onClick={handleOpenDialogFile}>
-            <FontAwesomeIcon className="icon-upload-avatar" icon={faCloudDownload} />
-            <input onChange={handleUpdateAvatar} type="file" id="avatar" style={{ display: 'none' }} />
-          </BackDrop>
-          {isUploading && <StyledSpinner />}
-        </AvatarContainer>
+        <Space size="large" direction="horizontal">
+          <AvatarContainer>
+            <AlbumAvatar className="album-avatar" src={album.avatar} alt={album.name} />
+            <BackDrop className="back-drop" onClick={handleOpenDialogFile}>
+              <FontAwesomeIcon className="icon-upload-avatar" icon={faCloudDownload} />
+              <input onChange={handleUpdateAvatar} type="file" id="avatar" style={{ display: 'none' }} />
+            </BackDrop>
+            {isUploading && <StyledSpinner />}
+          </AvatarContainer>
 
-        <AlbumName>
-          {!isEditMode && (
-            <>
-              <span className="album-name">{album.name}</span>
-              <EditButton className="icon-edit" icon={faEdit} onClick={handleClickEditButton} />
-            </>
-          )}
+          <AlbumName>
+            <Space direction="vertical" size="small">
+              {!isEditMode && (
+                <>
+                  <span className="album-name">{album.name}</span>
+                  <EditButton className="icon-edit" icon={faEdit} onClick={handleClickEditButton} />
+                </>
+              )}
 
-          {isEditMode && (
-            <>
-              <input className="input-album-name" type="text" defaultValue={album.name} ref={inputRef} />
-              <SaveButton className="icon-save" icon={faCheck} onClick={handleSaveName} />
-            </>
-          )}
-        </AlbumName>
+              {isEditMode && (
+                <>
+                  <input className="input-album-name" type="text" defaultValue={album.name} ref={inputRef} />
+                  <SaveButton className="icon-save" icon={faCheck} onClick={handleSaveName} />
+                </>
+              )}
+            </Space>
+          </AlbumName>
+        </Space>
       </InfoAlbum>
 
-      <DisplaySettings>
+      <Space direction="vertical" align="end" justify="space-between">
         <ThemeSelector />
         <ImagesCount>{imagesCount} IMAGES</ImagesCount>
-      </DisplaySettings>
+      </Space>
     </Header>
   );
 };
