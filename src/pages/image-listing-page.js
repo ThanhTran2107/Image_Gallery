@@ -2,14 +2,15 @@ import { find, findIndex, map } from 'lodash-es';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { GalleryImages } from 'components/gallery-images.component';
-import { HeaderPage } from 'components/header.component';
-import { ListAlbums } from 'components/list-albums.component';
-import { ScrollButtons } from 'components/scroll-buttons.component';
-
 import { useCachedAlbums } from 'utilities/hooks/custom-hooks/use-cached-albums.hook';
-import { useDeleteImage } from 'utilities/hooks/images/use-delete-image.hook';
-import { useGetImages } from 'utilities/hooks/images/use-get-images.hook';
+import { useEnqueueUpload } from 'utilities/hooks/custom-hooks/use-enqueue-upload-image.hook';
+import { useDeleteImage } from 'utilities/hooks/data-hooks/images/use-delete-image.hook';
+import { useGetImages } from 'utilities/hooks/data-hooks/images/use-get-images.hook';
+
+import { GalleryImages } from './components/gallery-images.component';
+import { HeaderPage } from './components/header.component';
+import { ListAlbums } from './components/list-albums.component';
+import { ScrollButtons } from './components/scroll-buttons.component';
 
 const Wrapper = styled.div`
   display: flex;
@@ -29,6 +30,7 @@ export const ImageListingPage = () => {
   const getImages = useGetImages();
   const deleteImage = useDeleteImage();
   const albumId = currentAlbum.id;
+  const enqueueUpload = useEnqueueUpload();
 
   const handleDeleteImages = deleteId => {
     const newImages = [...images];
@@ -94,6 +96,7 @@ export const ImageListingPage = () => {
         onFilesAttached={handleImagesAttached}
         onFileUploadComplete={handleFileUploadComplete}
         albumId={albumId}
+        enqueueUpload={enqueueUpload}
       />
       <ScrollButtons />
       <ListAlbums albums={albumList} onSelectedAlbumId={handleSetAlbumId} />
