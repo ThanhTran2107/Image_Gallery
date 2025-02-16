@@ -1,7 +1,7 @@
 import { find, isEmpty } from 'lodash-es';
 import { useEffect, useState } from 'react';
 
-import { useGetAlbums } from '../albums/use-get-albums.hook';
+import { useGetAlbums } from '../data-hooks/albums/use-get-albums.hook';
 
 export const useCachedAlbums = () => {
   const [currentAlbum, setCurrentAlbum] = useState({});
