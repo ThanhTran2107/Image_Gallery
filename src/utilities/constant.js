@@ -7,20 +7,29 @@ export const FIRE_BASE_IMAGE_TABLE = 'FIRE_BASE_IMAGE_TABLE';
 export const FIRE_BASE_IMAGE_FIELD_ID = 'FIRE_BASE_IMAGE_FIELD_ID';
 
 export const COLORS = Object.freeze({
+  //NEUTRAL COLORS
   BLACK: '#000000',
   WHITE: '#FFFFFF',
+
+  //BLUE COLORS
   BRIGHT_BLUE: 'rgb(0 123 255)',
+  BLUE: 'blue',
+
+  //GRAY COLORS
   FOG_GRAY: '#726f6f75',
   DARK_GRAY: '#3b3b3b',
+
+  //PINK COLORS
   DARK_PINK: '#70114b',
   DEEP_PINK: '#ca077e',
-  BLUE: 'blue',
+
+  //SHADE COLOR
   BLACK_55: 'rgb(0 0 0 / 55%)',
 });
 
 export const MODE = Object.freeze({
-  dark: 'dark',
-  light: 'light',
+  DARK: 'dark',
+  LIGHT: 'light',
 });
 
 export const THEME_OPTIONS = [

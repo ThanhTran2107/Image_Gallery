@@ -1,13 +1,14 @@
 import { faDownload, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { COLORS } from 'constant';
 import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
 import { Spinner } from 'components/spinner.component';
 
+import { COLORS } from 'utilities/constant';
 import { useAddImage } from 'utilities/hooks/data-hooks/images/use-add-image.hook';
+import { downloadImageService } from 'utilities/services/image';
 
 const StyledImage = styled.img`
   width: 100%;
@@ -95,38 +96,13 @@ const StyledSpinner = styled(Spinner)`
   height: 8rem;
 `;
 
-export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete, onDelete, enqueueUpload }) => {
+export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete, onDelete, onEnqueueUpload }) => {
   const [isUploading, setIsUploading] = useState(false);
   const addImages = useAddImage();
 
   const url = useMemo(() => image.url || URL.createObjectURL(image.file), [image]);
 
-  const handleDownloadImage = async () => {
-    try {
-      if (image) {
-        const response = await fetch(image.url);
-
-        if (response) {
-          const blob = await response.blob();
-
-          const url = URL.createObjectURL(blob);
-          const fileName = image.url.split('/');
-
-          const link = document.createElement('a');
-          link.download = `image-${fileName[3]}.jpg`;
-          link.href = url;
-
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-          URL.revokeObjectURL(url);
-        }
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const handleDownloadImage = () => downloadImageService(image);
 
   useEffect(() => {
     (async () => {
@@ -134,7 +110,7 @@ export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete,
         if (image.file) {
           setIsUploading(true);
 
-          const data = await enqueueUpload(image.file);
+          const data = await onEnqueueUpload(image.file);
 
           const { url } = data.data.image;
 
@@ -172,4 +148,5 @@ ImageCard.propTypes = {
   onDelete: PropTypes.func.isRequired,
   albumId: PropTypes.string.isRequired,
   onFileUploadComplete: PropTypes.func.isRequired,
+  onEnqueueUpload: PropTypes.func.isRequired,
 };

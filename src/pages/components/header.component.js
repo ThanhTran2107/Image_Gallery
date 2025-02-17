@@ -1,21 +1,23 @@
 import { faCheck, faCloudDownload, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { COLORS } from 'constant';
 import { trim } from 'lodash-es';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
-import { toast } from 'react-toastify';
 import styled from 'styled-components';
 
+import { Avatar } from 'components/avatar.component';
+import { Button } from 'components/button.component';
+import { Dropdown } from 'components/dropdown.component';
+import { notification } from 'components/notification.component';
+import { Space } from 'components/space.component';
 import { Spinner } from 'components/spinner.component';
 import { ThemeSelector } from 'components/theme-selector.component';
 
-import { uploadImageService } from 'services/uploadImageService';
-
+import { COLORS } from 'utilities/constant';
 import { useUpdateAlbum } from 'utilities/hooks/data-hooks/albums/use-update-albums.hook';
+import { uploadImageService } from 'utilities/services/uploadImageService';
 
-import { Avatar } from '../../components/avatar.component';
-import { Space } from '../../components/space.component';
+import { CreateAlbumModal } from './create-album-form.component';
 
 const Header = styled.div`
   display: flex;
@@ -184,9 +186,15 @@ const StyledSpinner = styled(Spinner)`
   height: 4rem;
 `;
 
-export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
+export const HeaderPage = ({ album, imagesCount, onUpdateAlbum, onAddAlbum, albums }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isOpenCreateAlbumForm, setIsOpenCreateAlbumForm] = useState(false);
+
+  const handleOpenCreateAlbumForm = () => setIsOpenCreateAlbumForm(true);
+
+  const handleCloseCreateAlbumForm = () => setIsOpenCreateAlbumForm(false);
+
   const inputRef = useRef(null);
 
   const updateAlbum = useUpdateAlbum();
@@ -203,7 +211,7 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
 
       updateAlbum(updatedAlbumName.id, updatedAlbumName)
         .then(() => {
-          toast.success('Update album name successfully');
+          notification.success({ message: 'Update album name successfully' });
 
           onUpdateAlbum(updatedAlbumName);
           setIsEditMode(false);
@@ -233,7 +241,7 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
 
       updateAlbum(updatedAlbumAvatar.id, updatedAlbumAvatar)
         .then(() => {
-          toast.success('Update avatar successfully');
+          notification.success({ message: 'Update avatar successfully' });
 
           setIsUploading(false);
           onUpdateAlbum(updatedAlbumAvatar);
@@ -244,6 +252,23 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
           setIsUploading(false);
         });
     });
+  };
+
+  const items = [
+    {
+      label: 'Create an album',
+      key: '1',
+      onClick: handleOpenCreateAlbumForm,
+    },
+    {
+      label: 'Delete the album',
+      key: '2',
+      onClick: () => alert('Coming soon!'),
+    },
+  ];
+
+  const menuProps = {
+    items,
   };
 
   useEffect(() => {
@@ -285,8 +310,20 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum }) => {
 
       <Space direction="vertical" align="end" justify="space-between">
         <ThemeSelector />
-        <ImagesCount>{imagesCount} IMAGES</ImagesCount>
+        <Space direction="vertical" size="small" align="end">
+          <ImagesCount>{imagesCount} IMAGES</ImagesCount>
+          <Dropdown menu={menuProps}>
+            <Button>Select Actions</Button>
+          </Dropdown>
+        </Space>
       </Space>
+
+      <CreateAlbumModal
+        isOpen={isOpenCreateAlbumForm}
+        albums={albums}
+        onClose={handleCloseCreateAlbumForm}
+        onSubmit={onAddAlbum}
+      />
     </Header>
   );
 };
@@ -299,4 +336,13 @@ HeaderPage.propTypes = {
   }).isRequired,
   imagesCount: PropTypes.number.isRequired,
   onUpdateAlbum: PropTypes.number.isRequired,
+  isOpen: PropTypes.bool,
+  onAddAlbum: PropTypes.func.isRequired,
+  albums: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      avatar: PropTypes.string,
+    }),
+  ).isRequired,
 };

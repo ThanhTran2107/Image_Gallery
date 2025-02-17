@@ -1,14 +1,15 @@
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import { COLORS } from 'constant';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { Avatar } from '../../components/avatar.component';
-import { Button } from '../../components/button.component';
-import { Space } from '../../components/space.component';
+import { Avatar } from 'components/avatar.component';
+import { Button } from 'components/button.component';
+import { Space } from 'components/space.component';
+
+import { COLORS } from 'utilities/constant';
 
 const Container = styled.div`
   position: fixed;
@@ -122,7 +123,7 @@ export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
     <Items className="item" key={id} onClick={() => onSelectedAlbumId(id)}>
       <Space direction="vertical" size="small" align="center">
         <StyledImage src={avatar} alt={name} />
-        <p>{name}</p>
+        <p style={{ alignSelf: 'center' }}>{name}</p>
       </Space>
     </Items>
   ));
