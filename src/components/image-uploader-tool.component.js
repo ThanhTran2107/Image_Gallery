@@ -1,12 +1,14 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { COLORS } from 'constant';
 import PropTypes from 'prop-types';
-import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
-import { isValidImageSize } from '../services/isValidImageSize';
+import { notification } from 'components/notification.component';
+
+import { COLORS } from 'utilities/constant';
+
+import { isValidImageSize } from '../utilities/services/isValidImageSize';
 import { Button } from './button.component';
 
 const UploadButton = styled(Button)`
@@ -65,7 +67,7 @@ export const ImageUploaderTool = ({ onFilesAttached }) => {
     const errorMessage = getValidationImagesError(selectedFiles);
 
     if (errorMessage) {
-      toast.error(errorMessage);
+      notification.error({ message: errorMessage });
 
       return;
     }

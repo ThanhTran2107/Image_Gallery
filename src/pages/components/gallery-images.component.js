@@ -1,11 +1,12 @@
-import { COLORS } from 'constant';
 import { map } from 'lodash-es';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
+import { ImageUploaderTool } from 'components/image-uploader-tool.component';
+
+import { COLORS } from 'utilities/constant';
 import { usePreviewImages } from 'utilities/hooks/custom-hooks/use-preview-images.hook';
 
-import { ImageUploaderTool } from '../../components/image-uploader-tool.component';
 import { ImageCard } from './image-card.component';
 
 const GalleryWrapper = styled.div`
@@ -45,7 +46,14 @@ const PreviewImage = styled.img`
   height: 100vh;
 `;
 
-export const GalleryImages = ({ images, albumId, onDelete, onFilesAttached, onFileUploadComplete, enqueueUpload }) => {
+export const GalleryImages = ({
+  images,
+  albumId,
+  onDelete,
+  onFilesAttached,
+  onFileUploadComplete,
+  onEnqueueUpload,
+}) => {
   const { isOpen, previewImage, onSelectImage, onClosePreviewModal } = usePreviewImages(images);
 
   const sendImageToImageComponent = map(images, img => (
@@ -56,7 +64,7 @@ export const GalleryImages = ({ images, albumId, onDelete, onFilesAttached, onFi
       onDelete={onDelete}
       onFileUploadComplete={onFileUploadComplete}
       onSelectImage={onSelectImage}
-      enqueueUpload={enqueueUpload}
+      onEnqueueUpload={onEnqueueUpload}
     />
   ));
 
@@ -94,4 +102,5 @@ GalleryImages.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onFileUploadComplete: PropTypes.func.isRequired,
   onFilesAttached: PropTypes.func.isRequired,
+  onEnqueueUpload: PropTypes.func.isRequired,
 };

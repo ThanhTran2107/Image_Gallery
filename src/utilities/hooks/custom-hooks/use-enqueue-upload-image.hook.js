@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-import { uploadImageService } from 'services/uploadImageService';
+import { uploadImageService } from 'utilities/services/uploadImageService';
 
 export const useEnqueueUpload = (max = 100) => {
   const queueRef = useRef([]);

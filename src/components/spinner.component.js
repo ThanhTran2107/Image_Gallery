@@ -1,5 +1,6 @@
-import { COLORS } from 'constant';
 import styled from 'styled-components';
+
+import { COLORS } from 'utilities/constant';
 
 const StyledSpinner = styled.div`
   border: 4px solid transparent;

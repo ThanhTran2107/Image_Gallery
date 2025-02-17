@@ -74,6 +74,11 @@ export const ImageListingPage = () => {
     );
   };
 
+  const handleAddAlbum = newAlbum => {
+    setAlbumList([...albumList, { ...newAlbum }]);
+    setCurrentAlbum(newAlbum);
+  };
+
   useEffect(() => {
     if (albumId) {
       getImages(albumId, lastDocId)
@@ -89,16 +94,25 @@ export const ImageListingPage = () => {
 
   return (
     <Wrapper>
-      <HeaderPage album={currentAlbum} imagesCount={images.length} onUpdateAlbum={handleUpdateAlbum} />
+      <HeaderPage
+        album={currentAlbum}
+        albums={albumList}
+        imagesCount={images.length}
+        onAddAlbum={handleAddAlbum}
+        onUpdateAlbum={handleUpdateAlbum}
+      />
+
       <GalleryImages
         images={images}
+        albumId={albumId}
+        onEnqueueUpload={enqueueUpload}
         onDelete={handleDeleteImages}
         onFilesAttached={handleImagesAttached}
         onFileUploadComplete={handleFileUploadComplete}
-        albumId={albumId}
-        enqueueUpload={enqueueUpload}
       />
+
       <ScrollButtons />
+
       <ListAlbums albums={albumList} onSelectedAlbumId={handleSetAlbumId} />
     </Wrapper>
   );

@@ -1,10 +1,11 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { COLORS } from 'constant';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { Button } from '../../components/button.component';
+import { Button } from 'components/button.component';
+
+import { COLORS } from 'utilities/constant';
 
 const StyledButton = styled(Button)`
   position: fixed;

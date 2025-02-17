@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { MODE, THEME_OPTIONS } from 'constant';
 import { map, some } from 'lodash-es';
 import { useState } from 'react';
 import styled from 'styled-components';
+
+import { MODE, THEME_OPTIONS } from 'utilities/constant';
 
 const ThemeButton = styled(FontAwesomeIcon)`
   cursor: pointer;
@@ -20,14 +21,14 @@ export const ThemeSelector = () => {
   const [currentTheme, setCurrentTheme] = useState(() => {
     const currentMode = window.localStorage.getItem('theme');
 
-    const response = some(THEME_OPTIONS, data => data.mode === currentMode) ? currentMode : MODE.light;
+    const response = some(THEME_OPTIONS, data => data.mode === currentMode) ? currentMode : MODE.LIGHT;
     document.documentElement.setAttribute('data-theme', response);
 
     return response;
   });
 
   const handleToggleTheme = () => {
-    const newTheme = currentTheme === MODE.dark ? MODE.light : MODE.dark;
+    const newTheme = currentTheme === MODE.DARK ? MODE.LIGHT : MODE.DARK;
 
     document.documentElement.setAttribute('data-theme', newTheme);
     window.localStorage.setItem('theme', newTheme);
@@ -40,7 +41,7 @@ export const ThemeSelector = () => {
       {map(
         THEME_OPTIONS,
         ({ icon, mode }) =>
-          mode === (currentTheme === MODE.dark ? MODE.light : MODE.dark) && (
+          mode === (currentTheme === MODE.DARK ? MODE.LIGHT : MODE.DARK) && (
             <ThemeButton key={mode} icon={icon} onClick={handleToggleTheme} />
           ),
       )}
