@@ -10,7 +10,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --background-color: black;
   --text-color: white;
   --border-image-color: white;
@@ -18,7 +18,7 @@ body {
   --divider-border-color: white;
 }
 
-[data-theme="light"] {
+[data-theme='light'] {
   --background-color: white;
   --text-color: black;
   --border-image-color: #726f6f75;

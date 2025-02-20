@@ -3,17 +3,11 @@ import { deleteDoc, doc } from 'firebase/firestore';
 import { useCallback } from 'react';
 
 export const useDeleteAlbum = () => {
-  return useCallback(albumId => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const albumRef = doc(db, 'albums', albumId);
+  return useCallback(async albumId => {
+    const albumRef = doc(db, 'albums', albumId);
 
-        await deleteDoc(albumRef);
+    await deleteDoc(albumRef);
 
-        resolve(albumRef.id);
-      } catch (e) {
-        reject(e);
-      }
-    });
+    return albumRef.id;
   }, []);
 };

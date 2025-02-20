@@ -3,17 +3,11 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { useCallback } from 'react';
 
 export const useUpdateImage = () => {
-  return useCallback((albumId, imageId, data) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const imagesRef = doc(db, 'albums', albumId, 'images', imageId);
+  return useCallback(async (albumId, imageId, data) => {
+    const imagesRef = doc(db, 'albums', albumId, 'images', imageId);
 
-        await updateDoc(imagesRef, data);
+    await updateDoc(imagesRef, data);
 
-        resolve(imagesRef.id);
-      } catch (error) {
-        reject(error);
-      }
-    });
+    return imagesRef.id;
   }, []);
 };
