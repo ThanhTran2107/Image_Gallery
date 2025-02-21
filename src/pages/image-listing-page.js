@@ -1,11 +1,11 @@
-import { find, findIndex, map } from 'lodash-es';
+import { filter, find, findIndex, map } from 'lodash-es';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { useCachedAlbums } from 'utilities/hooks/custom-hooks/use-cached-albums.hook';
-import { useEnqueueUpload } from 'utilities/hooks/custom-hooks/use-enqueue-upload-image.hook';
-import { useDeleteImage } from 'utilities/hooks/data-hooks/images/use-delete-image.hook';
-import { useGetImages } from 'utilities/hooks/data-hooks/images/use-get-images.hook';
+import { useCachedAlbums } from 'utilities/custom-hooks/use-cached-albums.hook';
+import { useEnqueueUpload } from 'utilities/custom-hooks/use-enqueue-upload-image.hook';
+import { useDeleteImage } from 'utilities/data-hooks/images/use-delete-image.hook';
+import { useGetImages } from 'utilities/data-hooks/images/use-get-images.hook';
 
 import { GalleryImages } from './components/gallery-images.component';
 import { HeaderPage } from './components/header.component';
@@ -79,6 +79,13 @@ export const ImageListingPage = () => {
     setCurrentAlbum(newAlbum);
   };
 
+  const handleDeleteAlbum = deletedAlbumID => {
+    const updatedAlbumList = filter(albumList, alb => alb.id != deletedAlbumID);
+
+    setAlbumList(updatedAlbumList);
+    setCurrentAlbum(updatedAlbumList[0]);
+  };
+
   useEffect(() => {
     if (albumId) {
       getImages(albumId, lastDocId)
@@ -100,6 +107,7 @@ export const ImageListingPage = () => {
         imagesCount={images.length}
         onAddAlbum={handleAddAlbum}
         onUpdateAlbum={handleUpdateAlbum}
+        onDeleteAlbum={handleDeleteAlbum}
       />
 
       <GalleryImages

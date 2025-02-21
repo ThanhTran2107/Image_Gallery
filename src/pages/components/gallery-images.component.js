@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { ImageUploaderTool } from 'components/image-uploader-tool.component';
 
 import { COLORS } from 'utilities/constant';
-import { usePreviewImages } from 'utilities/hooks/custom-hooks/use-preview-images.hook';
+import { usePreviewImages } from 'utilities/custom-hooks/use-preview-images.hook';
 
 import { ImageCard } from './image-card.component';
 

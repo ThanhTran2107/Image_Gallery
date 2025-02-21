@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { Spinner } from 'components/spinner.component';
 
 import { COLORS } from 'utilities/constant';
-import { useAddImage } from 'utilities/hooks/data-hooks/images/use-add-image.hook';
+import { useAddImage } from 'utilities/data-hooks/images/use-add-image.hook';
 import { downloadImageService } from 'utilities/services/image';
 
 const StyledImage = styled.img`
