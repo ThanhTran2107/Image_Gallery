@@ -14,10 +14,11 @@ import { Spinner } from 'components/spinner.component';
 import { ThemeSelector } from 'components/theme-selector.component';
 
 import { COLORS } from 'utilities/constant';
-import { useUpdateAlbum } from 'utilities/hooks/data-hooks/albums/use-update-albums.hook';
+import { useUpdateAlbum } from 'utilities/data-hooks/albums/use-update-albums.hook';
 import { uploadImageService } from 'utilities/services/uploadImageService';
 
-import { CreateAlbumModal } from './create-album-form.component';
+import { CreateAlbumModal } from './create-album-modal.component';
+import { DeleteAlbumModal } from './delete-album-modal.component';
 
 const Header = styled.div`
   display: flex;
@@ -186,14 +187,19 @@ const StyledSpinner = styled(Spinner)`
   height: 4rem;
 `;
 
-export const HeaderPage = ({ album, imagesCount, onUpdateAlbum, onAddAlbum, albums }) => {
+export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlbum, onDeleteAlbum }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isOpenCreateAlbumForm, setIsOpenCreateAlbumForm] = useState(false);
+  const [isOpenDeleteAlbumForm, setIsOpenDeleteAlbumForm] = useState(false);
 
-  const handleOpenCreateAlbumForm = () => setIsOpenCreateAlbumForm(true);
+  const handleOpenCreateAlbumModal = () => setIsOpenCreateAlbumForm(true);
 
-  const handleCloseCreateAlbumForm = () => setIsOpenCreateAlbumForm(false);
+  const handleCloseCreateAlbumModal = () => setIsOpenCreateAlbumForm(false);
+
+  const handleOpenDeleteAlbumModal = () => setIsOpenDeleteAlbumForm(true);
+
+  const handleCloseDeleteAlbumModal = () => setIsOpenDeleteAlbumForm(false);
 
   const inputRef = useRef(null);
 
@@ -211,7 +217,7 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum, onAddAlbum, albu
 
       updateAlbum(updatedAlbumName.id, updatedAlbumName)
         .then(() => {
-          notification.success({ message: 'Update album name successfully' });
+          notification.success({ message: 'Update album name successfully!' });
 
           onUpdateAlbum(updatedAlbumName);
           setIsEditMode(false);
@@ -241,7 +247,7 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum, onAddAlbum, albu
 
       updateAlbum(updatedAlbumAvatar.id, updatedAlbumAvatar)
         .then(() => {
-          notification.success({ message: 'Update avatar successfully' });
+          notification.success({ message: 'Update avatar successfully!' });
 
           setIsUploading(false);
           onUpdateAlbum(updatedAlbumAvatar);
@@ -258,12 +264,12 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum, onAddAlbum, albu
     {
       label: 'Create an album',
       key: '1',
-      onClick: handleOpenCreateAlbumForm,
+      onClick: handleOpenCreateAlbumModal,
     },
     {
       label: 'Delete the album',
       key: '2',
-      onClick: () => alert('Coming soon!'),
+      onClick: handleOpenDeleteAlbumModal,
     },
   ];
 
@@ -321,8 +327,15 @@ export const HeaderPage = ({ album, imagesCount, onUpdateAlbum, onAddAlbum, albu
       <CreateAlbumModal
         isOpen={isOpenCreateAlbumForm}
         albums={albums}
-        onClose={handleCloseCreateAlbumForm}
+        onClose={handleCloseCreateAlbumModal}
         onSubmit={onAddAlbum}
+      />
+
+      <DeleteAlbumModal
+        isOpen={isOpenDeleteAlbumForm}
+        album={album}
+        onClose={handleCloseDeleteAlbumModal}
+        onDelete={onDeleteAlbum}
       />
     </Header>
   );
@@ -336,6 +349,7 @@ HeaderPage.propTypes = {
   }).isRequired,
   imagesCount: PropTypes.number.isRequired,
   onUpdateAlbum: PropTypes.number.isRequired,
+  onDeleteAlbum: PropTypes.func.isRequired,
   isOpen: PropTypes.bool,
   onAddAlbum: PropTypes.func.isRequired,
   albums: PropTypes.arrayOf(

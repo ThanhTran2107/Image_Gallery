@@ -13,7 +13,7 @@ import { notification } from 'components/notification.component';
 import { Space } from 'components/space.component';
 import { Upload } from 'components/upload.component';
 
-import { useAddAlbum } from 'utilities/hooks/data-hooks/albums/use-add-album.hook';
+import { useAddAlbum } from 'utilities/data-hooks/albums/use-add-album.hook';
 import { uploadImageService } from 'utilities/services/uploadImageService';
 
 const StyledButton = styled(Button)`
@@ -47,9 +47,9 @@ export const CreateAlbumModal = ({ isOpen, albums, onClose, onSubmit }) => {
 
         const { data, error } = await uploadImageService(fileObj);
 
-        if (error) throw new Error(error?.message || 'Upload image occurs error!');
+        if (error) throw new Error(error?.message || 'Upload image occurs error !');
 
-        avatarUrl = data.data.image.url;
+        avatarUrl = data.image.url;
       }
 
       const newAlbum = {
@@ -70,7 +70,7 @@ export const CreateAlbumModal = ({ isOpen, albums, onClose, onSubmit }) => {
       }
     } catch (e) {
       notification.error({
-        message: 'Create an album failed',
+        message: 'Create an album failed!',
         description: e.message,
       });
     } finally {
@@ -92,6 +92,7 @@ export const CreateAlbumModal = ({ isOpen, albums, onClose, onSubmit }) => {
       confirmLoading={isSubmitting}
       maskClosable={false}
       cancelButtonProps={{ disabled: isSubmitting }}
+      closeIcon={false}
     >
       <Form
         form={form}

@@ -43,7 +43,7 @@ export const ImageUploaderTool = ({ onFilesAttached }) => {
 
   const getValidationImagesError = files => {
     if (files.length > 200) {
-      return 'You can upload only 200 images at a time !';
+      return 'You can upload only 200 images at a time!';
     }
 
     const largeFilesName = files
@@ -52,7 +52,7 @@ export const ImageUploaderTool = ({ onFilesAttached }) => {
       .filter(name => name !== null);
 
     if (!largeFilesName) {
-      return `${largeFilesName.join(', ')} too large. Max allowed size is 10 MB !`;
+      return `${largeFilesName.join(', ')} too large. Max allowed size is 10 MB!`;
     }
   };
 
