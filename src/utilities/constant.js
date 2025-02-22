@@ -1,4 +1,5 @@
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { keyBy } from 'lodash-es';
 
 export const IMG_BB_KEY = 'c78e725ddd5bd8476285b43c99297428';
 export const UPLOAD_IMAGE_END_POINT = `https://api.imgbb.com/1/upload?key=${IMG_BB_KEY}`;
@@ -32,7 +33,27 @@ export const MODE = Object.freeze({
   LIGHT: 'light',
 });
 
+export const LOCALE = Object.freeze({
+  EN: 'en',
+  VI: 'vi',
+});
+
 export const THEME_OPTIONS = [
-  { icon: faSun, mode: 'light' },
-  { icon: faMoon, mode: 'dark' },
+  { mode: MODE.LIGHT, icon: faMoon },
+  { mode: MODE.DARK, icon: faSun },
 ];
+
+export const LANGUAGE_OPTIONS = [
+  {
+    locale: LOCALE.EN,
+    label: 'English',
+  },
+  {
+    locale: LOCALE.VI,
+    label: 'Vietnamese',
+  },
+];
+
+export const THEME_OPTIONS_HASH = keyBy(THEME_OPTIONS, 'mode');
+
+export const LANGUAGE_OPTIONS_HASH = keyBy(LANGUAGE_OPTIONS, 'locale');

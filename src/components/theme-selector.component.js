@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { map, some } from 'lodash-es';
+import { some } from 'lodash-es';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { MODE, THEME_OPTIONS } from 'utilities/constant';
+import { MODE, THEME_OPTIONS, THEME_OPTIONS_HASH } from 'utilities/constant';
 
 const ThemeButton = styled(FontAwesomeIcon)`
   cursor: pointer;
@@ -18,17 +18,19 @@ const ThemeButton = styled(FontAwesomeIcon)`
 `;
 
 export const ThemeSelector = () => {
+  const { DARK, LIGHT } = MODE;
+
   const [currentTheme, setCurrentTheme] = useState(() => {
     const currentMode = window.localStorage.getItem('theme');
 
-    const response = some(THEME_OPTIONS, data => data.mode === currentMode) ? currentMode : MODE.LIGHT;
+    const response = some(THEME_OPTIONS, data => data.mode === currentMode) ? currentMode : LIGHT;
     document.documentElement.setAttribute('data-theme', response);
 
     return response;
   });
 
   const handleToggleTheme = () => {
-    const newTheme = currentTheme === MODE.DARK ? MODE.LIGHT : MODE.DARK;
+    const newTheme = currentTheme === DARK ? LIGHT : DARK;
 
     document.documentElement.setAttribute('data-theme', newTheme);
     window.localStorage.setItem('theme', newTheme);
@@ -36,15 +38,5 @@ export const ThemeSelector = () => {
     setCurrentTheme(newTheme);
   };
 
-  return (
-    <>
-      {map(
-        THEME_OPTIONS,
-        ({ icon, mode }) =>
-          mode === (currentTheme === MODE.DARK ? MODE.LIGHT : MODE.DARK) && (
-            <ThemeButton key={mode} icon={icon} onClick={handleToggleTheme} />
-          ),
-      )}
-    </>
-  );
+  return <ThemeButton key={currentTheme} icon={THEME_OPTIONS_HASH[currentTheme].icon} onClick={handleToggleTheme} />;
 };

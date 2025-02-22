@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash-es';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Modal } from 'components/modal.component';
 import { notification } from 'components/notification.component';
@@ -12,6 +13,8 @@ const { confirm } = Modal;
 export const DeleteAlbumModal = ({ album, isOpen, onClose, onDelete }) => {
   const deleteAlbum = useDeleteAlbum();
 
+  const { t } = useTranslation();
+
   const handleDeleteAlbum = async () => {
     try {
       if (isEmpty(album)) return;
@@ -19,15 +22,15 @@ export const DeleteAlbumModal = ({ album, isOpen, onClose, onDelete }) => {
       const deletedAlbumId = await deleteAlbum(album.id);
 
       if (deletedAlbumId) {
-        notification.success({ message: 'Delete the album successfully!' });
+        notification.success({ message: t('delete_album_success') });
 
         onDelete(deletedAlbumId);
         onClose();
       }
     } catch (e) {
       notification.error({
-        message: 'Delete the album failed!',
-        description: e.message || 'Delete the album occurs error!',
+        message: t('delete_album_failed'),
+        description: e.message || t('delete_album_failed_details'),
       });
     }
   };
@@ -35,10 +38,10 @@ export const DeleteAlbumModal = ({ album, isOpen, onClose, onDelete }) => {
   useEffect(() => {
     if (isOpen) {
       confirm({
-        title: 'Confirm',
-        content: 'Are you sure you want to delete this album?',
-        okText: 'Delete',
-        cancelText: 'Cancel',
+        title: t('confirm'),
+        content: t('confirm_delete_album_question'),
+        okText: t('delete'),
+        cancelText: t('cancel'),
         okButtonProps: { type: 'default', danger: true },
         onOk: handleDeleteAlbum,
         onCancel: onClose,
