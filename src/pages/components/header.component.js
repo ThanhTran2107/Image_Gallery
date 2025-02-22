@@ -3,11 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { trim } from 'lodash-es';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { Avatar } from 'components/avatar.component';
 import { Button } from 'components/button.component';
+import { Divider } from 'components/divider.component';
 import { Dropdown } from 'components/dropdown.component';
+import { LanguageSelector } from 'components/language-selector.components';
 import { notification } from 'components/notification.component';
 import { Space } from 'components/space.component';
 import { Spinner } from 'components/spinner.component';
@@ -193,6 +196,8 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
   const [isOpenCreateAlbumForm, setIsOpenCreateAlbumForm] = useState(false);
   const [isOpenDeleteAlbumForm, setIsOpenDeleteAlbumForm] = useState(false);
 
+  const { t } = useTranslation();
+
   const handleOpenCreateAlbumModal = () => setIsOpenCreateAlbumForm(true);
 
   const handleCloseCreateAlbumModal = () => setIsOpenCreateAlbumForm(false);
@@ -217,7 +222,7 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
 
       updateAlbum(updatedAlbumName.id, updatedAlbumName)
         .then(() => {
-          notification.success({ message: 'Update album name successfully!' });
+          notification.success({ message: t('update_album_name_success') });
 
           onUpdateAlbum(updatedAlbumName);
           setIsEditMode(false);
@@ -247,7 +252,7 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
 
       updateAlbum(updatedAlbumAvatar.id, updatedAlbumAvatar)
         .then(() => {
-          notification.success({ message: 'Update avatar successfully!' });
+          notification.success({ message: t('update_album_avatar_success') });
 
           setIsUploading(false);
           onUpdateAlbum(updatedAlbumAvatar);
@@ -262,12 +267,12 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
 
   const items = [
     {
-      label: 'Create an album',
+      label: t('create_an_album'),
       key: '1',
       onClick: handleOpenCreateAlbumModal,
     },
     {
-      label: 'Delete the album',
+      label: t('delete_the_album'),
       key: '2',
       onClick: handleOpenDeleteAlbumModal,
     },
@@ -315,11 +320,17 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
       </InfoAlbum>
 
       <Space direction="vertical" align="end" justify="space-between">
-        <ThemeSelector />
+        <Space size="small" split={<Divider type="vertical" />}>
+          <LanguageSelector />
+          <ThemeSelector />
+        </Space>
+
         <Space direction="vertical" size="small" align="end">
-          <ImagesCount>{imagesCount} IMAGES</ImagesCount>
+          <ImagesCount>
+            {imagesCount} {t('images_count')}
+          </ImagesCount>
           <Dropdown menu={menuProps}>
-            <Button>Select Actions</Button>
+            <Button>{t('select_actions')}</Button>
           </Dropdown>
         </Space>
       </Space>
@@ -348,7 +359,7 @@ HeaderPage.propTypes = {
     avatar: PropTypes.string.isRequired,
   }).isRequired,
   imagesCount: PropTypes.number.isRequired,
-  onUpdateAlbum: PropTypes.number.isRequired,
+  onUpdateAlbum: PropTypes.func.isRequired,
   onDeleteAlbum: PropTypes.func.isRequired,
   isOpen: PropTypes.bool,
   onAddAlbum: PropTypes.func.isRequired,

@@ -1,6 +1,7 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -39,11 +40,13 @@ const UploadButton = styled(Button)`
 `;
 
 export const ImageUploaderTool = ({ onFilesAttached }) => {
+  const { t } = useTranslation();
+
   const handleOpenDialogFile = () => document.getElementById('file').click();
 
   const getValidationImagesError = files => {
     if (files.length > 200) {
-      return 'You can upload only 200 images at a time!';
+      return t('validate_files_length');
     }
 
     const largeFilesName = files
@@ -52,7 +55,7 @@ export const ImageUploaderTool = ({ onFilesAttached }) => {
       .filter(name => name !== null);
 
     if (!largeFilesName) {
-      return `${largeFilesName.join(', ')} too large. Max allowed size is 10 MB!`;
+      return `${largeFilesName.join(', ')} ${t('validate_files_size')}`;
     }
   };
 

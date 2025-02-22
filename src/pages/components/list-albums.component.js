@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { Avatar } from 'components/avatar.component';
@@ -104,7 +105,7 @@ const OpenButton = styled(Button)`
   justify-content: center;
   font-weight: bold;
   color: ${COLORS.WHITE};
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 
   &:hover {
     background-color: ${COLORS.DARK_PINK} !important;
@@ -114,6 +115,8 @@ const OpenButton = styled(Button)`
 
 export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
   const [showAlbums, setShowAlbums] = useState(false);
+
+  const { t } = useTranslation();
 
   const handleOpenAlbum = () => setShowAlbums(true);
 
@@ -130,12 +133,12 @@ export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
 
   return (
     <>
-      <OpenButton onClick={handleOpenAlbum}>All Albums</OpenButton>
+      <OpenButton onClick={handleOpenAlbum}>Albums</OpenButton>
       {showAlbums && <BackDrop onClick={handleCloseAlbums} />}
 
       <Container className={classNames({ 'is-show': showAlbums })} onClick={event => event.stopPropagation()}>
         <Header>
-          <span className="header-text">All Albums</span>
+          <span className="header-text">{t('all_albums')}</span>
           <CloseButton icon={faClose} onClick={handleCloseAlbums} />
         </Header>
 
