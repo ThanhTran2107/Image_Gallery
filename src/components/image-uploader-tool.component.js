@@ -1,13 +1,14 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import { useTranslation } from 'react-i18next';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
 import { notification } from 'components/notification.component';
 
 import { COLORS } from 'utilities/constant';
+import { MAX_FILE_LENGTH, MAX_FILE_SIZE_MB } from 'utilities/constant';
 
 import { isValidImageSize } from '../utilities/services/isValidImageSize';
 import { Button } from './button.component';
@@ -40,13 +41,16 @@ const UploadButton = styled(Button)`
 `;
 
 export const ImageUploaderTool = ({ onFilesAttached }) => {
-  const { t } = useTranslation();
+  const { formatMessage } = useIntl();
 
   const handleOpenDialogFile = () => document.getElementById('file').click();
 
   const getValidationImagesError = files => {
-    if (files.length > 200) {
-      return t('validate_files_length');
+    if (files.length > MAX_FILE_LENGTH) {
+      return formatMessage({
+        defaultMessage: 'You can upload only {maxLength} images at a time!',
+        values: { maxLength: MAX_FILE_LENGTH },
+      });
     }
 
     const largeFilesName = files
@@ -55,7 +59,10 @@ export const ImageUploaderTool = ({ onFilesAttached }) => {
       .filter(name => name !== null);
 
     if (!largeFilesName) {
-      return `${largeFilesName.join(', ')} ${t('validate_files_size')}`;
+      return `${largeFilesName.join(', ')} ${formatMessage({
+        defaultMessage: 'Too large. Max allowed {maxSize} is 10 MB!',
+        values: { maxSize: MAX_FILE_SIZE_MB },
+      })}`;
     }
   };
 

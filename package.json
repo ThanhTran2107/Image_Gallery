@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/v5-patch-for-react-19": "^1.0.3",
+    "@craco/craco": "^7.1.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
@@ -11,13 +13,11 @@
     "classnames": "^2.5.1",
     "cra-template": "1.2.0",
     "firebase": "^11.1.0",
-    "i18next": "^24.2.2",
-    "i18next-browser-languagedetector": "^8.0.4",
     "lodash-es": "^4.17.21",
     "prop-types": "^15.8.1",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "react-i18next": "^15.4.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-intl": "^7.1.6",
     "react-lazy-load-image-component": "^1.6.3",
     "react-scripts": "^5.0.1",
     "styled-components": "^6.1.14",
@@ -25,15 +25,17 @@
     "web-vitals": "^4.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "prettier": "prettier --write src",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "lint-staged": "lint-staged",
-    "prepare": "husky"
+    "prepare": "husky",
+    "i18n:compile": "yarn formatjs compile src/lang/en.json --out-file src/lang/compiled/en.json",
+    "i18n:extract": "formatjs extract 'src/**/*.{js,jsx}' --out-file src/lang/en.json --id-interpolation-pattern [sha512:contenthash:base64:6]"
   },
   "eslintConfig": {
     "extends": [
@@ -65,7 +67,9 @@
     ]
   },
   "devDependencies": {
+    "@formatjs/cli": "^6.6.1",
     "@trivago/prettier-plugin-sort-imports": "4.2.1",
+    "babel-plugin-formatjs": "^10.5.35",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.1.0",

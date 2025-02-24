@@ -1,13 +1,15 @@
 import { faEarth } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { map } from 'lodash-es';
-import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
 import styled from 'styled-components';
 
 import { Dropdown } from 'components/dropdown.component';
 import { Space } from 'components/space.component';
 
 import { LANGUAGE_OPTIONS, LANGUAGE_OPTIONS_HASH } from 'utilities/constant';
+
+import { LocaleContext } from 'contexts/locale.context';
 
 const LanguageButton = styled(FontAwesomeIcon)`
   cursor: pointer;
@@ -27,19 +29,18 @@ const Language = styled.span`
 `;
 
 export const LanguageSelector = () => {
-  const { i18n } = useTranslation();
-  const { language, changeLanguage } = i18n;
+  const { locale, setLocale } = useContext(LocaleContext);
 
   return (
     <Space size="small">
-      <Language key={language}>{LANGUAGE_OPTIONS_HASH[language].label}</Language>
+      <Language key={locale}>{LANGUAGE_OPTIONS_HASH[locale].label}</Language>
 
       <Dropdown
         menu={{
           items: map(LANGUAGE_OPTIONS, ({ locale, label }) => ({
             label,
             key: locale,
-            onClick: () => changeLanguage(locale),
+            onClick: () => setLocale(locale),
           })),
         }}
       >

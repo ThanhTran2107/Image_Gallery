@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { trim } from 'lodash-es';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 
 import { Button } from 'components/button.component';
@@ -28,10 +28,10 @@ const StyledButton = styled(Button)`
 export const CreateAlbumModal = ({ isOpen, albums, onClose, onSubmit }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [form] = Form.useForm();
+  const { formatMessage } = useIntl();
 
+  const [form] = Form.useForm();
   const addAlbum = useAddAlbum();
-  const { t } = useTranslation();
 
   const handleCreateNewAlbum = async () => {
     try {
@@ -49,7 +49,7 @@ export const CreateAlbumModal = ({ isOpen, albums, onClose, onSubmit }) => {
 
         const { data, error } = await uploadImageService(fileObj);
 
-        if (error) throw new Error(error?.message || t('upload_file_failed'));
+        if (error) throw new Error(error?.message || formatMessage({ defaultMessage: 'Upload image occurs error!' }));
 
         avatarUrl = data.image.url;
       }
@@ -64,7 +64,7 @@ export const CreateAlbumModal = ({ isOpen, albums, onClose, onSubmit }) => {
 
       if (newAlbumID) {
         notification.success({
-          message: t('create_album_success'),
+          message: formatMessage({ defaultMessage: 'Create a new album successfully!' }),
         });
 
         onSubmit({ ...newAlbum, id: newAlbumID });
@@ -72,7 +72,7 @@ export const CreateAlbumModal = ({ isOpen, albums, onClose, onSubmit }) => {
       }
     } catch (e) {
       notification.error({
-        message: t('create_album_failed'),
+        message: formatMessage({ defaultMessage: 'Create an album failed!' }),
         description: e.message,
       });
     } finally {
@@ -86,12 +86,12 @@ export const CreateAlbumModal = ({ isOpen, albums, onClose, onSubmit }) => {
 
   return (
     <Modal
-      title={t('create_an_album')}
+      title={formatMessage({ defaultMessage: 'Create an album' })}
       open={isOpen}
       onOk={handleCreateNewAlbum}
       onCancel={onClose}
-      okText={t('create')}
-      cancelText={t('cancel')}
+      okText={formatMessage({ defaultMessage: 'Create' })}
+      cancelText={formatMessage({ defaultMessage: 'Cancel' })}
       confirmLoading={isSubmitting}
       maskClosable={false}
       cancelButtonProps={{ disabled: isSubmitting }}
@@ -106,20 +106,23 @@ export const CreateAlbumModal = ({ isOpen, albums, onClose, onSubmit }) => {
         style={{ marginTop: '2rem' }}
       >
         <Form.Item
-          label={t('name')}
+          label={formatMessage({ defaultMessage: 'Name' })}
           name="name"
           rules={[
-            { required: true, message: t('album_name_rule') },
+            {
+              required: true,
+              message: formatMessage({ defaultMessage: 'Please enter the album name!' }),
+            },
             {
               type: 'string',
               whitespace: true,
             },
           ]}
         >
-          <Input placeholder={t('place_holder_album_name')} />
+          <Input placeholder={formatMessage({ defaultMessage: 'Enter the album name' })} />
         </Form.Item>
 
-        <Form.Item label={t('avatar')} name="avatar">
+        <Form.Item label={formatMessage({ defaultMessage: 'Avatar' })} name="avatar">
           <Upload listType="picture-card" maxCount={1}>
             <StyledButton type="button">
               <Space direction="vertical">

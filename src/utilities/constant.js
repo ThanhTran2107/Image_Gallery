@@ -7,6 +7,19 @@ export const HTTP_POST = 'POST';
 export const FIRE_BASE_IMAGE_TABLE = 'FIRE_BASE_IMAGE_TABLE';
 export const FIRE_BASE_IMAGE_FIELD_ID = 'FIRE_BASE_IMAGE_FIELD_ID';
 
+export const MAX_FILE_SIZE_MB = 10;
+export const MAX_FILE_LENGTH = 200;
+
+export const LOCALSTORAGE_KEY = Object.freeze({
+  LOCALE: 'locale',
+  THEME: 'theme',
+  CURRENT_ALBUM_ID: 'currentAlbumId',
+});
+
+export const ATTRIBUTE_DATA = Object.freeze({
+  DATA_THEME: 'data-theme',
+});
+
 export const COLORS = Object.freeze({
   //NEUTRAL COLORS
   BLACK: '#000000',

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { trim } from 'lodash-es';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 
 import { Avatar } from 'components/avatar.component';
@@ -196,7 +196,7 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
   const [isOpenCreateAlbumForm, setIsOpenCreateAlbumForm] = useState(false);
   const [isOpenDeleteAlbumForm, setIsOpenDeleteAlbumForm] = useState(false);
 
-  const { t } = useTranslation();
+  const { formatMessage } = useIntl();
 
   const handleOpenCreateAlbumModal = () => setIsOpenCreateAlbumForm(true);
 
@@ -222,7 +222,9 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
 
       updateAlbum(updatedAlbumName.id, updatedAlbumName)
         .then(() => {
-          notification.success({ message: t('update_album_name_success') });
+          notification.success({
+            message: formatMessage({ defaultMessage: 'Update album name successfully!' }),
+          });
 
           onUpdateAlbum(updatedAlbumName);
           setIsEditMode(false);
@@ -252,7 +254,9 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
 
       updateAlbum(updatedAlbumAvatar.id, updatedAlbumAvatar)
         .then(() => {
-          notification.success({ message: t('update_album_avatar_success') });
+          notification.success({
+            message: formatMessage({ defaultMessage: 'Update album avatar successfully!' }),
+          });
 
           setIsUploading(false);
           onUpdateAlbum(updatedAlbumAvatar);
@@ -267,12 +271,14 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
 
   const items = [
     {
-      label: t('create_an_album'),
+      label: formatMessage({ defaultMessage: 'Create an album' }),
+
       key: '1',
       onClick: handleOpenCreateAlbumModal,
     },
     {
-      label: t('delete_the_album'),
+      label: formatMessage({ defaultMessage: 'Delete the album' }),
+
       key: '2',
       onClick: handleOpenDeleteAlbumModal,
     },
@@ -327,10 +333,10 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
 
         <Space direction="vertical" size="small" align="end">
           <ImagesCount>
-            {imagesCount} {t('images_count')}
+            {imagesCount} {formatMessage({ defaultMessage: 'IMAGES' })}
           </ImagesCount>
           <Dropdown menu={menuProps}>
-            <Button>{t('select_actions')}</Button>
+            <Button>{formatMessage({ defaultMessage: 'Select Actions' })}</Button>
           </Dropdown>
         </Space>
       </Space>

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 
 import { Avatar } from 'components/avatar.component';
@@ -116,7 +116,7 @@ const OpenButton = styled(Button)`
 export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
   const [showAlbums, setShowAlbums] = useState(false);
 
-  const { t } = useTranslation();
+  const { formatMessage } = useIntl();
 
   const handleOpenAlbum = () => setShowAlbums(true);
 
@@ -138,7 +138,7 @@ export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
 
       <Container className={classNames({ 'is-show': showAlbums })} onClick={event => event.stopPropagation()}>
         <Header>
-          <span className="header-text">{t('all_albums')}</span>
+          <span className="header-text">{formatMessage({ defaultMessage: 'All Albums' })}</span>
           <CloseButton icon={faClose} onClick={handleCloseAlbums} />
         </Header>
 
