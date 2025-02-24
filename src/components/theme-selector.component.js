@@ -4,6 +4,8 @@ import { useState } from 'react';
 import styled from 'styled-components';
 
 import { MODE, THEME_OPTIONS, THEME_OPTIONS_HASH } from 'utilities/constant';
+import { LOCALSTORAGE_KEY } from 'utilities/constant';
+import { ATTRIBUTE_DATA } from 'utilities/constant';
 
 const ThemeButton = styled(FontAwesomeIcon)`
   cursor: pointer;
@@ -17,14 +19,17 @@ const ThemeButton = styled(FontAwesomeIcon)`
   }
 `;
 
+const { THEME: THEME_KEY } = LOCALSTORAGE_KEY;
+const { DATA_THEME } = ATTRIBUTE_DATA;
+
 export const ThemeSelector = () => {
   const { DARK, LIGHT } = MODE;
 
   const [currentTheme, setCurrentTheme] = useState(() => {
-    const currentMode = window.localStorage.getItem('theme');
+    const currentMode = window.localStorage.getItem(THEME_KEY);
 
     const response = some(THEME_OPTIONS, data => data.mode === currentMode) ? currentMode : LIGHT;
-    document.documentElement.setAttribute('data-theme', response);
+    document.documentElement.setAttribute(DATA_THEME, response);
 
     return response;
   });
@@ -32,8 +37,8 @@ export const ThemeSelector = () => {
   const handleToggleTheme = () => {
     const newTheme = currentTheme === DARK ? LIGHT : DARK;
 
-    document.documentElement.setAttribute('data-theme', newTheme);
-    window.localStorage.setItem('theme', newTheme);
+    document.documentElement.setAttribute(DATA_THEME, newTheme);
+    window.localStorage.setItem(THEME_KEY, JSON.stringify(newTheme));
 
     setCurrentTheme(newTheme);
   };

@@ -1,0 +1,74 @@
+{
+  "2oGXXk": {
+    "defaultMessage": "IMAGES"
+  },
+  "3txD8R": {
+    "defaultMessage": "Create a new album successfully!"
+  },
+  "47FYwb": {
+    "defaultMessage": "Cancel"
+  },
+  "AyWCqN": {
+    "defaultMessage": "Delete the album"
+  },
+  "DdIDiZ": {
+    "defaultMessage": "Enter the album name"
+  },
+  "EWH+6o": {
+    "defaultMessage": "Select Actions"
+  },
+  "EhM+Do": {
+    "defaultMessage": "Create an album failed!"
+  },
+  "EkyXAI": {
+    "defaultMessage": "Delete the album successfully!"
+  },
+  "F6oKtT": {
+    "defaultMessage": "Upload image occurs error!"
+  },
+  "HAlOn1": {
+    "defaultMessage": "Name"
+  },
+  "K3r6DQ": {
+    "defaultMessage": "Delete"
+  },
+  "LgZ6xL": {
+    "defaultMessage": "Delete the album failed!"
+  },
+  "N2IrpM": {
+    "defaultMessage": "Confirm"
+  },
+  "OR9tgj": {
+    "defaultMessage": "Too large. Max allowed {maxSize} is 10 MB!"
+  },
+  "Sr8Sna": {
+    "defaultMessage": "Are you sure you want to delete this album?"
+  },
+  "U5pKIV": {
+    "defaultMessage": "Update album name successfully!"
+  },
+  "VnXp8Z": {
+    "defaultMessage": "Avatar"
+  },
+  "VzzYJk": {
+    "defaultMessage": "Create"
+  },
+  "i5e6d1": {
+    "defaultMessage": "All Albums"
+  },
+  "kxo+Ag": {
+    "defaultMessage": "Create an album"
+  },
+  "mwBmSX": {
+    "defaultMessage": "Delete the album occurs error!"
+  },
+  "nI7Tny": {
+    "defaultMessage": "You can upload only {maxLength} images at a time!"
+  },
+  "rjSjkX": {
+    "defaultMessage": "Update album avatar successfully!"
+  },
+  "vFiUaO": {
+    "defaultMessage": "Please enter the album name!"
+  }
+}

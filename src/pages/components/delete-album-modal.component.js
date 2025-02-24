@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash-es';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useIntl } from 'react-intl';
 
 import { Modal } from 'components/modal.component';
 import { notification } from 'components/notification.component';
@@ -12,8 +12,7 @@ const { confirm } = Modal;
 
 export const DeleteAlbumModal = ({ album, isOpen, onClose, onDelete }) => {
   const deleteAlbum = useDeleteAlbum();
-
-  const { t } = useTranslation();
+  const { formatMessage } = useIntl();
 
   const handleDeleteAlbum = async () => {
     try {
@@ -22,15 +21,17 @@ export const DeleteAlbumModal = ({ album, isOpen, onClose, onDelete }) => {
       const deletedAlbumId = await deleteAlbum(album.id);
 
       if (deletedAlbumId) {
-        notification.success({ message: t('delete_album_success') });
+        notification.success({
+          message: formatMessage({ defaultMessage: 'Delete the album successfully!' }),
+        });
 
         onDelete(deletedAlbumId);
         onClose();
       }
     } catch (e) {
       notification.error({
-        message: t('delete_album_failed'),
-        description: e.message || t('delete_album_failed_details'),
+        message: formatMessage({ defaultMessage: 'Delete the album failed!' }),
+        description: e.message || formatMessage({ defaultMessage: 'Delete the album occurs error!' }),
       });
     }
   };
@@ -38,10 +39,10 @@ export const DeleteAlbumModal = ({ album, isOpen, onClose, onDelete }) => {
   useEffect(() => {
     if (isOpen) {
       confirm({
-        title: t('confirm'),
-        content: t('confirm_delete_album_question'),
-        okText: t('delete'),
-        cancelText: t('cancel'),
+        title: formatMessage({ defaultMessage: 'Confirm' }),
+        content: formatMessage({ defaultMessage: 'Are you sure you want to delete this album?' }),
+        okText: formatMessage({ defaultMessage: 'Delete' }),
+        cancelText: formatMessage({ defaultMessage: 'Cancel' }),
         okButtonProps: { type: 'default', danger: true },
         onOk: handleDeleteAlbum,
         onCancel: onClose,

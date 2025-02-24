@@ -1,7 +1,9 @@
 import { filter, find, findIndex, map } from 'lodash-es';
+import React from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { LOCALSTORAGE_KEY } from 'utilities/constant';
 import { useCachedAlbums } from 'utilities/custom-hooks/use-cached-albums.hook';
 import { useEnqueueUpload } from 'utilities/custom-hooks/use-enqueue-upload-image.hook';
 import { useDeleteImage } from 'utilities/data-hooks/images/use-delete-image.hook';
@@ -21,6 +23,8 @@ const Wrapper = styled.div`
   background-color: var(--background-color);
   color: var(--text-color);
 `;
+
+const { CURRENT_ALBUM_ID: CURRENT_ALBUM_ID_KEY } = LOCALSTORAGE_KEY;
 
 export const ImageListingPage = () => {
   const [images, setImages] = useState([]);
@@ -90,7 +94,7 @@ export const ImageListingPage = () => {
     if (albumId) {
       getImages(albumId, lastDocId)
         .then(response => {
-          window.localStorage.setItem('currentAlbumId', albumId);
+          window.localStorage.setItem(CURRENT_ALBUM_ID_KEY, JSON.stringify(albumId));
 
           setLastDocId(response.lastDocId);
           setImages(response.data);
