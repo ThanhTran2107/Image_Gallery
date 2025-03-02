@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { MODE, THEME_OPTIONS, THEME_OPTIONS_HASH } from 'utilities/constant';
 import { LOCALSTORAGE_KEY } from 'utilities/constant';
 import { ATTRIBUTE_DATA } from 'utilities/constant';
+import { getLocalStorage, setLocalStorage } from 'utilities/services/common';
 
 const ThemeButton = styled(FontAwesomeIcon)`
   cursor: pointer;
@@ -26,7 +27,7 @@ export const ThemeSelector = () => {
   const { DARK, LIGHT } = MODE;
 
   const [currentTheme, setCurrentTheme] = useState(() => {
-    const currentMode = window.localStorage.getItem(THEME_KEY);
+    const currentMode = getLocalStorage(THEME_KEY);
 
     const response = some(THEME_OPTIONS, data => data.mode === currentMode) ? currentMode : LIGHT;
     document.documentElement.setAttribute(DATA_THEME, response);
@@ -38,7 +39,7 @@ export const ThemeSelector = () => {
     const newTheme = currentTheme === DARK ? LIGHT : DARK;
 
     document.documentElement.setAttribute(DATA_THEME, newTheme);
-    window.localStorage.setItem(THEME_KEY, JSON.stringify(newTheme));
+    setLocalStorage(THEME_KEY, newTheme);
 
     setCurrentTheme(newTheme);
   };

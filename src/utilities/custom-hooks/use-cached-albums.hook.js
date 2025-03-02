@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { LOCALSTORAGE_KEY } from 'utilities/constant';
 import { useGetAlbums } from 'utilities/data-hooks/albums/use-get-albums.hook';
+import { getLocalStorage } from 'utilities/services/common';
 
 const { CURRENT_ALBUM_ID: CURRENT_ALBUM_ID_KEY } = LOCALSTORAGE_KEY;
 
@@ -23,8 +24,7 @@ export const useCachedAlbums = () => {
         if (!isEmpty(data)) {
           setAlbumList(data);
 
-          const currentAlbumId = window.localStorage.getItem(CURRENT_ALBUM_ID_KEY);
-
+          const currentAlbumId = getLocalStorage(CURRENT_ALBUM_ID_KEY);
           const found = find(data, alb => alb.id === currentAlbumId);
 
           if (!isEmpty(found)) {

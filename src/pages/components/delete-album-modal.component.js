@@ -20,19 +20,18 @@ export const DeleteAlbumModal = ({ album, isOpen, onClose, onDelete }) => {
 
       const deletedAlbumId = await deleteAlbum(album.id);
 
-      if (deletedAlbumId) {
-        notification.success({
-          message: formatMessage({ defaultMessage: 'Delete the album successfully!' }),
-        });
+      notification.success({
+        message: formatMessage({ defaultMessage: 'Delete the album successfully!' }),
+      });
 
-        onDelete(deletedAlbumId);
-        onClose();
-      }
+      onDelete(deletedAlbumId);
     } catch (e) {
       notification.error({
         message: formatMessage({ defaultMessage: 'Delete the album failed!' }),
         description: e.message || formatMessage({ defaultMessage: 'Delete the album occurs error!' }),
       });
+    } finally {
+      onClose();
     }
   };
 
