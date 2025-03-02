@@ -8,11 +8,13 @@ import { useCachedAlbums } from 'utilities/custom-hooks/use-cached-albums.hook';
 import { useEnqueueUpload } from 'utilities/custom-hooks/use-enqueue-upload-image.hook';
 import { useDeleteImage } from 'utilities/data-hooks/images/use-delete-image.hook';
 import { useGetImages } from 'utilities/data-hooks/images/use-get-images.hook';
+import { setLocalStorage } from 'utilities/services/common';
 
 import { GalleryImages } from './components/gallery-images.component';
 import { HeaderPage } from './components/header.component';
 import { ListAlbums } from './components/list-albums.component';
 import { ScrollButtons } from './components/scroll-buttons.component';
+import { CACHED_ALBUMS } from './image-listing-page.constant';
 
 const Wrapper = styled.div`
   display: flex;
@@ -28,7 +30,6 @@ const { CURRENT_ALBUM_ID: CURRENT_ALBUM_ID_KEY } = LOCALSTORAGE_KEY;
 
 export const ImageListingPage = () => {
   const [images, setImages] = useState([]);
-  const [lastDocId, setLastDocId] = useState('');
   const { currentAlbum, setCurrentAlbum, albumList, setAlbumList } = useCachedAlbums();
 
   const getImages = useGetImages();
@@ -36,19 +37,27 @@ export const ImageListingPage = () => {
   const albumId = currentAlbum.id;
   const enqueueUpload = useEnqueueUpload();
 
-  const handleDeleteImages = deleteId => {
-    const newImages = [...images];
-    const foundIndex = findIndex(newImages, image => image.id === deleteId);
+  const handleDeleteImages = async deleteId => {
+    try {
+      const newImages = [...images];
+      const foundIndex = findIndex(newImages, image => image.id === deleteId);
 
-    if (foundIndex > -1) {
-      const [data] = newImages.splice(foundIndex, 1);
+      if (foundIndex > -1) {
+        const [data] = newImages.splice(foundIndex, 1);
 
-      setImages(newImages);
-      deleteImage(albumId, data.id);
+        await deleteImage(albumId, data.id);
+
+        CACHED_ALBUMS[albumId] = [...newImages];
+        setImages(newImages);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
   const handleFileUploadComplete = ({ clientId, id, url }) => {
+    CACHED_ALBUMS[albumId].push({ clientId, id, url });
+
     setImages(prevImages => {
       return map(prevImages, img => {
         if (img.clientId === clientId) return { clientId, id, url };
@@ -63,6 +72,7 @@ export const ImageListingPage = () => {
   const handleSetAlbumId = selectedId => {
     const selectedAlbum = find(albumList, alb => alb.id === selectedId);
 
+    setLocalStorage(CURRENT_ALBUM_ID_KEY, selectedId);
     setCurrentAlbum(selectedAlbum);
   };
 
@@ -86,18 +96,23 @@ export const ImageListingPage = () => {
   const handleDeleteAlbum = deletedAlbumID => {
     const updatedAlbumList = filter(albumList, alb => alb.id != deletedAlbumID);
 
+    delete CACHED_ALBUMS[deletedAlbumID];
+
     setAlbumList(updatedAlbumList);
     setCurrentAlbum(updatedAlbumList[0]);
+    setLocalStorage(CURRENT_ALBUM_ID_KEY, updatedAlbumList[0].id);
   };
 
   useEffect(() => {
     if (albumId) {
-      getImages(albumId, lastDocId)
-        .then(response => {
-          window.localStorage.setItem(CURRENT_ALBUM_ID_KEY, JSON.stringify(albumId));
+      const cacheImages = CACHED_ALBUMS[albumId];
 
-          setLastDocId(response.lastDocId);
-          setImages(response.data);
+      if (cacheImages) setImages(cacheImages);
+
+      getImages(albumId)
+        .then(({ data }) => {
+          setImages(data);
+          CACHED_ALBUMS[albumId] = data;
         })
         .catch(e => console.log(e));
     }
