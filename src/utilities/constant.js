@@ -26,8 +26,8 @@ export const COLORS = Object.freeze({
   WHITE: '#FFFFFF',
 
   //BLUE COLORS
-  BRIGHT_BLUE: 'rgb(0 123 255)',
-  BLUE: 'blue',
+  BRIGHT_BLUE: '#1677ff',
+  BLUE: '#4096ff',
 
   //GRAY COLORS
   FOG_GRAY: '#726f6f75',

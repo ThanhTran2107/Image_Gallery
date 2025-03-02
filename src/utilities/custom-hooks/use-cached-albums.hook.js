@@ -1,4 +1,4 @@
-import { find, isEmpty } from 'lodash-es';
+import { find } from 'lodash-es';
 import { useEffect, useState } from 'react';
 
 import { LOCALSTORAGE_KEY } from 'utilities/constant';
@@ -19,20 +19,19 @@ export const useCachedAlbums = () => {
   // if not exist => skip
 
   useEffect(() => {
-    getAlbums()
-      .then(data => {
-        if (!isEmpty(data)) {
-          setAlbumList(data);
+    (async () => {
+      try {
+        const data = await getAlbums();
+        setAlbumList(data);
 
-          const currentAlbumId = getLocalStorage(CURRENT_ALBUM_ID_KEY);
-          const found = find(data, alb => alb.id === currentAlbumId);
+        const currentAlbumId = getLocalStorage(CURRENT_ALBUM_ID_KEY);
+        const found = find(data, alb => alb.id === currentAlbumId);
 
-          if (!isEmpty(found)) {
-            setCurrentAlbum(found);
-          }
-        }
-      })
-      .catch(e => console.log(e));
+        setCurrentAlbum(found);
+      } catch (e) {
+        console.log(e);
+      }
+    })();
   }, []);
 
   return {

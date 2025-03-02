@@ -104,18 +104,22 @@ export const ImageListingPage = () => {
   };
 
   useEffect(() => {
-    if (albumId) {
-      const cacheImages = CACHED_ALBUMS[albumId];
+    (async () => {
+      try {
+        if (albumId) {
+          window.scrollTo(0, 0);
+          const cacheImages = CACHED_ALBUMS[albumId];
 
-      if (cacheImages) setImages(cacheImages);
+          setImages(cacheImages || []);
 
-      getImages(albumId)
-        .then(({ data }) => {
+          const { data } = await getImages(albumId);
           setImages(data);
           CACHED_ALBUMS[albumId] = data;
-        })
-        .catch(e => console.log(e));
-    }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    })();
   }, [albumId]);
 
   return (

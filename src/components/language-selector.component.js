@@ -13,10 +13,10 @@ import { LocaleContext } from 'contexts/locale.context';
 
 const LanguageButton = styled(FontAwesomeIcon)`
   cursor: pointer;
-  font-size: 0.5rem;
+  font-size: 1.1rem;
 
   @media only screen and (min-width: 768px) {
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
   @media only screen and (min-width: 1024px) {
     font-size: 1.5rem;
@@ -24,8 +24,16 @@ const LanguageButton = styled(FontAwesomeIcon)`
 `;
 
 const Language = styled.span`
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 500;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 1.3rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    font-size: 1.5rem;
+  }
 `;
 
 export const LanguageSelector = () => {

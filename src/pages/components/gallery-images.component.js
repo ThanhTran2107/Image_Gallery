@@ -11,13 +11,13 @@ import { ImageCard } from './image-card.component';
 
 const GalleryWrapper = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.6rem;
   padding: 1rem;
   justify-content: center;
 
   @media only screen and (min-width: 768px) {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 
   @media only screen and (min-width: 1024px) {
@@ -41,9 +41,22 @@ const PreviewImageModal = styled.div`
 
 const PreviewImage = styled.img`
   position: absolute;
-  margin: auto;
   display: block;
-  height: 100vh;
+  object-fit: cover;
+  width: 30rem;
+  height: 60vh;
+  margin-top: 15rem;
+
+  @media only screen and (min-width: 768px) {
+    width: 50rem;
+    height: 80vh;
+    margin-top: 10rem;
+  }
+
+  @media only screen and (min-width: 1025px) {
+    margin-top: 0rem;
+    height: 100vh;
+  }
 `;
 
 export const GalleryImages = ({
