@@ -8,11 +8,13 @@ import { useCachedAlbums } from 'utilities/custom-hooks/use-cached-albums.hook';
 import { useEnqueueUpload } from 'utilities/custom-hooks/use-enqueue-upload-image.hook';
 import { useDeleteImage } from 'utilities/data-hooks/images/use-delete-image.hook';
 import { useGetImages } from 'utilities/data-hooks/images/use-get-images.hook';
+import { setLocalStorage } from 'utilities/services/common';
 
 import { GalleryImages } from './components/gallery-images.component';
 import { HeaderPage } from './components/header.component';
 import { ListAlbums } from './components/list-albums.component';
 import { ScrollButtons } from './components/scroll-buttons.component';
+import { CACHED_ALBUMS_HASH } from './image-listing-page.constant';
 
 const Wrapper = styled.div`
   display: flex;
@@ -28,7 +30,6 @@ const { CURRENT_ALBUM_ID: CURRENT_ALBUM_ID_KEY } = LOCALSTORAGE_KEY;
 
 export const ImageListingPage = () => {
   const [images, setImages] = useState([]);
-  const [lastDocId, setLastDocId] = useState('');
   const { currentAlbum, setCurrentAlbum, albumList, setAlbumList } = useCachedAlbums();
 
   const getImages = useGetImages();
@@ -63,6 +64,7 @@ export const ImageListingPage = () => {
   const handleSetAlbumId = selectedId => {
     const selectedAlbum = find(albumList, alb => alb.id === selectedId);
 
+    setLocalStorage(CURRENT_ALBUM_ID_KEY, selectedId);
     setCurrentAlbum(selectedAlbum);
   };
 
@@ -92,12 +94,14 @@ export const ImageListingPage = () => {
 
   useEffect(() => {
     if (albumId) {
-      getImages(albumId, lastDocId)
-        .then(response => {
-          window.localStorage.setItem(CURRENT_ALBUM_ID_KEY, JSON.stringify(albumId));
+      const cacheImages = CACHED_ALBUMS_HASH[albumId];
 
-          setLastDocId(response.lastDocId);
-          setImages(response.data);
+      if (cacheImages) setImages(cacheImages);
+
+      getImages(albumId)
+        .then(({ data }) => {
+          setImages(data);
+          CACHED_ALBUMS_HASH[albumId] = data;
         })
         .catch(e => console.log(e));
     }

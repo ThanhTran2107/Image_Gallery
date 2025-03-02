@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 
+import { CACHED_ALBUMS_HASH } from 'pages/image-listing-page.constant';
+
 import { Spinner } from 'components/spinner.component';
 
 import { COLORS } from 'utilities/constant';
@@ -115,6 +117,8 @@ export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete,
           const { url } = data.data.image;
 
           const id = await addImages(albumId, { url });
+
+          CACHED_ALBUMS_HASH[albumId].push({ id, url });
 
           onFileUploadComplete({ url, id, clientId: image.clientId });
         }

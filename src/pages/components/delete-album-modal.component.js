@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
+import { CACHED_ALBUMS_HASH } from 'pages/image-listing-page.constant';
+
 import { Modal } from 'components/modal.component';
 import { notification } from 'components/notification.component';
 
@@ -20,19 +22,20 @@ export const DeleteAlbumModal = ({ album, isOpen, onClose, onDelete }) => {
 
       const deletedAlbumId = await deleteAlbum(album.id);
 
-      if (deletedAlbumId) {
-        notification.success({
-          message: formatMessage({ defaultMessage: 'Delete the album successfully!' }),
-        });
+      delete CACHED_ALBUMS_HASH[album.id];
 
-        onDelete(deletedAlbumId);
-        onClose();
-      }
+      notification.success({
+        message: formatMessage({ defaultMessage: 'Delete the album successfully!' }),
+      });
+
+      onDelete(deletedAlbumId);
     } catch (e) {
       notification.error({
         message: formatMessage({ defaultMessage: 'Delete the album failed!' }),
         description: e.message || formatMessage({ defaultMessage: 'Delete the album occurs error!' }),
       });
+    } finally {
+      onClose();
     }
   };
 
