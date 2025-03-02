@@ -1,7 +1,7 @@
 import { Upload as BaseUpload } from 'antd';
 import { useState } from 'react';
 
-import { Image } from 'components/image.component';
+import { Image } from 'components/image';
 
 import { getBase64 } from 'utilities/services/image';
 

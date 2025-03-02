@@ -15,12 +15,13 @@ import { Button } from './button.component';
 
 const UploadButton = styled(Button)`
   width: 100%;
-  height: 20rem;
+  height: auto;
   border-radius: 1rem;
   border: 0.1rem solid var(--border-upload-button-color);
   background-color: ${COLORS.DARK_GRAY};
   cursor: pointer;
   transition: transform 180ms cubic-bezier(0.25, 1, 0.5, 1);
+  aspect-ratio: 1/1;
 
   &:hover {
     background-color: ${COLORS.DARK_GRAY} !important;
@@ -29,14 +30,6 @@ const UploadButton = styled(Button)`
     .icon {
       transform: scale(1.05);
     }
-  }
-
-  @media only screen and (min-width: 768px) {
-    height: 25rem;
-  }
-
-  @media only screen and (min-width: 1024px) {
-    height: 30rem;
   }
 `;
 

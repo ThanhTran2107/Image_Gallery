@@ -14,7 +14,7 @@ import { COLORS } from 'utilities/constant';
 
 const Container = styled.div`
   position: fixed;
-  width: 64rem;
+  width: 24rem;
   min-height: 100vh;
   background-color: var(--background-color);
   right: 0;
@@ -23,8 +23,20 @@ const Container = styled.div`
   border: 0.1rem solid white;
   overflow: auto;
 
+  @media only screen and (min-width: 768px) {
+    width: 44rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    width: 64rem;
+  }
+
   &.is-show {
     transform: translateX(0);
+
+    .album-list {
+      opacity: 1;
+    }
   }
 `;
 
@@ -38,7 +50,15 @@ const Header = styled.div`
   .header-text {
     display: flex;
     font-weight: bold;
-    font-size: 1.6rem;
+    font-size: 1.2rem;
+
+    @media only screen and (min-width: 768px) {
+      font-size: 1.4rem;
+    }
+
+    @media only screen and (min-width: 1024px) {
+      font-size: 1.6rem;
+    }
   }
 `;
 
@@ -58,30 +78,70 @@ const CloseButton = styled(FontAwesomeIcon)`
   display: flex;
   border: none;
   cursor: pointer;
-  font-size: 2rem;
+  font-size: 1rem;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 1.5rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    font-size: 2rem;
+  }
 `;
 
 const AlbumList = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   position: absolute;
-  width: 62rem;
-  padding: 2.5rem 0.5rem;
+  width: 23rem;
+  padding: 1rem 0.5rem;
+  opacity: 0;
+  transition: opacity 0.5s;
+
+  @media only screen and (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    width: 44rem;
+    padding: 2.5rem 0.5rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+    width: 62rem;
+    padding: 2.5rem 0.5rem;
+  }
 `;
 
 const Items = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: 1.6rem;
+  font-size: 0.8rem;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 1.2rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    font-size: 1.6rem;
+  }
 `;
 
 const StyledImage = styled(Avatar)`
-  width: 16rem;
-  height: 16rem;
+  width: 10rem;
+  height: 10rem;
   border-radius: 100%;
   object-fit: cover;
   cursor: pointer;
+
+  @media only screen and (min-width: 768px) {
+    width: 12rem;
+    height: 12rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    width: 16rem;
+    height: 16rem;
+  }
 
   &:hover {
     box-sizing: border-box;
@@ -92,20 +152,34 @@ const StyledImage = styled(Avatar)`
 const OpenButton = styled(Button)`
   display: flex;
   position: fixed;
-  right: -4rem;
+  right: -3.2rem;
   top: 32rem;
   border: none;
   border-radius: 1rem 1rem 0 0;
   cursor: pointer;
   background-color: ${COLORS.DEEP_PINK};
   transform: rotate(270deg);
-  width: 10rem;
-  height: 2.5rem;
+  width: 8rem;
+  height: 2.2rem;
   align-items: center;
   justify-content: center;
   font-weight: bold;
   color: ${COLORS.WHITE};
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+
+  @media only screen and (min-width: 768px) {
+    width: 10rem;
+    height: 2.5rem;
+    font-size: 1.5rem;
+    right: -3.9 rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    width: 10rem;
+    height: 2.5rem;
+    font-size: 1.5rem;
+    right: -4rem;
+  }
 
   &:hover {
     background-color: ${COLORS.DARK_PINK} !important;
@@ -141,8 +215,7 @@ export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
           <span className="header-text">{formatMessage({ defaultMessage: 'All Albums' })}</span>
           <CloseButton icon={faClose} onClick={handleCloseAlbums} />
         </Header>
-
-        <AlbumList>{albumsList}</AlbumList>
+        <AlbumList className="album-list">{albumsList}</AlbumList>
       </Container>
     </>
   );

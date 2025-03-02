@@ -11,14 +11,24 @@ const StyledButton = styled(Button)`
   position: fixed;
   right: 2rem;
   border-radius: 100%;
-  width: 5rem;
-  height: 5rem;
+  width: 3rem;
+  height: 3rem;
   border: none;
   background-color: ${COLORS.BRIGHT_BLUE};
   font-size: 1.5rem;
   color: ${COLORS.WHITE};
   cursor: pointer;
   transition: transform 0.3s;
+
+  @media only screen and (min-width: 768px) {
+    width: 5rem;
+    height: 5rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    width: 5rem;
+    height: 5rem;
+  }
 
   &:hover {
     transform: scale(1.1);
@@ -28,7 +38,15 @@ const StyledButton = styled(Button)`
 `;
 
 const ArrowUpButton = styled(StyledButton)`
-  bottom: 10rem;
+  bottom: 7rem;
+
+  @media only screen and (min-width: 768px) {
+    bottom: 10rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    bottom: 10rem;
+  }
 `;
 
 const ArrowDownButton = styled(StyledButton)`
@@ -60,9 +78,7 @@ export const ScrollButtons = () => {
 
     document.addEventListener('scroll', handleScroll);
 
-    return () => {
-      document.removeEventListener('scroll', handleScroll);
-    };
+    return () => document.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (

@@ -10,10 +10,10 @@ import { getLocalStorage, setLocalStorage } from 'utilities/services/common';
 
 const ThemeButton = styled(FontAwesomeIcon)`
   cursor: pointer;
-  font-size: 0.5rem;
+  font-size: 1.1rem;
 
   @media only screen and (min-width: 768px) {
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
   @media only screen and (min-width: 1024px) {
     font-size: 1.5rem;

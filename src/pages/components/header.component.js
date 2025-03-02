@@ -10,7 +10,7 @@ import { Avatar } from 'components/avatar.component';
 import { Button } from 'components/button.component';
 import { Divider } from 'components/divider.component';
 import { Dropdown } from 'components/dropdown.component';
-import { LanguageSelector } from 'components/language-selector.components';
+import { LanguageSelector } from 'components/language-selector.component';
 import { notification } from 'components/notification.component';
 import { Space } from 'components/space.component';
 import { Spinner } from 'components/spinner.component';
@@ -27,65 +27,10 @@ const Header = styled.div`
   display: flex;
   padding: 1rem;
   justify-content: space-between;
-
-  @media only screen and (min-width: 768px) {
-    .album-name {
-      font-size: 2rem;
-    }
-
-    .back-drop {
-      width: 12rem;
-      height: 12rem;
-    }
-
-    .album-avatar {
-      width: 12rem;
-      height: 12rem;
-    }
-
-    .icon-edit {
-      font-size: 1rem;
-    }
-
-    .icon-save {
-      font-size: 1rem;
-    }
-  }
-
-  @media only screen and (min-width: 1024px) {
-    .album-name {
-      font-size: 2.5rem;
-    }
-
-    .back-drop {
-      width: 16rem;
-      height: 16rem;
-    }
-
-    .album-avatar {
-      width: 16rem;
-      height: 16rem;
-    }
-
-    .icon-edit {
-      font-size: 2rem;
-    }
-
-    .icon-save {
-      font-size: 2rem;
-    }
-  }
 `;
 
 const InfoAlbum = styled.div`
   display: flex;
-
-  @media only screen and (min-width: 768px) {
-    gap: 1.5rem;
-  }
-  @media only screen and (min-width: 1024px) {
-    gap: 2rem;
-  }
 `;
 
 const AlbumName = styled.div`
@@ -93,6 +38,14 @@ const AlbumName = styled.div`
   flex-direction: column;
   justify-content: center;
   font-size: 1.5rem;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 2rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    font-size: 2.5rem;
+  }
 
   .input-album-name {
     border: 0.1rem solid blue;
@@ -109,6 +62,16 @@ const AlbumAvatar = styled(Avatar)`
   object-fit: cover;
   width: 8rem;
   height: 8rem;
+
+  @media only screen and (min-width: 768px) {
+    width: 12rem;
+    height: 12rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    width: 16rem;
+    height: 16rem;
+  }
 `;
 
 const AvatarContainer = styled.div`
@@ -133,11 +96,19 @@ const AvatarContainer = styled.div`
 
 const EditButton = styled(FontAwesomeIcon)`
   color: ${COLORS.BRIGHT_BLUE};
-  font-size: 0.8rem;
+  font-size: 1rem;
   border: none;
   background-color: transparent;
   cursor: pointer;
   width: fit-content;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 1.5rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    font-size: 2rem;
+  }
 
   &.is-saving {
     display: none;
@@ -150,11 +121,19 @@ const EditButton = styled(FontAwesomeIcon)`
 
 const SaveButton = styled(FontAwesomeIcon)`
   color: ${COLORS.BRIGHT_BLUE};
-  font-size: 0.8rem;
+  font-size: 1rem;
   border: none;
   background-color: transparent;
   cursor: pointer;
   width: fit-content;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 1.5rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    font-size: 2rem;
+  }
 
   &:hover {
     color: ${COLORS.BLUE};
@@ -165,23 +144,36 @@ const BackDrop = styled.div`
   display: none;
   background-color: ${COLORS.BLACK_55};
   border-radius: 100%;
-  margin-left: -16rem;
+  margin-left: -8rem;
   justify-content: center;
   align-items: center;
-  width: 4rem;
-  height: 4rem;
+  width: 8rem;
+  height: 8rem;
   cursor: pointer;
+
+  @media only screen and (min-width: 768px) {
+    margin-left: -12rem;
+    width: 12rem;
+    height: 12rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    margin-left: -16rem;
+    width: 16rem;
+    height: 16rem;
+  }
 `;
 
 const ImagesCount = styled.h1`
-  font-size: 0.5rem;
+  font-size: 1rem;
   font-weight: normal;
 
   @media only screen and (min-width: 768px) {
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
+
   @media only screen and (min-width: 1024px) {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 `;
 
@@ -190,6 +182,35 @@ const StyledSpinner = styled(Spinner)`
   height: 4rem;
 `;
 
+const SelectButton = styled(Button)`
+  height: 2rem;
+  width: 8rem;
+  font-size: 1rem;
+
+  @media only screen and (min-width: 768px) {
+    height: 2.8rem;
+    width: 10.8rem;
+    font-size: 1.3rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    height: 3rem;
+    width: 11rem;
+    font-size: 1.4rem;
+  }
+`;
+
+const OptionLabels = styled.label`
+  font-size: 1.2rem;
+
+  @media only screen and (min-width: 768px) {
+    font-size: 1.3rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    font-size: 1.4rem;
+  }
+`;
 export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlbum, onDeleteAlbum }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -242,9 +263,7 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
   const handleUpdateAvatar = event => {
     const { files } = event.target;
 
-    if (files.length === 0) {
-      return;
-    }
+    if (files.length === 0) return;
 
     setIsUploading(true);
 
@@ -271,14 +290,12 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
 
   const items = [
     {
-      label: formatMessage({ defaultMessage: 'Create an album' }),
-
+      label: <OptionLabels>{formatMessage({ defaultMessage: 'Create an album' })}</OptionLabels>,
       key: '1',
       onClick: handleOpenCreateAlbumModal,
     },
     {
-      label: formatMessage({ defaultMessage: 'Delete the album' }),
-
+      label: <OptionLabels>{formatMessage({ defaultMessage: 'Delete the album' })}</OptionLabels>,
       key: '2',
       onClick: handleOpenDeleteAlbumModal,
     },
@@ -336,7 +353,7 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
             {imagesCount} {formatMessage({ defaultMessage: 'IMAGES' })}
           </ImagesCount>
           <Dropdown menu={menuProps}>
-            <Button>{formatMessage({ defaultMessage: 'Select Actions' })}</Button>
+            <SelectButton className="select-button">{formatMessage({ defaultMessage: 'Select Actions' })}</SelectButton>
           </Dropdown>
         </Space>
       </Space>
