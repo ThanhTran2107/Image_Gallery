@@ -6,15 +6,23 @@ import styled from 'styled-components';
 
 import { CACHED_ALBUMS_HASH } from 'pages/image-listing-page.constant';
 
-import { Spinner } from 'components/spinner.component';
+import { Image } from 'components/image/index';
+import { Skeleton } from 'components/skeleton.component';
 
 import { COLORS } from 'utilities/constant';
 import { useAddImage } from 'utilities/data-hooks/images/use-add-image.hook';
 import { downloadImageService } from 'utilities/services/image';
 
-const StyledImage = styled.img`
+const StyledImage = styled(Image)`
   width: 100%;
   height: 20rem;
+  object-fit: cover;
+  border-radius: 1rem;
+`;
+
+const StyledSkeleton = styled(Skeleton.Image)`
+  min-width: 100%;
+  min-height: 100%;
   object-fit: cover;
   border-radius: 1rem;
 `;
@@ -93,11 +101,6 @@ const DownloadButton = styled(FontAwesomeIcon)`
   }
 `;
 
-const StyledSpinner = styled(Spinner)`
-  width: 8rem;
-  height: 8rem;
-`;
-
 export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete, onDelete, onEnqueueUpload }) => {
   const [isUploading, setIsUploading] = useState(false);
   const addImages = useAddImage();
@@ -133,14 +136,17 @@ export const ImageCard = ({ albumId, image, onSelectImage, onFileUploadComplete,
   return (
     <>
       <StyledImageContainer>
-        <StyledImage src={url} alt="Uploaded" className="image" onClick={() => onSelectImage(image.id)} />
-
-        <Banner className="banner">
-          <DownloadButton icon={faDownload} onClick={handleDownloadImage} />
-          <DeleteButton icon={faTrashCan} onClick={() => onDelete(image.id)} />
-        </Banner>
-
-        {isUploading && <StyledSpinner />}
+        {isUploading ? (
+          <StyledSkeleton loading={isUploading} active={isUploading} size="default" />
+        ) : (
+          <>
+            <StyledImage src={url} alt="Uploaded" className="image" onClick={() => onSelectImage(image.id)} />
+            <Banner className="banner">
+              <DownloadButton icon={faDownload} onClick={handleDownloadImage} />
+              <DeleteButton icon={faTrashCan} onClick={() => onDelete(image.id)} />
+            </Banner>
+          </>
+        )}
       </StyledImageContainer>
     </>
   );
