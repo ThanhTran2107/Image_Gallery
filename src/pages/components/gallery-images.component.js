@@ -13,7 +13,7 @@ const GalleryWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.6rem;
-  padding: 1rem;
+  padding: 1.6rem;
   justify-content: center;
 
   @media only screen and (min-width: 768px) {
@@ -29,7 +29,6 @@ const PreviewImageModal = styled.div`
   display: flex;
   position: fixed;
   overflow: hidden !important;
-  z-index: 1;
   left: 0;
   top: 0;
   width: 100%;
@@ -62,6 +61,8 @@ const PreviewImage = styled.img`
 export const GalleryImages = ({
   images,
   albumId,
+  isSelectAll,
+  isReuploadingAll,
   onDelete,
   onFilesAttached,
   onFileUploadComplete,
@@ -74,6 +75,8 @@ export const GalleryImages = ({
       key={img.clientId || img.id}
       image={img}
       albumId={albumId}
+      isSelectAll={isSelectAll}
+      isReuploadingAll={isReuploadingAll}
       onDelete={onDelete}
       onFileUploadComplete={onFileUploadComplete}
       onSelectImage={onSelectImage}
@@ -112,6 +115,8 @@ GalleryImages.propTypes = {
       url: PropTypes.string.isRequired,
     }),
   ),
+  isSelectAll: PropTypes.bool,
+  isReuploadingAll: PropTypes.bool,
   onDelete: PropTypes.func.isRequired,
   onFileUploadComplete: PropTypes.func.isRequired,
   onFilesAttached: PropTypes.func.isRequired,

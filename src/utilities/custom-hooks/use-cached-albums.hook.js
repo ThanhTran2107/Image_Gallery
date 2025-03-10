@@ -24,7 +24,10 @@ export const useCachedAlbums = () => {
         const data = await getAlbums();
         setAlbumList(data);
 
-        const currentAlbumId = getLocalStorage(CURRENT_ALBUM_ID_KEY);
+        if (!data || data.length === 0) return;
+
+        const currentAlbumId = getLocalStorage(CURRENT_ALBUM_ID_KEY) || data[0].id;
+
         const found = find(data, alb => alb.id === currentAlbumId);
 
         setCurrentAlbum(found);

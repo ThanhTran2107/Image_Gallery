@@ -16,6 +16,7 @@ body {
   --border-image-color: white;
   --border-upload-button-color: white;
   --divider-border-color: white;
+  --disabled-color: rgb(255, 252, 252);
 }
 
 [data-theme='light'] {
