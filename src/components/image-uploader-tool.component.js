@@ -21,7 +21,7 @@ const UploadButton = styled(Button)`
   background-color: ${COLORS.DARK_GRAY};
   cursor: pointer;
   transition: transform 180ms cubic-bezier(0.25, 1, 0.5, 1);
-  aspect-ratio: 1/1;
+  aspect-ratio: 1;
 
   &:hover {
     background-color: ${COLORS.DARK_GRAY} !important;

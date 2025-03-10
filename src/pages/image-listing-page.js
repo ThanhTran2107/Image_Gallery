@@ -1,4 +1,4 @@
-import { filter, find, findIndex, map } from 'lodash-es';
+import { filter, find, findIndex, isEmpty, map } from 'lodash-es';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import { LOCALSTORAGE_KEY } from 'utilities/constant';
 import { useCachedAlbums } from 'utilities/custom-hooks/use-cached-albums.hook';
 import { useEnqueueUpload } from 'utilities/custom-hooks/use-enqueue-upload-image.hook';
 import { useDeleteImage } from 'utilities/data-hooks/images/use-delete-image.hook';
+import { useGetImagesSize } from 'utilities/data-hooks/images/use-get-image-size.hook';
 import { useGetImages } from 'utilities/data-hooks/images/use-get-images.hook';
 import { setLocalStorage } from 'utilities/services/common';
 
@@ -30,12 +31,17 @@ const { CURRENT_ALBUM_ID: CURRENT_ALBUM_ID_KEY } = LOCALSTORAGE_KEY;
 
 export const ImageListingPage = () => {
   const [images, setImages] = useState([]);
-  const { currentAlbum, setCurrentAlbum, albumList, setAlbumList } = useCachedAlbums();
+  const [isSelectAll, setIsSelectAll] = useState(false);
+  const [isReuploadingAll, setIsReUploadingAll] = useState(false);
+  const [imagesCount, setImagesCount] = useState(0);
 
+  const { currentAlbum, setCurrentAlbum, albumList, setAlbumList } = useCachedAlbums();
+  const getImagesSize = useGetImagesSize();
   const getImages = useGetImages();
   const deleteImage = useDeleteImage();
-  const albumId = currentAlbum.id;
   const enqueueUpload = useEnqueueUpload();
+
+  const albumId = currentAlbum ? currentAlbum.id : null;
 
   const handleDeleteImages = async deleteId => {
     try {
@@ -48,7 +54,9 @@ export const ImageListingPage = () => {
         await deleteImage(albumId, data.id);
 
         CACHED_ALBUMS[albumId] = [...newImages];
+
         setImages(newImages);
+        setImagesCount(newImages.length);
       }
     } catch (e) {
       console.log(e);
@@ -60,11 +68,13 @@ export const ImageListingPage = () => {
 
     setImages(prevImages => {
       return map(prevImages, img => {
-        if (img.clientId === clientId) return { clientId, id, url };
+        if (img.clientId === clientId) return { id, url };
 
         return img;
       });
     });
+
+    setImagesCount(CACHED_ALBUMS[albumId].length);
   };
 
   const handleImagesAttached = data => setImages([...data, ...images]);
@@ -95,26 +105,44 @@ export const ImageListingPage = () => {
 
   const handleDeleteAlbum = deletedAlbumID => {
     const updatedAlbumList = filter(albumList, alb => alb.id != deletedAlbumID);
+    const updatedLength = updatedAlbumList.length;
 
     delete CACHED_ALBUMS[deletedAlbumID];
 
     setAlbumList(updatedAlbumList);
-    setCurrentAlbum(updatedAlbumList[0]);
+    setCurrentAlbum(updatedAlbumList[updatedLength - 1]);
     setLocalStorage(CURRENT_ALBUM_ID_KEY, updatedAlbumList[0].id);
+  };
+
+  const handleClickSelectAll = () => {
+    if (isEmpty(images)) return;
+
+    setIsSelectAll(!isSelectAll);
+  };
+
+  const handleClickReuploadAll = () => {
+    setIsReUploadingAll(!isReuploadingAll);
+    setIsSelectAll(false);
   };
 
   useEffect(() => {
     (async () => {
       try {
         if (albumId) {
+          setIsSelectAll(false);
+
           window.scrollTo(0, 0);
           const cacheImages = CACHED_ALBUMS[albumId];
-
           setImages(cacheImages || []);
 
           const { data } = await getImages(albumId);
-          setImages(data);
+
           CACHED_ALBUMS[albumId] = data;
+          setImages(data);
+
+          const count = await getImagesSize(albumId);
+
+          setImagesCount(count);
         }
       } catch (e) {
         console.log(e);
@@ -127,15 +155,20 @@ export const ImageListingPage = () => {
       <HeaderPage
         album={currentAlbum}
         albums={albumList}
-        imagesCount={images.length}
+        imagesCount={imagesCount}
+        isSelectAll={isSelectAll}
         onAddAlbum={handleAddAlbum}
         onUpdateAlbum={handleUpdateAlbum}
         onDeleteAlbum={handleDeleteAlbum}
+        onSelectAll={handleClickSelectAll}
+        onReuploadAll={handleClickReuploadAll}
       />
 
       <GalleryImages
         images={images}
         albumId={albumId}
+        isSelectAll={isSelectAll}
+        isReuploadingAll={isReuploadingAll}
         onEnqueueUpload={enqueueUpload}
         onDelete={handleDeleteImages}
         onFilesAttached={handleImagesAttached}

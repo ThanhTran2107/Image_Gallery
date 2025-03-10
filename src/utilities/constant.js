@@ -37,6 +37,9 @@ export const COLORS = Object.freeze({
   DARK_PINK: '#70114b',
   DEEP_PINK: '#ca077e',
 
+  //YELLOW COLORS
+  CYBER_YELLOW: '#ffd809',
+
   //SHADE COLOR
   BLACK_55: 'rgb(0 0 0 / 55%)',
 });
@@ -52,8 +55,8 @@ export const LOCALE = Object.freeze({
 });
 
 export const THEME_OPTIONS = [
-  { mode: MODE.LIGHT, icon: faMoon },
-  { mode: MODE.DARK, icon: faSun },
+  { mode: MODE.LIGHT, icon: faSun },
+  { mode: MODE.DARK, icon: faMoon },
 ];
 
 export const LANGUAGE_OPTIONS = [

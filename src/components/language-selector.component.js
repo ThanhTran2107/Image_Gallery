@@ -41,8 +41,6 @@ export const LanguageSelector = () => {
 
   return (
     <Space size="small">
-      <Language key={locale}>{LANGUAGE_OPTIONS_HASH[locale].label}</Language>
-
       <Dropdown
         menu={{
           items: map(LANGUAGE_OPTIONS, ({ locale, label }) => ({
@@ -52,7 +50,10 @@ export const LanguageSelector = () => {
           })),
         }}
       >
-        <LanguageButton icon={faEarth} />
+        <Space>
+          <Language key={locale}>{LANGUAGE_OPTIONS_HASH[locale].label}</Language>
+          <LanguageButton icon={faEarth} />
+        </Space>
       </Dropdown>
     </Space>
   );

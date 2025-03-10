@@ -1,5 +1,6 @@
 import { faCheck, faCloudDownload, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import classNames from 'classnames';
 import { trim } from 'lodash-es';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
@@ -13,7 +14,7 @@ import { Dropdown } from 'components/dropdown.component';
 import { LanguageSelector } from 'components/language-selector.component';
 import { notification } from 'components/notification.component';
 import { Space } from 'components/space.component';
-import { Spinner } from 'components/spinner.component';
+import { Spin } from 'components/spin.component';
 import { ThemeSelector } from 'components/theme-selector.component';
 
 import { COLORS } from 'utilities/constant';
@@ -25,7 +26,7 @@ import { DeleteAlbumModal } from './delete-album-modal.component';
 
 const Header = styled.div`
   display: flex;
-  padding: 1rem;
+  padding: 1.6rem;
   justify-content: space-between;
 `;
 
@@ -76,6 +77,7 @@ const AlbumAvatar = styled(Avatar)`
 
 const AvatarContainer = styled.div`
   display: flex;
+  position: relative;
   border-radius: 100%;
   justify-content: center;
   align-items: center;
@@ -83,7 +85,7 @@ const AvatarContainer = styled.div`
   &:hover {
     .back-drop {
       display: flex;
-      z-index: 99;
+      z-index: 1;
     }
 
     .icon-upload-avatar {
@@ -177,30 +179,17 @@ const ImagesCount = styled.h1`
   }
 `;
 
-const StyledSpinner = styled(Spinner)`
-  width: 4rem;
-  height: 4rem;
-`;
+const SelectActionButton = styled(Button)`
+  height: 3.2rem;
+  width: 11rem;
+  font-size: 1.4rem;
 
-const SelectButton = styled(Button)`
-  height: 2rem;
-  width: 8rem;
-  font-size: 1rem;
-
-  @media only screen and (min-width: 768px) {
-    height: 2.8rem;
-    width: 10.8rem;
-    font-size: 1.3rem;
-  }
-
-  @media only screen and (min-width: 1024px) {
-    height: 3rem;
-    width: 11rem;
-    font-size: 1.4rem;
+  &.is-disabled {
+    background: var(--disabled-color);
   }
 `;
 
-const OptionLabels = styled.label`
+const OptionLabel = styled.label`
   font-size: 1.2rem;
 
   @media only screen and (min-width: 768px) {
@@ -211,7 +200,22 @@ const OptionLabels = styled.label`
     font-size: 1.4rem;
   }
 `;
-export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlbum, onDeleteAlbum }) => {
+
+const StyledSpinner = styled(Spin)`
+  position: absolute;
+`;
+
+export const HeaderPage = ({
+  albums,
+  album,
+  imagesCount,
+  isSelectAll,
+  onUpdateAlbum,
+  onAddAlbum,
+  onDeleteAlbum,
+  onSelectAll,
+  onReuploadAll,
+}) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isOpenCreateAlbumForm, setIsOpenCreateAlbumForm] = useState(false);
@@ -235,74 +239,86 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
 
   const handleClickEditButton = () => setIsEditMode(true);
 
-  const handleSaveName = () => {
-    const newName = trim(inputRef.current.value);
+  const handleDeleteAll = () => alert('delete all ');
 
-    if (newName != album.name && newName != '') {
-      const updatedAlbumName = { ...album, name: newName };
+  const handleSaveName = async () => {
+    try {
+      const newName = trim(inputRef.current.value);
 
-      updateAlbum(updatedAlbumName.id, updatedAlbumName)
-        .then(() => {
-          notification.success({
-            message: formatMessage({ defaultMessage: 'Update album name successfully!' }),
-          });
+      if (newName !== '' && newName !== album.name) {
+        const updatedAlbumName = { ...album, name: newName };
 
-          onUpdateAlbum(updatedAlbumName);
-          setIsEditMode(false);
-        })
-        .catch(e => {
-          console.log(e);
+        await updateAlbum(updatedAlbumName.id, updatedAlbumName);
 
-          setIsEditMode(false);
+        notification.success({
+          message: formatMessage({ defaultMessage: 'Update album name successfully!' }),
         });
-    } else {
+
+        onUpdateAlbum(updatedAlbumName);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
       setIsEditMode(false);
     }
   };
 
-  const handleUpdateAvatar = event => {
-    const { files } = event.target;
+  const handleUpdateAvatar = async event => {
+    try {
+      const { files } = event.target;
 
-    if (files.length === 0) return;
+      if (files.length === 0) return;
 
-    setIsUploading(true);
+      setIsUploading(true);
 
-    uploadImageService(files[0]).then(data => {
+      const data = await uploadImageService(files[0]);
+
       const updatedUrl = data.data.image.url;
       const updatedAlbumAvatar = { ...album, avatar: updatedUrl };
 
-      updateAlbum(updatedAlbumAvatar.id, updatedAlbumAvatar)
-        .then(() => {
-          notification.success({
-            message: formatMessage({ defaultMessage: 'Update album avatar successfully!' }),
-          });
+      await updateAlbum(updatedAlbumAvatar.id, updatedAlbumAvatar);
 
-          setIsUploading(false);
-          onUpdateAlbum(updatedAlbumAvatar);
-        })
-        .catch(e => {
-          console.log(e);
+      notification.success({
+        message: formatMessage({ defaultMessage: 'Update album avatar successfully!' }),
+      });
 
-          setIsUploading(false);
-        });
-    });
+      onUpdateAlbum(updatedAlbumAvatar);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
-  const items = [
+  const selectActionItems = [
     {
-      label: <OptionLabels>{formatMessage({ defaultMessage: 'Create an album' })}</OptionLabels>,
-      key: '1',
+      label: <OptionLabel>{formatMessage({ defaultMessage: 'Create an album' })}</OptionLabel>,
+      key: 'createAlbum',
       onClick: handleOpenCreateAlbumModal,
     },
     {
-      label: <OptionLabels>{formatMessage({ defaultMessage: 'Delete the album' })}</OptionLabels>,
-      key: '2',
+      label: <OptionLabel>{formatMessage({ defaultMessage: 'Delete the album' })}</OptionLabel>,
+      key: 'deleteAlbum',
       onClick: handleOpenDeleteAlbumModal,
     },
   ];
 
+  const selectAllItems = [
+    {
+      label: <OptionLabel>{formatMessage({ defaultMessage: 'Delete' })}</OptionLabel>,
+      key: 'deleteAll',
+      onClick: handleDeleteAll,
+    },
+    {
+      label: <OptionLabel>{formatMessage({ defaultMessage: 'Reupload' })}</OptionLabel>,
+      key: 'reuploadAll',
+      onClick: onReuploadAll,
+    },
+  ];
+
   const menuProps = {
-    items,
+    selectActionItems,
+    selectAllItems,
   };
 
   useEffect(() => {
@@ -314,19 +330,19 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
       <InfoAlbum>
         <Space size="large" direction="horizontal">
           <AvatarContainer>
-            <AlbumAvatar className="album-avatar" src={album.avatar} alt={album.name} />
+            <AlbumAvatar className="album-avatar" src={album ? album.avatar : null} alt={album ? album.name : null} />
             <BackDrop className="back-drop" onClick={handleOpenDialogFile}>
               <FontAwesomeIcon className="icon-upload-avatar" icon={faCloudDownload} />
               <input onChange={handleUpdateAvatar} type="file" id="avatar" style={{ display: 'none' }} />
             </BackDrop>
-            {isUploading && <StyledSpinner />}
+            {isUploading && <StyledSpinner size="large" />}
           </AvatarContainer>
 
           <AlbumName>
             <Space direction="vertical" size="small">
               {!isEditMode && (
                 <>
-                  <span className="album-name">{album.name}</span>
+                  <span className="album-name">{album ? album.name : null}</span>
                   <EditButton className="icon-edit" icon={faEdit} onClick={handleClickEditButton} />
                 </>
               )}
@@ -352,9 +368,24 @@ export const HeaderPage = ({ albums, album, imagesCount, onUpdateAlbum, onAddAlb
           <ImagesCount>
             {imagesCount} {formatMessage({ defaultMessage: 'IMAGES' })}
           </ImagesCount>
-          <Dropdown menu={menuProps}>
-            <SelectButton className="select-button">{formatMessage({ defaultMessage: 'Select Actions' })}</SelectButton>
-          </Dropdown>
+
+          <Space size="middle">
+            <Dropdown
+              className={classNames({ 'is-disabled': isSelectAll })}
+              disabled={isSelectAll}
+              menu={{ items: menuProps.selectActionItems }}
+            >
+              <SelectActionButton className="select-button">
+                {formatMessage({ defaultMessage: 'Select Actions' })}
+              </SelectActionButton>
+            </Dropdown>
+
+            <Dropdown.Button menu={{ items: isSelectAll ? menuProps.selectAllItems : [] }} onClick={onSelectAll}>
+              {isSelectAll
+                ? formatMessage({ defaultMessage: 'Deselect All' })
+                : formatMessage({ defaultMessage: 'Select All' })}
+            </Dropdown.Button>
+          </Space>
         </Space>
       </Space>
 
@@ -381,11 +412,6 @@ HeaderPage.propTypes = {
     name: PropTypes.string.isRequired,
     avatar: PropTypes.string.isRequired,
   }).isRequired,
-  imagesCount: PropTypes.number.isRequired,
-  onUpdateAlbum: PropTypes.func.isRequired,
-  onDeleteAlbum: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool,
-  onAddAlbum: PropTypes.func.isRequired,
   albums: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -393,4 +419,11 @@ HeaderPage.propTypes = {
       avatar: PropTypes.string,
     }),
   ).isRequired,
+  imagesCount: PropTypes.number.isRequired,
+  onUpdateAlbum: PropTypes.func.isRequired,
+  onDeleteAlbum: PropTypes.func.isRequired,
+  isSelectAll: PropTypes.bool,
+  onAddAlbum: PropTypes.func.isRequired,
+  onSelectAll: PropTypes.func.isRequired,
+  onReuploadAll: PropTypes.func.isRequired,
 };

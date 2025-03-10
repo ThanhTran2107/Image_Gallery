@@ -21,7 +21,6 @@ const Container = styled.div`
   transform: translateX(100%);
   transition: transform 0.5s;
   border: 0.1rem solid white;
-  overflow: auto;
 
   @media only screen and (min-width: 768px) {
     width: 44rem;
@@ -41,11 +40,14 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 4rem;
   padding: 2rem;
+  background: var(--background-color);
+  border-bottom: 0.1rem solid ${COLORS.FOG_GRAY};
 
   .header-text {
     display: flex;
@@ -92,21 +94,25 @@ const CloseButton = styled(FontAwesomeIcon)`
 const AlbumList = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  position: absolute;
-  width: 23rem;
+  position: fixed;
+  right: 0;
+  width: 24rem;
   padding: 1rem 0.5rem;
   opacity: 0;
   transition: opacity 0.5s;
+  min-height: 20vh;
+  max-height: 90vh;
+  overflow: auto;
 
   @media only screen and (min-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
-    width: 44rem;
+    width: 45rem;
     padding: 2.5rem 0.5rem;
   }
 
   @media only screen and (min-width: 1024px) {
     grid-template-columns: repeat(3, 1fr);
-    width: 62rem;
+    width: 63rem;
     padding: 2.5rem 0.5rem;
   }
 `;

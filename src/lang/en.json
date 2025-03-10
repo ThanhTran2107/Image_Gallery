@@ -56,8 +56,17 @@
   "i5e6d1": {
     "defaultMessage": "All Albums"
   },
+  "ixTlcv": {
+    "defaultMessage": "Deselect All"
+  },
+  "kHdqem": {
+    "defaultMessage": "Select All"
+  },
   "kxo+Ag": {
     "defaultMessage": "Create an album"
+  },
+  "lfnYWD": {
+    "defaultMessage": "Reupload"
   },
   "mwBmSX": {
     "defaultMessage": "Delete the album occurs error!"
