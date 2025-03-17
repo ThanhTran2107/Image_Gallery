@@ -7,9 +7,7 @@ export const useEnqueueUpload = (max = 100) => {
   const activeUploads = useRef(0);
 
   const processQueue = async () => {
-    if (activeUploads.current >= max || queueRef.current.length === 0) {
-      return;
-    }
+    if (activeUploads.current >= max || queueRef.current.length === 0) return;
 
     activeUploads.current += 1;
     const { file, resolve, reject } = queueRef.current.shift();

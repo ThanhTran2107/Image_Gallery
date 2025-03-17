@@ -1,21 +1,20 @@
 import { filter, find, findIndex, isEmpty, map } from 'lodash-es';
-import React from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { useCachedAlbums } from 'pages/hooks/use-cached-albums.hook';
+
 import { LOCALSTORAGE_KEY } from 'utilities/constant';
-import { useCachedAlbums } from 'utilities/custom-hooks/use-cached-albums.hook';
 import { useEnqueueUpload } from 'utilities/custom-hooks/use-enqueue-upload-image.hook';
 import { useDeleteImage } from 'utilities/data-hooks/images/use-delete-image.hook';
 import { useGetImagesSize } from 'utilities/data-hooks/images/use-get-image-size.hook';
-import { useGetImages } from 'utilities/data-hooks/images/use-get-images.hook';
 import { setLocalStorage } from 'utilities/services/common';
 
 import { GalleryImages } from './components/gallery-images.component';
 import { HeaderPage } from './components/header.component';
 import { ListAlbums } from './components/list-albums.component';
 import { ScrollButtons } from './components/scroll-buttons.component';
-import { CACHED_ALBUMS } from './image-listing-page.constant';
+import { useInfinityImagesQuery } from './hooks/use-infinity-images-query.hook';
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,18 +29,17 @@ const Wrapper = styled.div`
 const { CURRENT_ALBUM_ID: CURRENT_ALBUM_ID_KEY } = LOCALSTORAGE_KEY;
 
 export const ImageListingPage = () => {
-  const [images, setImages] = useState([]);
-  const [isSelectAll, setIsSelectAll] = useState(false);
   const [isReuploadingAll, setIsReUploadingAll] = useState(false);
+  const [isSelectAll, setIsSelectAll] = useState(false);
   const [imagesCount, setImagesCount] = useState(0);
 
   const { currentAlbum, setCurrentAlbum, albumList, setAlbumList } = useCachedAlbums();
-  const getImagesSize = useGetImagesSize();
-  const getImages = useGetImages();
+  const { images, setImages } = useInfinityImagesQuery(currentAlbum.id);
   const deleteImage = useDeleteImage();
   const enqueueUpload = useEnqueueUpload();
+  const getImagesSize = useGetImagesSize();
 
-  const albumId = currentAlbum ? currentAlbum.id : null;
+  const albumId = currentAlbum.id || null;
 
   const handleDeleteImages = async deleteId => {
     try {
@@ -53,8 +51,6 @@ export const ImageListingPage = () => {
 
         await deleteImage(albumId, data.id);
 
-        CACHED_ALBUMS[albumId] = [...newImages];
-
         setImages(newImages);
         setImagesCount(newImages.length);
       }
@@ -64,8 +60,6 @@ export const ImageListingPage = () => {
   };
 
   const handleFileUploadComplete = ({ clientId, id, url }) => {
-    CACHED_ALBUMS[albumId].push({ clientId, id, url });
-
     setImages(prevImages => {
       return map(prevImages, img => {
         if (img.clientId === clientId) return { id, url };
@@ -74,7 +68,7 @@ export const ImageListingPage = () => {
       });
     });
 
-    setImagesCount(CACHED_ALBUMS[albumId].length);
+    setImagesCount(prevCount => prevCount + 1);
   };
 
   const handleImagesAttached = data => setImages([...data, ...images]);
@@ -107,8 +101,6 @@ export const ImageListingPage = () => {
     const updatedAlbumList = filter(albumList, alb => alb.id != deletedAlbumID);
     const updatedLength = updatedAlbumList.length;
 
-    delete CACHED_ALBUMS[deletedAlbumID];
-
     setAlbumList(updatedAlbumList);
     setCurrentAlbum(updatedAlbumList[updatedLength - 1]);
     setLocalStorage(CURRENT_ALBUM_ID_KEY, updatedAlbumList[0].id);
@@ -128,22 +120,13 @@ export const ImageListingPage = () => {
   useEffect(() => {
     (async () => {
       try {
-        if (albumId) {
-          setIsSelectAll(false);
+        if (!albumId) return;
 
-          window.scrollTo(0, 0);
-          const cacheImages = CACHED_ALBUMS[albumId];
-          setImages(cacheImages || []);
+        setIsSelectAll(false);
 
-          const { data } = await getImages(albumId);
+        const size = await getImagesSize(albumId);
 
-          CACHED_ALBUMS[albumId] = data;
-          setImages(data);
-
-          const count = await getImagesSize(albumId);
-
-          setImagesCount(count);
-        }
+        setImagesCount(size);
       } catch (e) {
         console.log(e);
       }

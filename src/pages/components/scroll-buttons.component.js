@@ -1,11 +1,13 @@
 import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Button } from 'components/button.component';
 
 import { COLORS } from 'utilities/constant';
+import { isScrolledNearBottom, isScrolledNearTop } from 'utilities/services/dom';
 
 const StyledButton = styled(Button)`
   position: fixed;
@@ -54,26 +56,18 @@ const ArrowDownButton = styled(StyledButton)`
 `;
 
 export const ScrollButtons = () => {
-  const [invisibleUp, setInvisibleUp] = useState(true);
+  const [invisibleUp, setInvisibleUp] = useState(false);
   const [invisibleDown, setInvisibleDown] = useState(false);
 
   const handleScrollUp = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
-  const handleScrollDown = () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  const handleScrollDown = () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
 
   useEffect(() => {
-    const handleScroll = event => {
-      if (event.target.documentElement.scrollTop > 300) {
-        setInvisibleUp(false);
-      } else {
-        setInvisibleUp(true);
-      }
+    const handleScroll = () => {
+      setInvisibleUp(!isScrolledNearTop(300));
 
-      if (document.body.scrollHeight - window.innerHeight - Math.ceil(event.target.documentElement.scrollTop) > 300) {
-        setInvisibleDown(false);
-      } else {
-        setInvisibleDown(true);
-      }
+      setInvisibleDown(!isScrolledNearBottom(300));
     };
 
     document.addEventListener('scroll', handleScroll);
@@ -81,22 +75,33 @@ export const ScrollButtons = () => {
     return () => document.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setInvisibleDown(!isScrolledNearBottom(300));
+    });
+
+    observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div>
-      {!invisibleUp && (
-        <>
-          <ArrowUpButton className="btn-scroll-up" onClick={handleScrollUp}>
-            <FontAwesomeIcon icon={faArrowUp} className="arrow-up" />
-          </ArrowUpButton>
-        </>
+      {invisibleUp && (
+        <ArrowUpButton className="btn-scroll-up" onClick={handleScrollUp}>
+          <FontAwesomeIcon icon={faArrowUp} className="arrow-up" />
+        </ArrowUpButton>
       )}
-      {!invisibleDown && (
-        <>
-          <ArrowDownButton className="btn-scroll-down" onClick={handleScrollDown}>
-            <FontAwesomeIcon icon={faArrowDown} className="arrow-down" />
-          </ArrowDownButton>
-        </>
+
+      {invisibleDown && (
+        <ArrowDownButton className="btn-scroll-down" onClick={handleScrollDown}>
+          <FontAwesomeIcon icon={faArrowDown} className="arrow-down" />
+        </ArrowDownButton>
       )}
     </div>
   );
+};
+
+ScrollButtons.PropTypes = {
+  isScrollHeightChanged: PropTypes.bool,
 };
