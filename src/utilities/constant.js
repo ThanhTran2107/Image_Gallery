@@ -1,7 +1,7 @@
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { keyBy } from 'lodash-es';
 
-export const IMG_BB_KEY = 'c78e725ddd5bd8476285b43c99297428';
+export const IMG_BB_KEY = '868291d780259aa681c8063a2c09121c';
 export const UPLOAD_IMAGE_END_POINT = `https://api.imgbb.com/1/upload?key=${IMG_BB_KEY}`;
 export const HTTP_POST = 'POST';
 export const FIRE_BASE_IMAGE_TABLE = 'FIRE_BASE_IMAGE_TABLE';

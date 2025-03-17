@@ -1,20 +1,15 @@
 import { useEffect } from 'react';
 
-export const useDetectScrollAtBottom = func => {
+import { isScrolledNearBottom } from 'utilities/services/dom';
+
+export const useDetectScrollAtBottom = ({ func, isDisabled, threshold = 0 }) => {
   useEffect(() => {
     const handleScroll = () => {
-      const isAtBottom =
-        document.body.scrollHeight - window.innerHeight <= Math.ceil(document.documentElement.scrollTop);
-
-      if (isAtBottom) {
-        func();
-      }
+      if (!isDisabled && isScrolledNearBottom(threshold)) func().then(() => console.log('Processed!'));
     };
 
     window.addEventListener('scroll', handleScroll);
 
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [func]);
 };
