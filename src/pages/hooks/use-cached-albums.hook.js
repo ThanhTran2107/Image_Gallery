@@ -2,6 +2,7 @@ import { find } from 'lodash-es';
 import { useEffect, useState } from 'react';
 
 import { LOCALSTORAGE_KEY } from 'utilities/constant';
+import { queryClient } from 'utilities/constant';
 import { useGetAlbums } from 'utilities/data-hooks/albums/use-get-albums.hook';
 import { getLocalStorage } from 'utilities/services/common';
 
@@ -10,37 +11,27 @@ const { CURRENT_ALBUM_ID: CURRENT_ALBUM_ID_KEY } = LOCALSTORAGE_KEY;
 export const useCachedAlbums = () => {
   const [currentAlbum, setCurrentAlbum] = useState({});
   const [albumList, setAlbumList] = useState([]);
-  const getAlbums = useGetAlbums();
-
-  // get albums list
-  // get select current album id from local storage
-  // check cached current album id is exists in album list
-  // if exist => set album by method setCurrentAlbum
-  // if not exist => skip
+  const { data: albums } = useGetAlbums();
 
   useEffect(() => {
-    (async () => {
-      try {
-        const data = await getAlbums();
-        setAlbumList(data);
+    if (albums) {
+      setAlbumList(albums);
 
-        if (!data || data.length === 0) return;
+      const currentAlbumId = getLocalStorage(CURRENT_ALBUM_ID_KEY) || albums[0].id;
+      const found = find(albums, alb => alb.id === currentAlbumId);
 
-        const currentAlbumId = getLocalStorage(CURRENT_ALBUM_ID_KEY) || data[0].id;
+      setCurrentAlbum(found);
+    }
+  }, [albums]);
 
-        const found = find(data, alb => alb.id === currentAlbumId);
-
-        setCurrentAlbum(found);
-      } catch (e) {
-        console.log(e);
-      }
-    })();
-  }, []);
+  const handleSetAlbumList = newData => {
+    queryClient.setQueryData(['albums'], newData);
+  };
 
   return {
     currentAlbum,
     albumList,
     setCurrentAlbum,
-    setAlbumList,
+    setAlbumList: handleSetAlbumList,
   };
 };

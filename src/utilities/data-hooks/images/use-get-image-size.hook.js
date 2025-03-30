@@ -1,13 +1,25 @@
+import { useQuery } from '@tanstack/react-query';
 import { db } from 'firebase-config';
 import { collection, getCountFromServer } from 'firebase/firestore';
-import { useCallback } from 'react';
 
-export const useGetImagesSize = () => {
-  return useCallback(async albumId => {
-    const docRef = collection(db, 'albums', albumId, 'images');
+import { QUERY_KEYS } from 'utilities/constant';
 
-    const countSnapshot = await getCountFromServer(docRef);
+const { IMAGES_SIZE } = QUERY_KEYS;
 
-    return countSnapshot.data().count;
-  }, []);
+const getImagesSize = async albumId => {
+  const docRef = collection(db, 'albums', albumId, 'images');
+
+  const countSnapshot = await getCountFromServer(docRef);
+
+  return countSnapshot.data().count;
+};
+
+export const useGetImagesSize = options => {
+  const { albumId } = options;
+
+  return useQuery({
+    queryKey: [IMAGES_SIZE, albumId],
+    queryFn: () => getImagesSize(options.albumId),
+    ...options,
+  });
 };

@@ -37,7 +37,7 @@ export const ImageListingPage = () => {
   const { images, setImages } = useInfinityImagesQuery(currentAlbum.id);
   const deleteImage = useDeleteImage();
   const enqueueUpload = useEnqueueUpload();
-  const getImagesSize = useGetImagesSize();
+  const { data: imagesSize } = useGetImagesSize({ albumId: currentAlbum.id, enabled: !!currentAlbum.id });
 
   const albumId = currentAlbum.id || null;
 
@@ -118,20 +118,11 @@ export const ImageListingPage = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        if (!albumId) return;
-
-        setIsSelectAll(false);
-
-        const size = await getImagesSize(albumId);
-
-        setImagesCount(size);
-      } catch (e) {
-        console.log(e);
-      }
-    })();
-  }, [albumId]);
+    if (albumId && imagesSize) {
+      setImagesCount(imagesSize);
+      setIsSelectAll(false);
+    }
+  }, [albumId, imagesSize]);
 
   return (
     <Wrapper>

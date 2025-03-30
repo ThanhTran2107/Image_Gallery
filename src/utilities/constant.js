@@ -1,4 +1,5 @@
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { QueryClient } from '@tanstack/react-query';
 import { keyBy } from 'lodash-es';
 
 export const IMG_BB_KEY = '868291d780259aa681c8063a2c09121c';
@@ -73,3 +74,11 @@ export const LANGUAGE_OPTIONS = [
 export const THEME_OPTIONS_HASH = keyBy(THEME_OPTIONS, 'mode');
 
 export const LANGUAGE_OPTIONS_HASH = keyBy(LANGUAGE_OPTIONS, 'locale');
+
+export const queryClient = new QueryClient();
+
+export const QUERY_KEYS = Object.freeze({
+  ALBUMS: 'albums',
+  IMAGES: 'images',
+  IMAGES_SIZE: 'images-size',
+});
