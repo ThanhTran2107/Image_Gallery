@@ -11,13 +11,13 @@ import { useDeleteAlbum } from 'utilities/data-hooks/albums/use-delete-album.hoo
 const { confirm } = Modal;
 
 export const DeleteAlbumModal = ({ album, isOpen, onClose, onDelete }) => {
-  const deleteAlbum = useDeleteAlbum();
+  const { mutateAsync: deleteAlbum } = useDeleteAlbum();
   const { formatMessage } = useIntl();
 
   const handleDeleteAlbum = async () => {
-    try {
-      if (isEmpty(album)) return;
+    if (isEmpty(album)) return;
 
+    try {
       const deletedAlbumId = await deleteAlbum(album.id);
 
       notification.success({
@@ -26,6 +26,8 @@ export const DeleteAlbumModal = ({ album, isOpen, onClose, onDelete }) => {
 
       onDelete(deletedAlbumId);
     } catch (e) {
+      console.log(e);
+
       notification.error({
         message: formatMessage({ defaultMessage: 'Delete the album failed!' }),
         description: e.message || formatMessage({ defaultMessage: 'Delete the album occurs error!' }),

@@ -233,7 +233,7 @@ export const HeaderPage = ({
 
   const inputRef = useRef(null);
 
-  const updateAlbum = useUpdateAlbum();
+  const { mutateAsync: updateAlbum } = useUpdateAlbum();
 
   const handleOpenDialogFile = () => document.getElementById('avatar').click();
 
@@ -242,51 +242,54 @@ export const HeaderPage = ({
   const handleDeleteAll = () => alert('delete all ');
 
   const handleSaveName = async () => {
-    try {
-      const newName = trim(inputRef.current.value);
+    const newName = trim(inputRef.current.value);
 
-      if (newName !== '' && newName !== album.name) {
-        const updatedAlbumName = { ...album, name: newName };
+    if (newName !== '' && newName !== album.name) {
+      const updatedAlbumName = { ...album, name: newName };
 
-        await updateAlbum(updatedAlbumName.id, updatedAlbumName);
+      try {
+        await updateAlbum({ albumId: updatedAlbumName.id, album: updatedAlbumName });
 
         notification.success({
           message: formatMessage({ defaultMessage: 'Update album name successfully!' }),
         });
 
         onUpdateAlbum(updatedAlbumName);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setIsEditMode(false);
       }
-    } catch (e) {
-      console.log(e);
-    } finally {
+    } else {
       setIsEditMode(false);
     }
   };
 
   const handleUpdateAvatar = async event => {
+    const { files } = event.target;
+
+    if (files.length === 0) return;
+
+    setIsUploading(true);
+
     try {
-      const { files } = event.target;
-
-      if (files.length === 0) return;
-
-      setIsUploading(true);
-
       const data = await uploadImageService(files[0]);
 
       const updatedUrl = data.data.image.url;
       const updatedAlbumAvatar = { ...album, avatar: updatedUrl };
 
-      await updateAlbum(updatedAlbumAvatar.id, updatedAlbumAvatar);
+      updateAlbum({ albumId: updatedAlbumAvatar.id, album: updatedAlbumAvatar })
+        .then(() => {
+          notification.success({
+            message: formatMessage({ defaultMessage: 'Update album avatar successfully!' }),
+          });
 
-      notification.success({
-        message: formatMessage({ defaultMessage: 'Update album avatar successfully!' }),
-      });
-
-      onUpdateAlbum(updatedAlbumAvatar);
+          onUpdateAlbum(updatedAlbumAvatar);
+        })
+        .catch(e => console.log(e))
+        .finally(() => setIsUploading(false));
     } catch (e) {
       console.log(e);
-    } finally {
-      setIsUploading(false);
     }
   };
 
@@ -365,7 +368,7 @@ export const HeaderPage = ({
         </Space>
 
         <Space direction="vertical" size="small" align="end">
-          <ImagesCount>
+          <ImagesCount className="images-count">
             {imagesCount} {formatMessage({ defaultMessage: 'IMAGES' })}
           </ImagesCount>
 

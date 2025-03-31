@@ -162,9 +162,9 @@ export const ImageCard = ({
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadError, setIsUploadError] = useState(false);
 
-  const addImages = useAddImage();
+  const { mutateAsync: addImage } = useAddImage();
 
-  const url = useMemo(() => image.url || URL.createObjectURL(image.file), [image]);
+  const srcUrl = useMemo(() => image.url || URL.createObjectURL(image.file)[image]);
 
   const handleDownloadImage = () => downloadImageService(image);
 
@@ -179,12 +179,13 @@ export const ImageCard = ({
 
           const { url } = data.data.image;
 
-          const id = await addImages(albumId, { url });
+          const id = await addImage({ albumId: albumId, data: { url } });
 
           onFileUploadComplete({ url, id, clientId: image.clientId });
         }
       } catch (e) {
         console.log(e);
+
         setIsUploadError(true);
       } finally {
         setIsUploading(false);
@@ -199,9 +200,9 @@ export const ImageCard = ({
       <StyledImage
         placeholder={<StyledSkeleton active loading />}
         preview={false}
-        src={url}
+        src={srcUrl}
         alt="Uploaded"
-        className={classNames({ 'is-selected': isSelectAll })}
+        className={classNames('image', { 'is-selected': isSelectAll })}
         onClick={() => onSelectImage(image.id)}
       />
 

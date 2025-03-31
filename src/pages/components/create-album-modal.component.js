@@ -31,61 +31,52 @@ export const CreateAlbumModal = ({ isOpen, albums, onClose, onSubmit }) => {
   const { formatMessage } = useIntl();
 
   const [form] = Form.useForm();
-  const addAlbum = useAddAlbum();
+  const { mutateAsync: addAlbum } = useAddAlbum();
 
   const handleCreateNewAlbum = async () => {
     setIsSubmitting(true);
 
-    await form
-      .validateFields()
-      .then(async values => {
-        try {
-          const { name, avatar } = values;
-          const { file } = avatar || {};
-          const order = albums.length;
-          let avatarUrl = '';
+    try {
+      const values = await form.validateFields();
 
-          if (avatar) {
-            const { originFileObj: fileObj } = file;
+      const { name, avatar } = values;
+      const { file } = avatar || {};
+      const order = albums.length;
+      let avatarUrl = '';
 
-            const { data, error } = await uploadImageService(fileObj);
+      if (avatar) {
+        const { originFileObj: fileObj } = file;
+        const { data, error } = await uploadImageService(fileObj);
 
-            if (error)
-              throw new Error(error?.message || formatMessage({ defaultMessage: 'Upload image occurs error!' }));
+        if (error) throw new Error(error?.message || formatMessage({ defaultMessage: 'Upload image occurs error!' }));
 
-            avatarUrl = data.image.url;
-          }
+        avatarUrl = data.image.url;
+      }
 
-          const newAlbum = {
-            name: trim(name),
-            avatar: avatarUrl,
-            order: order,
-          };
+      const newAlbum = {
+        name: trim(name),
+        avatar: avatarUrl,
+        order,
+      };
 
-          const newAlbumID = await addAlbum(newAlbum);
+      const newAlbumId = await addAlbum(newAlbum);
 
-          notification.success({
-            message: formatMessage({ defaultMessage: 'Create a new album successfully!' }),
-          });
-
-          onSubmit({ ...newAlbum, id: newAlbumID });
-          onClose();
-        } catch (e) {
-          console.log(e);
-
-          notification.error({
-            message: formatMessage({ defaultMessage: 'Create an album failed!' }),
-            description: e.message,
-          });
-        } finally {
-          setIsSubmitting(false);
-        }
-      })
-      .catch(e => {
-        console.log(e);
-
-        setIsSubmitting(false);
+      notification.success({
+        message: formatMessage({ defaultMessage: 'Create a new album successfully!' }),
       });
+
+      onSubmit({ ...newAlbum, id: newAlbumId });
+      onClose();
+    } catch (e) {
+      console.log(e);
+
+      notification.error({
+        message: formatMessage({ defaultMessage: 'Create an album failed!' }),
+        description: e.message,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   useEffect(() => {
