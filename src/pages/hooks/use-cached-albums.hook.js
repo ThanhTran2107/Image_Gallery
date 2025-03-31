@@ -24,9 +24,7 @@ export const useCachedAlbums = () => {
     }
   }, [albums]);
 
-  const handleSetAlbumList = newData => {
-    queryClient.setQueryData(['albums'], newData);
-  };
+  const handleSetAlbumList = newData => queryClient.setQueryData(['albums'], newData);
 
   return {
     currentAlbum,

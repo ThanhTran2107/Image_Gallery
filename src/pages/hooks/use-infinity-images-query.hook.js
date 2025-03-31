@@ -1,3 +1,4 @@
+import { filter } from 'lodash-es';
 import { useEffect, useRef, useState } from 'react';
 
 import { CACHED_ALBUMS } from 'pages/image-listing-page.constant';
@@ -51,7 +52,15 @@ export const useInfinityImagesQuery = albumId => {
   });
 
   useEffect(() => {
-    if (albumId) CACHED_ALBUMS[albumId] = [...images];
+    if (albumId) {
+      const cachedImagesWithoutClientId = filter(images, img => !img.clientId);
+
+      CACHED_ALBUMS[albumId] = [...cachedImagesWithoutClientId];
+
+      const lastImage = CACHED_ALBUMS[albumId].at(-1);
+
+      setLastDocId(lastImage ? lastImage.id : '');
+    }
   }, [images]);
 
   useEffect(() => {

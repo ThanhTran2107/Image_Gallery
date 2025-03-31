@@ -206,20 +206,24 @@ export const ListAlbums = ({ albums, onSelectedAlbumId }) => {
     <Items className="item" key={id} onClick={() => onSelectedAlbumId(id)}>
       <Space direction="vertical" size="small" align="center">
         <StyledImage src={avatar} alt={name} />
-        <p style={{ alignSelf: 'center' }}>{name}</p>
+        <p className="item-name" style={{ alignSelf: 'center' }}>
+          {name}
+        </p>
       </Space>
     </Items>
   ));
 
   return (
     <>
-      <OpenButton onClick={handleOpenAlbum}>Albums</OpenButton>
-      {showAlbums && <BackDrop onClick={handleCloseAlbums} />}
+      <OpenButton className="open-album-btn" onClick={handleOpenAlbum}>
+        Albums
+      </OpenButton>
+      {showAlbums && <BackDrop id="back-drop" onClick={handleCloseAlbums} />}
 
       <Container className={classNames({ 'is-show': showAlbums })} onClick={event => event.stopPropagation()}>
         <Header>
           <span className="header-text">{formatMessage({ defaultMessage: 'All Albums' })}</span>
-          <CloseButton icon={faClose} onClick={handleCloseAlbums} />
+          <CloseButton className="close-album-btn" icon={faClose} onClick={handleCloseAlbums} />
         </Header>
         <AlbumList className="album-list">{albumsList}</AlbumList>
       </Container>

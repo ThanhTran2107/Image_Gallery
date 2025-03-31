@@ -35,27 +35,27 @@ export const ImageListingPage = () => {
 
   const { currentAlbum, setCurrentAlbum, albumList, setAlbumList } = useCachedAlbums();
   const { images, setImages } = useInfinityImagesQuery(currentAlbum.id);
-  const deleteImage = useDeleteImage();
+  const { mutateAsync: deleteImage } = useDeleteImage();
   const enqueueUpload = useEnqueueUpload();
   const { data: imagesSize } = useGetImagesSize({ albumId: currentAlbum.id, enabled: !!currentAlbum.id });
 
   const albumId = currentAlbum.id || null;
 
   const handleDeleteImages = async deleteId => {
-    try {
-      const newImages = [...images];
-      const foundIndex = findIndex(newImages, image => image.id === deleteId);
+    const newImages = [...images];
+    const foundIndex = findIndex(newImages, image => image.id === deleteId);
 
-      if (foundIndex > -1) {
-        const [data] = newImages.splice(foundIndex, 1);
+    if (foundIndex > -1) {
+      const [data] = newImages.splice(foundIndex, 1);
 
-        await deleteImage(albumId, data.id);
+      try {
+        await deleteImage({ albumId: albumId, imageId: data.id });
 
         setImages(newImages);
         setImagesCount(newImages.length);
+      } catch (e) {
+        console.log(e);
       }
-    } catch (e) {
-      console.log(e);
     }
   };
 
@@ -95,6 +95,7 @@ export const ImageListingPage = () => {
   const handleAddAlbum = newAlbum => {
     setAlbumList([...albumList, { ...newAlbum }]);
     setCurrentAlbum(newAlbum);
+    setLocalStorage(CURRENT_ALBUM_ID_KEY, newAlbum.id);
   };
 
   const handleDeleteAlbum = deletedAlbumID => {
@@ -103,7 +104,7 @@ export const ImageListingPage = () => {
 
     setAlbumList(updatedAlbumList);
     setCurrentAlbum(updatedAlbumList[updatedLength - 1]);
-    setLocalStorage(CURRENT_ALBUM_ID_KEY, updatedAlbumList[0].id);
+    setLocalStorage(CURRENT_ALBUM_ID_KEY, updatedAlbumList[updatedLength - 1].id);
   };
 
   const handleClickSelectAll = () => {
