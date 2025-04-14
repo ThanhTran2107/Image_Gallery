@@ -164,7 +164,7 @@ export const ImageCard = ({
 
   const { mutateAsync: addImage } = useAddImage();
 
-  const srcUrl = useMemo(() => image.url || URL.createObjectURL(image.file)[image]);
+  const srcUrl = useMemo(() => image.url || URL.createObjectURL(image.file), [image]);
 
   const handleDownloadImage = () => downloadImageService(image);
 

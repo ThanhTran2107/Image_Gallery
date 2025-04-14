@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash-es';
 import { useRef } from 'react';
 
 import { uploadImageService } from 'utilities/services/uploadImageService';
@@ -7,7 +8,7 @@ export const useEnqueueUpload = (max = 100) => {
   const activeUploads = useRef(0);
 
   const processQueue = async () => {
-    if (activeUploads.current >= max || queueRef.current.length === 0) return;
+    if (activeUploads.current >= max || isEmpty(queueRef.current)) return;
 
     activeUploads.current += 1;
     const { file, resolve, reject } = queueRef.current.shift();

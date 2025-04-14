@@ -1,5 +1,6 @@
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isEmpty } from 'lodash-es';
 import PropTypes from 'prop-types';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
@@ -63,9 +64,7 @@ export const ImageUploaderTool = ({ onFilesAttached }) => {
     const { files } = event.target;
     const selectedFiles = Array.from(files);
 
-    if (selectedFiles.length === 0) {
-      return;
-    }
+    if (isEmpty(selectedFiles)) return;
 
     const errorMessage = getValidationImagesError(selectedFiles);
 
