@@ -1,3 +1,5 @@
+import { albumCacheService } from 'image-album-cache-services/album-cache.service';
+import { imageCacheService } from 'image-album-cache-services/image-cache.service';
 import { filter, find, findIndex, isEmpty, map } from 'lodash-es';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -41,15 +43,17 @@ export const ImageListingPage = () => {
 
   const albumId = currentAlbum.id || null;
 
-  const handleDeleteImages = async deleteId => {
+  const handleDeleteImages = async deletedId => {
     const newImages = [...images];
-    const foundIndex = findIndex(newImages, image => image.id === deleteId);
+    const foundIndex = findIndex(newImages, image => image.id === deletedId);
 
     if (foundIndex > -1) {
       const [data] = newImages.splice(foundIndex, 1);
 
       try {
         await deleteImage({ albumId: albumId, imageId: data.id });
+
+        imageCacheService.deleteImage({ albumId: albumId, imageId: deletedId });
 
         setImages(newImages);
         setImagesCount(newImages.length);
@@ -69,6 +73,8 @@ export const ImageListingPage = () => {
     });
 
     setImagesCount(prevCount => prevCount + 1);
+
+    imageCacheService.addImage(albumId, { id, url });
   };
 
   const handleImagesAttached = data => setImages([...data, ...images]);
@@ -90,18 +96,23 @@ export const ImageListingPage = () => {
         return album;
       }),
     );
+
+    albumCacheService.updateAlbum(updatedAlbum);
   };
 
   const handleAddAlbum = newAlbum => {
+    albumCacheService.addAlbum(newAlbum);
+
     setAlbumList([...albumList, { ...newAlbum }]);
     setCurrentAlbum(newAlbum);
     setLocalStorage(CURRENT_ALBUM_ID_KEY, newAlbum.id);
   };
 
-  const handleDeleteAlbum = deletedAlbumID => {
-    const updatedAlbumList = filter(albumList, alb => alb.id != deletedAlbumID);
+  const handleDeleteAlbum = deletedAlbumId => {
+    const updatedAlbumList = filter(albumList, alb => alb.id != deletedAlbumId);
     const updatedLength = updatedAlbumList.length;
 
+    albumCacheService.deleteAlbum(deletedAlbumId);
     setAlbumList(updatedAlbumList);
     setCurrentAlbum(updatedAlbumList[updatedLength - 1]);
     setLocalStorage(CURRENT_ALBUM_ID_KEY, updatedAlbumList[updatedLength - 1].id);

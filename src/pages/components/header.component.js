@@ -1,7 +1,7 @@
 import { faCheck, faCloudDownload, faEdit } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import classNames from 'classnames';
-import { trim } from 'lodash-es';
+import { isEmpty, trim } from 'lodash-es';
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
@@ -268,7 +268,7 @@ export const HeaderPage = ({
   const handleUpdateAvatar = async event => {
     const { files } = event.target;
 
-    if (files.length === 0) return;
+    if (isEmpty(files)) return;
 
     setIsUploading(true);
 
