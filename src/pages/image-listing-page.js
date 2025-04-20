@@ -1,10 +1,13 @@
 import { albumCacheService } from 'image-album-cache-services/album-cache.service';
 import { imageCacheService } from 'image-album-cache-services/image-cache.service';
-import { filter, find, findIndex, isEmpty, map } from 'lodash-es';
-import { useEffect, useState } from 'react';
+import { filter, find, findIndex, forEach, isEmpty, map } from 'lodash-es';
+import { useEffect, useRef, useState } from 'react';
+import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 
 import { useCachedAlbums } from 'pages/hooks/use-cached-albums.hook';
+
+import { notification } from 'components/notification.component';
 
 import { LOCALSTORAGE_KEY } from 'utilities/constant';
 import { useEnqueueUpload } from 'utilities/custom-hooks/use-enqueue-upload-image.hook';
@@ -12,6 +15,7 @@ import { useDeleteImage } from 'utilities/data-hooks/images/use-delete-image.hoo
 import { useGetImagesSize } from 'utilities/data-hooks/images/use-get-image-size.hook';
 import { setLocalStorage } from 'utilities/services/common';
 
+import { EmptyAlbumPlaceholder } from './components/empty-album-placeholder.component';
 import { GalleryImages } from './components/gallery-images.component';
 import { HeaderPage } from './components/header.component';
 import { ListAlbums } from './components/list-albums.component';
@@ -33,15 +37,17 @@ const { CURRENT_ALBUM_ID: CURRENT_ALBUM_ID_KEY } = LOCALSTORAGE_KEY;
 export const ImageListingPage = () => {
   const [isReuploadingAll, setIsReUploadingAll] = useState(false);
   const [isSelectAll, setIsSelectAll] = useState(false);
-  const [imagesCount, setImagesCount] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const imagesCount = useRef(0);
 
   const { currentAlbum, setCurrentAlbum, albumList, setAlbumList } = useCachedAlbums();
-  const { images, setImages } = useInfinityImagesQuery(currentAlbum.id);
+  const { images, setImages } = useInfinityImagesQuery(currentAlbum?.id);
   const { mutateAsync: deleteImage } = useDeleteImage();
   const enqueueUpload = useEnqueueUpload();
-  const { data: imagesSize } = useGetImagesSize({ albumId: currentAlbum.id, enabled: !!currentAlbum.id });
+  const { data: imagesSize } = useGetImagesSize({ albumId: currentAlbum?.id, enabled: !!currentAlbum?.id });
+  const { formatMessage } = useIntl();
 
-  const albumId = currentAlbum.id || null;
+  const albumId = currentAlbum?.id;
 
   const handleDeleteImages = async deletedId => {
     const newImages = [...images];
@@ -56,7 +62,7 @@ export const ImageListingPage = () => {
         imageCacheService.deleteImage({ albumId: albumId, imageId: deletedId });
 
         setImages(newImages);
-        setImagesCount(newImages.length);
+        imagesCount.current = newImages.length;
       } catch (e) {
         console.log(e);
       }
@@ -72,8 +78,7 @@ export const ImageListingPage = () => {
       });
     });
 
-    setImagesCount(prevCount => prevCount + 1);
-
+    imagesCount.current += 1;
     imageCacheService.addImage(albumId, { id, url });
   };
 
@@ -102,6 +107,7 @@ export const ImageListingPage = () => {
 
   const handleAddAlbum = newAlbum => {
     albumCacheService.addAlbum(newAlbum);
+    imagesCount.current = 0;
 
     setAlbumList([...albumList, { ...newAlbum }]);
     setCurrentAlbum(newAlbum);
@@ -113,9 +119,10 @@ export const ImageListingPage = () => {
     const updatedLength = updatedAlbumList.length;
 
     albumCacheService.deleteAlbum(deletedAlbumId);
+
     setAlbumList(updatedAlbumList);
     setCurrentAlbum(updatedAlbumList[updatedLength - 1]);
-    setLocalStorage(CURRENT_ALBUM_ID_KEY, updatedAlbumList[updatedLength - 1].id);
+    setLocalStorage(CURRENT_ALBUM_ID_KEY, updatedAlbumList[updatedLength - 1]?.id);
   };
 
   const handleClickSelectAll = () => {
@@ -129,9 +136,46 @@ export const ImageListingPage = () => {
     setIsSelectAll(false);
   };
 
+  const handleClickDeleteAllImages = () => {
+    let currentImages = [...images];
+
+    setIsSelectAll(false);
+    setIsDeleting(true);
+
+    forEach(currentImages, async img => {
+      try {
+        await deleteImage({ albumId: albumId, imageId: img.id });
+
+        imageCacheService.deleteImage({ albumId: albumId, imageId: img.id });
+        currentImages = filter(currentImages, curImg => curImg.id !== img.id);
+
+        imagesCount.current = currentImages.length;
+
+        setImages(currentImages);
+
+        if (isEmpty(currentImages)) {
+          setIsDeleting(false);
+
+          notification.success({
+            message: formatMessage({ defaultMessage: 'Delete all images successfully!' }),
+          });
+        }
+      } catch (e) {
+        console.log(e);
+
+        setIsDeleting(false);
+
+        notification.error({
+          message: formatMessage({ defaultMessage: 'Delete all images failed!' }),
+        });
+      }
+    });
+  };
+
   useEffect(() => {
     if (albumId && imagesSize) {
-      setImagesCount(imagesSize);
+      imagesCount.current = imagesSize;
+
       setIsSelectAll(false);
     }
   }, [albumId, imagesSize]);
@@ -141,25 +185,31 @@ export const ImageListingPage = () => {
       <HeaderPage
         album={currentAlbum}
         albums={albumList}
-        imagesCount={imagesCount}
+        imagesCount={imagesCount.current}
         isSelectAll={isSelectAll}
         onAddAlbum={handleAddAlbum}
         onUpdateAlbum={handleUpdateAlbum}
         onDeleteAlbum={handleDeleteAlbum}
         onSelectAll={handleClickSelectAll}
         onReuploadAll={handleClickReuploadAll}
+        onDeleteAllImages={handleClickDeleteAllImages}
       />
 
-      <GalleryImages
-        images={images}
-        albumId={albumId}
-        isSelectAll={isSelectAll}
-        isReuploadingAll={isReuploadingAll}
-        onEnqueueUpload={enqueueUpload}
-        onDelete={handleDeleteImages}
-        onFilesAttached={handleImagesAttached}
-        onFileUploadComplete={handleFileUploadComplete}
-      />
+      {!albumId ? (
+        <EmptyAlbumPlaceholder />
+      ) : (
+        <GalleryImages
+          images={images}
+          albumId={albumId}
+          isSelectAll={isSelectAll}
+          isReuploadingAll={isReuploadingAll}
+          isDeleting={isDeleting}
+          onEnqueueUpload={enqueueUpload}
+          onDelete={handleDeleteImages}
+          onFilesAttached={handleImagesAttached}
+          onFileUploadComplete={handleFileUploadComplete}
+        />
+      )}
 
       <ScrollButtons />
 

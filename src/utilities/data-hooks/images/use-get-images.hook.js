@@ -7,6 +7,8 @@ import { QUERY_KEYS } from 'utilities/constant';
 const { IMAGES } = QUERY_KEYS;
 
 const getImages = async ({ albumId, lastDocId, pageSize }) => {
+  if (!albumId) return { data: [], lastDocId: null };
+
   const docRef = collection(db, 'albums', albumId, 'images');
   const criteria = [docRef, orderBy('createdAt', 'desc'), limit(pageSize)];
 
@@ -35,5 +37,6 @@ export const useGetImages = (albumId, pageSize = 100) => {
     queryKey: [IMAGES, albumId],
     queryFn: ({ pageParam = '' }) => getImages({ albumId, lastDocId: pageParam, pageSize }),
     getNextPageParam: lastPage => lastPage.lastDocId,
+    enabled: !!albumId,
   });
 };

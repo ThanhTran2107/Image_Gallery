@@ -2,7 +2,7 @@ import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { QueryClient } from '@tanstack/react-query';
 import { keyBy } from 'lodash-es';
 
-export const IMG_BB_KEY = '868291d780259aa681c8063a2c09121c';
+export const IMG_BB_KEY = 'b766f007a9900220becb178343666ba3';
 export const UPLOAD_IMAGE_END_POINT = `https://api.imgbb.com/1/upload?key=${IMG_BB_KEY}`;
 export const HTTP_POST = 'POST';
 export const FIRE_BASE_IMAGE_TABLE = 'FIRE_BASE_IMAGE_TABLE';
@@ -15,6 +15,14 @@ export const LOCALSTORAGE_KEY = Object.freeze({
   LOCALE: 'locale',
   THEME: 'theme',
   CURRENT_ALBUM_ID: 'currentAlbumId',
+});
+
+export const queryClient = new QueryClient();
+
+export const QUERY_KEYS = Object.freeze({
+  ALBUMS: 'albums',
+  IMAGES: 'images',
+  IMAGES_SIZE: 'images-size',
 });
 
 export const ATTRIBUTE_DATA = Object.freeze({
@@ -43,6 +51,7 @@ export const COLORS = Object.freeze({
 
   //SHADE COLOR
   BLACK_55: 'rgb(0 0 0 / 55%)',
+  GRAY_55: '#7f7f7f55',
 });
 
 export const MODE = Object.freeze({
@@ -60,6 +69,8 @@ export const THEME_OPTIONS = [
   { mode: MODE.DARK, icon: faMoon },
 ];
 
+export const THEME_OPTIONS_HASH = keyBy(THEME_OPTIONS, 'mode');
+
 export const LANGUAGE_OPTIONS = [
   {
     locale: LOCALE.EN,
@@ -71,14 +82,4 @@ export const LANGUAGE_OPTIONS = [
   },
 ];
 
-export const THEME_OPTIONS_HASH = keyBy(THEME_OPTIONS, 'mode');
-
 export const LANGUAGE_OPTIONS_HASH = keyBy(LANGUAGE_OPTIONS, 'locale');
-
-export const queryClient = new QueryClient();
-
-export const QUERY_KEYS = Object.freeze({
-  ALBUMS: 'albums',
-  IMAGES: 'images',
-  IMAGES_SIZE: 'images-size',
-});

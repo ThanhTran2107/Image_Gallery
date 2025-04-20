@@ -63,6 +63,7 @@ export const GalleryImages = ({
   albumId,
   isSelectAll,
   isReuploadingAll,
+  isDeleting,
   onDelete,
   onFilesAttached,
   onFileUploadComplete,
@@ -77,6 +78,7 @@ export const GalleryImages = ({
       albumId={albumId}
       isSelectAll={isSelectAll}
       isReuploadingAll={isReuploadingAll}
+      isDeleting={isDeleting}
       onDelete={onDelete}
       onFileUploadComplete={onFileUploadComplete}
       onSelectImage={onSelectImage}
@@ -117,6 +119,7 @@ GalleryImages.propTypes = {
   ),
   isSelectAll: PropTypes.bool,
   isReuploadingAll: PropTypes.bool,
+  isDeleting: PropTypes.bool,
   onDelete: PropTypes.func.isRequired,
   onFileUploadComplete: PropTypes.func.isRequired,
   onFilesAttached: PropTypes.func.isRequired,

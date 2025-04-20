@@ -7,12 +7,13 @@ import { getFirestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyBdqD90edEoOcD8h_3xyqqUaesu_ER3KCc',
-  authDomain: 'learn-js-25006.firebaseapp.com',
-  projectId: 'learn-js-25006',
-  storageBucket: 'learn-js-25006.firebasestorage.app',
-  messagingSenderId: '609270484970',
-  appId: '1:609270484970:web:baf84a3504bbb4b9d5ec93',
+  apiKey: 'AIzaSyCa68yoeuKNFy6xkfAHAla4uTUGfz06sKk',
+  authDomain: 'imagegallery-69cdf.firebaseapp.com',
+  projectId: 'imagegallery-69cdf',
+  storageBucket: 'imagegallery-69cdf.firebasestorage.app',
+  messagingSenderId: '733038402773',
+  appId: '1:733038402773:web:307d37545a1be9fa12165c',
+  measurementId: 'G-S1CLJ3T5YT',
 };
 
 // Initialize Firebase

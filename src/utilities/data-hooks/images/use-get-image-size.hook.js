@@ -7,6 +7,8 @@ import { QUERY_KEYS } from 'utilities/constant';
 const { IMAGES_SIZE } = QUERY_KEYS;
 
 const getImagesSize = async albumId => {
+  if (!albumId) return 0;
+
   const docRef = collection(db, 'albums', albumId, 'images');
 
   const countSnapshot = await getCountFromServer(docRef);
@@ -19,7 +21,7 @@ export const useGetImagesSize = options => {
 
   return useQuery({
     queryKey: [IMAGES_SIZE, albumId],
-    queryFn: () => getImagesSize(options.albumId),
+    queryFn: () => getImagesSize(albumId),
     ...options,
   });
 };

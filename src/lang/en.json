@@ -1,4 +1,7 @@
 {
+  "252Caj": {
+    "defaultMessage": "Delete all images successfully!"
+  },
   "2oGXXk": {
     "defaultMessage": "IMAGES"
   },
@@ -13,6 +16,9 @@
   },
   "DdIDiZ": {
     "defaultMessage": "Enter the album name"
+  },
+  "EGZ4pl": {
+    "defaultMessage": "Let's create your first album!"
   },
   "EWH+6o": {
     "defaultMessage": "Select Actions"
@@ -52,6 +58,9 @@
   },
   "VzzYJk": {
     "defaultMessage": "Create"
+  },
+  "hCkP41": {
+    "defaultMessage": "Delete all images failed!"
   },
   "i5e6d1": {
     "defaultMessage": "All Albums"

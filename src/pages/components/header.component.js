@@ -81,6 +81,18 @@ const AvatarContainer = styled.div`
   border-radius: 100%;
   justify-content: center;
   align-items: center;
+  width: 8rem;
+  height: 8rem;
+
+  @media only screen and (min-width: 768px) {
+    width: 12rem;
+    height: 12rem;
+  }
+
+  @media only screen and (min-width: 1024px) {
+    width: 16rem;
+    height: 16rem;
+  }
 
   &:hover {
     .back-drop {
@@ -215,6 +227,7 @@ export const HeaderPage = ({
   onDeleteAlbum,
   onSelectAll,
   onReuploadAll,
+  onDeleteAllImages,
 }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -238,8 +251,6 @@ export const HeaderPage = ({
   const handleOpenDialogFile = () => document.getElementById('avatar').click();
 
   const handleClickEditButton = () => setIsEditMode(true);
-
-  const handleDeleteAll = () => alert('delete all ');
 
   const handleSaveName = async () => {
     const newName = trim(inputRef.current.value);
@@ -310,7 +321,7 @@ export const HeaderPage = ({
     {
       label: <OptionLabel>{formatMessage({ defaultMessage: 'Delete' })}</OptionLabel>,
       key: 'deleteAll',
-      onClick: handleDeleteAll,
+      onClick: onDeleteAllImages,
     },
     {
       label: <OptionLabel>{formatMessage({ defaultMessage: 'Reupload' })}</OptionLabel>,
@@ -333,30 +344,40 @@ export const HeaderPage = ({
       <InfoAlbum>
         <Space size="large" direction="horizontal">
           <AvatarContainer>
-            <AlbumAvatar className="album-avatar" src={album ? album.avatar : null} alt={album ? album.name : null} />
-            <BackDrop className="back-drop" onClick={handleOpenDialogFile}>
-              <FontAwesomeIcon className="icon-upload-avatar" icon={faCloudDownload} />
-              <input onChange={handleUpdateAvatar} type="file" id="avatar" style={{ display: 'none' }} />
-            </BackDrop>
-            {isUploading && <StyledSpinner size="large" />}
+            {!isEmpty(album) && (
+              <>
+                <AlbumAvatar
+                  className="album-avatar"
+                  src={album ? album.avatar : null}
+                  alt={album ? album.name : null}
+                />
+                <BackDrop className="back-drop" onClick={handleOpenDialogFile}>
+                  <FontAwesomeIcon className="icon-upload-avatar" icon={faCloudDownload} />
+                  <input onChange={handleUpdateAvatar} type="file" id="avatar" style={{ display: 'none' }} />
+                </BackDrop>
+                {isUploading && <StyledSpinner size="large" />}
+              </>
+            )}
           </AvatarContainer>
 
           <AlbumName>
-            <Space direction="vertical" size="small">
-              {!isEditMode && (
-                <>
-                  <span className="album-name">{album ? album.name : null}</span>
-                  <EditButton className="icon-edit" icon={faEdit} onClick={handleClickEditButton} />
-                </>
-              )}
+            {!isEmpty(album) && (
+              <Space direction="vertical" size="small">
+                {!isEditMode && (
+                  <>
+                    <span className="album-name">{album ? album.name : null}</span>
+                    <EditButton className="icon-edit" icon={faEdit} onClick={handleClickEditButton} />
+                  </>
+                )}
 
-              {isEditMode && (
-                <>
-                  <input className="input-album-name" type="text" defaultValue={album.name} ref={inputRef} />
-                  <SaveButton className="icon-save" icon={faCheck} onClick={handleSaveName} />
-                </>
-              )}
-            </Space>
+                {isEditMode && (
+                  <>
+                    <input className="input-album-name" type="text" defaultValue={album.name} ref={inputRef} />
+                    <SaveButton className="icon-save" icon={faCheck} onClick={handleSaveName} />
+                  </>
+                )}
+              </Space>
+            )}
           </AlbumName>
         </Space>
       </InfoAlbum>
@@ -429,4 +450,5 @@ HeaderPage.propTypes = {
   onAddAlbum: PropTypes.func.isRequired,
   onSelectAll: PropTypes.func.isRequired,
   onReuploadAll: PropTypes.func.isRequired,
+  onDeleteAllImages: PropTypes.func.isRequired,
 };

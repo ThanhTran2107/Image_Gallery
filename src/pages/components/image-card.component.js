@@ -41,6 +41,21 @@ const SelectedImage = styled.div`
   }
 `;
 
+const DeletedImage = styled.div`
+  position: absolute;
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+  aspect-ratio: 1;
+  background: ${COLORS.GRAY_55};
+  display: none;
+  justify-content: flex-end;
+
+  &.is-deleted {
+    display: flex;
+  }
+`;
+
 const ErrorIcon = styled(FontAwesomeIcon)`
   position: absolute;
   margin-bottom: 25rem;
@@ -154,6 +169,7 @@ export const ImageCard = ({
   image,
   isSelectAll,
   isReuploadingAll,
+  isDeleting,
   onSelectImage,
   onFileUploadComplete,
   onDelete,
@@ -216,6 +232,13 @@ export const ImageCard = ({
       {isUploading && (
         <StyledSpinner indicator={<LoadingOutlined style={{ fontSize: '5rem' }} spin />} className="spin" />
       )}
+
+      {isDeleting && (
+        <>
+          <DeletedImage className={classNames({ 'is-deleted': isDeleting })} />
+          <StyledSpinner indicator={<LoadingOutlined style={{ fontSize: '5rem' }} spin />} className="spin" />
+        </>
+      )}
     </StyledImageContainer>
   );
 };
@@ -224,6 +247,7 @@ ImageCard.propTypes = {
   image: PropTypes.object.isRequired,
   isSelectAll: PropTypes.bool,
   isReuploadingAll: PropTypes.bool,
+  isDeleting: PropTypes.bool,
   onReuploadAll: PropTypes.func.isRequired,
   onSelectImage: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
