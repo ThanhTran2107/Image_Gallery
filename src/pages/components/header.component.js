@@ -215,6 +215,7 @@ export const HeaderPage = ({
   onDeleteAlbum,
   onSelectAll,
   onReuploadAll,
+  onDeleteAllImages,
 }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -238,8 +239,6 @@ export const HeaderPage = ({
   const handleOpenDialogFile = () => document.getElementById('avatar').click();
 
   const handleClickEditButton = () => setIsEditMode(true);
-
-  const handleDeleteAll = () => alert('delete all ');
 
   const handleSaveName = async () => {
     const newName = trim(inputRef.current.value);
@@ -310,7 +309,7 @@ export const HeaderPage = ({
     {
       label: <OptionLabel>{formatMessage({ defaultMessage: 'Delete' })}</OptionLabel>,
       key: 'deleteAll',
-      onClick: handleDeleteAll,
+      onClick: onDeleteAllImages,
     },
     {
       label: <OptionLabel>{formatMessage({ defaultMessage: 'Reupload' })}</OptionLabel>,
@@ -429,4 +428,5 @@ HeaderPage.propTypes = {
   onAddAlbum: PropTypes.func.isRequired,
   onSelectAll: PropTypes.func.isRequired,
   onReuploadAll: PropTypes.func.isRequired,
+  onDeleteAllImages: PropTypes.func.isRequired,
 };

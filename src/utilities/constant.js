@@ -43,6 +43,7 @@ export const COLORS = Object.freeze({
 
   //SHADE COLOR
   BLACK_55: 'rgb(0 0 0 / 55%)',
+  GRAY_55: '#7f7f7f55',
 });
 
 export const MODE = Object.freeze({

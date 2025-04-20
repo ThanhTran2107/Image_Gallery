@@ -1,4 +1,7 @@
 {
+  "252Caj": {
+    "defaultMessage": "Delete all images successfully!"
+  },
   "2oGXXk": {
     "defaultMessage": "IMAGES"
   },
@@ -52,6 +55,9 @@
   },
   "VzzYJk": {
     "defaultMessage": "Create"
+  },
+  "hCkP41": {
+    "defaultMessage": "Delete all images failed!"
   },
   "i5e6d1": {
     "defaultMessage": "All Albums"
