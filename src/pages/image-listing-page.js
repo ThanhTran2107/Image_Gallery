@@ -14,6 +14,7 @@ import { useEnqueueUpload } from 'utilities/custom-hooks/use-enqueue-upload-imag
 import { useDeleteImage } from 'utilities/data-hooks/images/use-delete-image.hook';
 import { useGetImagesSize } from 'utilities/data-hooks/images/use-get-image-size.hook';
 import { setLocalStorage } from 'utilities/services/common';
+import { downloadImageService } from 'utilities/services/image';
 
 import { EmptyAlbumPlaceholder } from './components/empty-album-placeholder.component';
 import { GalleryImages } from './components/gallery-images.component';
@@ -172,10 +173,36 @@ export const ImageListingPage = () => {
     });
   };
 
+  const handleClickDownloadAllImages = async () => {
+    let count = 0;
+    setIsSelectAll(false);
+
+    try {
+      for (const img of images) {
+        await downloadImageService(img);
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        count += 1;
+      }
+
+      if (count === imagesCount.current)
+        notification.success({
+          message: formatMessage({ defaultMessage: 'Download all images successfully!' }),
+        });
+    } catch (e) {
+      console.log(e);
+
+      notification.error({
+        message: formatMessage({ defaultMessage: 'Download all images failed!' }),
+      });
+    }
+  };
+
   useEffect(() => {
     if (albumId && imagesSize) {
-      imagesCount.current = imagesSize;
+      window.scrollTo(0, 0);
 
+      imagesCount.current = imagesSize;
       setIsSelectAll(false);
     }
   }, [albumId, imagesSize]);
@@ -193,6 +220,7 @@ export const ImageListingPage = () => {
         onSelectAll={handleClickSelectAll}
         onReuploadAll={handleClickReuploadAll}
         onDeleteAllImages={handleClickDeleteAllImages}
+        onDownloadAllImages={handleClickDownloadAllImages}
       />
 
       {!albumId ? (

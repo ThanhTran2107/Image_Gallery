@@ -11,6 +11,12 @@
   "47FYwb": {
     "defaultMessage": "Cancel"
   },
+  "5q3qC0": {
+    "defaultMessage": "Download"
+  },
+  "7PZMX8": {
+    "defaultMessage": "Download all images successfully!"
+  },
   "AyWCqN": {
     "defaultMessage": "Delete the album"
   },
@@ -31,6 +37,9 @@
   },
   "F6oKtT": {
     "defaultMessage": "Upload image occurs error!"
+  },
+  "Gm8QPh": {
+    "defaultMessage": "Download all images failed!"
   },
   "HAlOn1": {
     "defaultMessage": "Name"
