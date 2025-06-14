@@ -39,15 +39,15 @@ yarn install
 
 Install the craco in the terminal
 
-```bash
-If you use yarn
+**Using yarn:**
 
+```bash
 yarn add @craco/craco
 ```
 
-```bash
-If you use npm
+** Or using npm:**
 
+```bash
 npm install @craco/craco --save
 ```
 
