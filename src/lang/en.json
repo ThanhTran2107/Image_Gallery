@@ -11,14 +11,20 @@
   "47FYwb": {
     "defaultMessage": "Cancel"
   },
+  "5q3qC0": {
+    "defaultMessage": "Download"
+  },
+  "7PZMX8": {
+    "defaultMessage": "Download all images successfully!"
+  },
+  "Aa+ecl": {
+    "defaultMessage": "Delete the image successfully!"
+  },
   "AyWCqN": {
     "defaultMessage": "Delete the album"
   },
   "DdIDiZ": {
     "defaultMessage": "Enter the album name"
-  },
-  "EGZ4pl": {
-    "defaultMessage": "Let's create your first album!"
   },
   "EWH+6o": {
     "defaultMessage": "Select Actions"
@@ -31,6 +37,9 @@
   },
   "F6oKtT": {
     "defaultMessage": "Upload image occurs error!"
+  },
+  "Gm8QPh": {
+    "defaultMessage": "Download all images failed!"
   },
   "HAlOn1": {
     "defaultMessage": "Name"
@@ -58,6 +67,12 @@
   },
   "VzzYJk": {
     "defaultMessage": "Create"
+  },
+  "YtVLvt": {
+    "defaultMessage": "Welcome To The Gallery!"
+  },
+  "h32Ht4": {
+    "defaultMessage": "Delete the image failed!"
   },
   "hCkP41": {
     "defaultMessage": "Delete all images failed!"
