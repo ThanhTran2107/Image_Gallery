@@ -2,6 +2,12 @@
 
 Follow these step-by-step instructions to install and run this ReactJS project. Even if you're a complete beginner, you'll be able to get it up and running!
 
+## 📸 User Interface Preview
+
+Below is the current UI of the Image Gallery:
+
+![App Screenshot](./public/image-gallery-screenshot.png)
+
 ## 📝 System Requirements
 
 - **Node.js** (version 22.14.0) - [Download Node.js here](https://nodejs.org/)
@@ -35,7 +41,23 @@ npm install
 yarn install
 ```
 
-### 3. Run the Project
+### 3. Install Craco
+
+Install the craco in the terminal
+
+**Using yarn:**
+
+```bash
+yarn add @craco/craco
+```
+
+** Or using npm:**
+
+```bash
+npm install @craco/craco --save
+```
+
+### 4. Run the Project
 
 Start the development server:
 
@@ -54,7 +76,7 @@ yarn start
 The app will automatically open in your browser at:  
 👉 [http://localhost:3000](http://localhost:3000)
 
-## 4. 🔧 Useful Commands
+## 5. 🔧 Useful Commands
 
 | Command             | Description                          | Yarn Equivalent  |
 | ------------------- | ------------------------------------ | ---------------- |

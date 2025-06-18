@@ -1,7 +1,7 @@
 import { albumCacheService } from 'image-album-cache-services/album-cache.service';
 import { imageCacheService } from 'image-album-cache-services/image-cache.service';
 import { filter, find, findIndex, forEach, isEmpty, map } from 'lodash-es';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useIntl } from 'react-intl';
 import styled from 'styled-components';
 
@@ -14,6 +14,7 @@ import { useEnqueueUpload } from 'utilities/custom-hooks/use-enqueue-upload-imag
 import { useDeleteImage } from 'utilities/data-hooks/images/use-delete-image.hook';
 import { useGetImagesSize } from 'utilities/data-hooks/images/use-get-image-size.hook';
 import { setLocalStorage } from 'utilities/services/common';
+import { downloadImageService } from 'utilities/services/image';
 
 import { EmptyAlbumPlaceholder } from './components/empty-album-placeholder.component';
 import { GalleryImages } from './components/gallery-images.component';
@@ -38,7 +39,7 @@ export const ImageListingPage = () => {
   const [isReuploadingAll, setIsReUploadingAll] = useState(false);
   const [isSelectAll, setIsSelectAll] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const imagesCount = useRef(0);
+  const [imagesCount, setImagesCount] = useState(0);
 
   const { currentAlbum, setCurrentAlbum, albumList, setAlbumList } = useCachedAlbums();
   const { images, setImages } = useInfinityImagesQuery(currentAlbum?.id);
@@ -62,9 +63,17 @@ export const ImageListingPage = () => {
         imageCacheService.deleteImage({ albumId: albumId, imageId: deletedId });
 
         setImages(newImages);
-        imagesCount.current = newImages.length;
+        setImagesCount(newImages.length);
+
+        notification.success({
+          message: formatMessage({ defaultMessage: 'Delete the image successfully!' }),
+        });
       } catch (e) {
         console.log(e);
+
+        notification.error({
+          message: formatMessage({ defaultMessage: 'Delete the image failed!' }),
+        });
       }
     }
   };
@@ -78,7 +87,8 @@ export const ImageListingPage = () => {
       });
     });
 
-    imagesCount.current += 1;
+    setImagesCount(prev => prev + 1);
+
     imageCacheService.addImage(albumId, { id, url });
   };
 
@@ -107,8 +117,8 @@ export const ImageListingPage = () => {
 
   const handleAddAlbum = newAlbum => {
     albumCacheService.addAlbum(newAlbum);
-    imagesCount.current = 0;
 
+    setImagesCount(0);
     setAlbumList([...albumList, { ...newAlbum }]);
     setCurrentAlbum(newAlbum);
     setLocalStorage(CURRENT_ALBUM_ID_KEY, newAlbum.id);
@@ -149,8 +159,7 @@ export const ImageListingPage = () => {
         imageCacheService.deleteImage({ albumId: albumId, imageId: img.id });
         currentImages = filter(currentImages, curImg => curImg.id !== img.id);
 
-        imagesCount.current = currentImages.length;
-
+        setImagesCount(currentImages.length);
         setImages(currentImages);
 
         if (isEmpty(currentImages)) {
@@ -172,10 +181,36 @@ export const ImageListingPage = () => {
     });
   };
 
-  useEffect(() => {
-    if (albumId && imagesSize) {
-      imagesCount.current = imagesSize;
+  const handleClickDownloadAllImages = async () => {
+    let count = 0;
+    setIsSelectAll(false);
 
+    try {
+      for (const img of images) {
+        await downloadImageService(img);
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        count += 1;
+      }
+
+      if (count === imagesCount)
+        notification.success({
+          message: formatMessage({ defaultMessage: 'Download all images successfully!' }),
+        });
+    } catch (e) {
+      console.log(e);
+
+      notification.error({
+        message: formatMessage({ defaultMessage: 'Download all images failed!' }),
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (albumId) {
+      window.scrollTo(0, 0);
+
+      setImagesCount(imagesSize);
       setIsSelectAll(false);
     }
   }, [albumId, imagesSize]);
@@ -185,7 +220,7 @@ export const ImageListingPage = () => {
       <HeaderPage
         album={currentAlbum}
         albums={albumList}
-        imagesCount={imagesCount.current}
+        imagesCount={imagesCount}
         isSelectAll={isSelectAll}
         onAddAlbum={handleAddAlbum}
         onUpdateAlbum={handleUpdateAlbum}
@@ -193,6 +228,7 @@ export const ImageListingPage = () => {
         onSelectAll={handleClickSelectAll}
         onReuploadAll={handleClickReuploadAll}
         onDeleteAllImages={handleClickDeleteAllImages}
+        onDownloadAllImages={handleClickDownloadAllImages}
       />
 
       {!albumId ? (

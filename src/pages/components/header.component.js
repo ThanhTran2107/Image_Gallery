@@ -228,6 +228,7 @@ export const HeaderPage = ({
   onSelectAll,
   onReuploadAll,
   onDeleteAllImages,
+  onDownloadAllImages,
 }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -318,6 +319,11 @@ export const HeaderPage = ({
   ];
 
   const selectAllItems = [
+    {
+      label: <OptionLabel>{formatMessage({ defaultMessage: 'Download' })}</OptionLabel>,
+      key: 'downloadAll',
+      onClick: onDownloadAllImages,
+    },
     {
       label: <OptionLabel>{formatMessage({ defaultMessage: 'Delete' })}</OptionLabel>,
       key: 'deleteAll',
@@ -451,4 +457,5 @@ HeaderPage.propTypes = {
   onSelectAll: PropTypes.func.isRequired,
   onReuploadAll: PropTypes.func.isRequired,
   onDeleteAllImages: PropTypes.func.isRequired,
+  onDownloadAllImages: PropTypes.func.isRequired,
 };

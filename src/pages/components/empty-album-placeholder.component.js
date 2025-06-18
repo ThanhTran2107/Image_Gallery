@@ -18,7 +18,7 @@ export const EmptyAlbumPlaceholder = () => {
 
   return (
     <Wrapper className="empty-album-placeholder">
-      <Title>{formatMessage({ defaultMessage: "Let's create your first album!" })}</Title>
+      <Title>{formatMessage({ defaultMessage: 'Welcome To The Gallery!' })}</Title>
     </Wrapper>
   );
 };
